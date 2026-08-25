@@ -1,2 +1,11 @@
 # web-semantik-kelompok07
-Repository latihan Web Semantik Kelompok 7
+
+## Anggota Kelompok
+
+| No. | Nama | NIM |
+|---:|---|---|
+| 1 | Jeli Alvonzo Laia | 251402101 |
+| 2 | Patricia Putri Josephine Situmeang | 251402119 |
+| 3 | Vascha U. Lumbantoruan | 251402125 |
+| 4 | Chyntia R.A Hutabarat | 251402002 |
+| 5 | Jona Vebrian Gultom | 251402084 |
