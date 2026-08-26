@@ -11,7 +11,7 @@
 | 5 | Jona Vebrian Gultom | 251402084 |
 
 ## ✅ Checklist Sebelum Mengumpulkan
-- [ ] Repository menggunakan format web-semantik-Kelompok.
+- [x] Repository menggunakan format web-semantik-Kelompok.
 - [ ] Folder pertemuan-01 sudah tersedia.
 - [ ] README.md sudah lengkap.
 - [ ] triple.md berisi minimal 5 triple.
