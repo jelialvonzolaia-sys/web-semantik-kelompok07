@@ -1,1 +1,39 @@
+# Pertemuan 1 - Pengenalan Web Semantik
 
+## 1. Eksplorasi Wikidata
+- Nama entitas: ...
+- Identifier Wikidata: ...
+- Deskripsi: ...
+- Negara: ...
+- Lokasi: ...
+- Tahun berdiri: ...
+- Website: ...
+
+## 2. Entitas, Atribut, dan Relasi
+
+| Informasi | Kategori | Alasan |
+|---|---|---|
+| ... | ... | ... |
+
+## 3. Eksplorasi Schema.org
+
+| Property | Fungsi | Contoh Nilai |
+|---|---|---|
+| ... | ... | ... |
+
+## 4. Pertanyaan Evaluasi
+
+### 1. Apa perbedaan web tradisional dan Web Semantik?
+Jawaban: ...
+
+### 2. Mengapa entitas membutuhkan identifier unik?
+Jawaban: ...
+
+### 3. Jelaskan subject, predicate, dan object.
+Jawaban: ...
+
+### 4. Apa keuntungan hubungan antarentitas?
+Jawaban: ...
+
+### 5. Bagaimana Knowledge Graph membantu AI?
+Jawaban: ...
