@@ -12,7 +12,7 @@
 
 ## ✅ Checklist Sebelum Mengumpulkan
 - [x] Repository menggunakan format web-semantik-Kelompok.
-- [ ] Folder pertemuan-01 sudah tersedia.
+- [x] Folder pertemuan-01 sudah tersedia.
 - [ ] README.md sudah lengkap.
 - [ ] triple.md berisi minimal 5 triple.
 - [ ] knowledge-graph.png memiliki minimal 5 entitas.
