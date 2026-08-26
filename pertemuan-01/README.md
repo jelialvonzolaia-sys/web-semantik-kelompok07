@@ -12,8 +12,11 @@
 ## 2. Entitas, Atribut, dan Relasi
 
 | Informasi | Kategori | Alasan |
-|---|---|---|
-| ... | ... | ... |
+|Indonesia|Entitas|Karena bisa berdiri sendiri dan memiliki identitas|
+| ASEAN  | Entitas | Karena ASEAN adalah sebuah organisasi yang bisa berdiri sendiri dan memiliki identitas tersendirinya juga |
+| Universitas Sumatera Utara → accredited by → National Accreditation Board for Higher Education | Relasi | Dimana menghubungkan USU dengan lembaga yang memberinya akreditas |
+| 20 Agustus 1957 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
+| USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
 ## 3. Eksplorasi Schema.org
 
