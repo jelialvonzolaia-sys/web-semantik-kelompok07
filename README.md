@@ -1,4 +1,11 @@
-# web-semantik-kelompok07
+# 🌐 Web Semantik - Kelompok 07
+
+![Mata Kuliah](https://img.shields.io/badge/Mata%20Kuliah-Web%20Semantik-blue)
+![Status](https://img.shields.io/badge/Status-Pertemuan%201%20Aktif-brightgreen)
+
+Repositori ini dibuat untuk memenuhi latihan 1 mata kuliah **Web Semantik**. Fokus utama dari repositori ini adalah mengeksplorasi bagaimana informasi di web dapat direpresentasikan sebagai **entitas, atribut, dan relasi**, serta menyusun fakta sederhana dalam bentuk **Subject – Predicate – Object** dan membuat *Knowledge Graph*.
+
+---
 
 ## Anggota Kelompok
 
