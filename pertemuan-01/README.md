@@ -89,4 +89,5 @@ Jawaban:
 - Memungkinkan Inferensi Otomatis : data yang terhubung akan menarik kesimpulan dari informasi yang sudah ada walaupun faktanya tidak pernah ditulis secara eksplisist, contohnya menyimpulkan letak provinsi secara transitif
 
 ### 5. Bagaimana Knowledge Graph membantu AI?
-Jawaban: ...
+Jawaban: 
+Menurut kelompok kami, **Knowledge Graph dapat membantu sistem pencarian atau AI dalam memahami informasi dengan cara menunjukkan hubungan antar informasi secara lebih jelas**. Jadi, AI tidak hanya melihat informasi sebagai kumpulan kata, tetapi juga bisa memahami keterkaitan antara satu entitas dengan entitas lainnya. Misalnya, sistem dapat mengetahui bahwa Menara Eiffel berada di Paris, dan Paris merupakan ibu kota Prancis. Dengan begitu, sistem pencarian atau AI dapat memberikan informasi yang lebih relevan, memahami konteks pertanyaan dengan lebih baik, serta menghasilkan jawaban yang lebih tepat.
