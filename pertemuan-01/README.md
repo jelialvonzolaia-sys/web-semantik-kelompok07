@@ -21,7 +21,7 @@
 | 20 Agustus 1957 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
-## 5. Eksplorasi Schema.org
+## 3. Eksplorasi Schema.org
 
 | Property | Fungsi | Contoh Nilai |
 |---|---|---|
