@@ -29,7 +29,7 @@
 | Description | Penjelasan tentang organisasi | Universitas negeri yang berada di Medan, Sumatera Utara, Indonesia |
 | Address | Menyatakan lokasi fisik organisasi pendidikan | Jl. Dr. T. Mansur No. 9, Kampus Padang Bulan, Medan, Sumatera Utara |
 | Slogan | Menyatakan moto terkait organisasi | The University for Industry |
-| FoundingDate | Tanggal berdirinya organisasi | 1952-06-04 |
+| FoundingDate | Tanggal berdirinya organisasi | 1957-11-20 |
 | URL | Menyatakan alamat website | https://www.usu.ac.id/ |
 
 
@@ -39,7 +39,9 @@
 Jawaban: ...
 
 ### 2. Mengapa entitas membutuhkan identifier unik?
-Jawaban: ...
+Jawaban: Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
+
+Dalam Web Semantik, identifier unik digunakan untuk memastikan setiap entitas dapat diidentifikasi dan dihubungkan dengan benar. Contohnya, Universitas Sumatera Utara memiliki identifier Wikidata Q4200341, sehingga dapat dibedakan dari entitas universitas lainnya.
 
 ### 3. Jelaskan subject, predicate, dan object.
 Jawaban: ...
