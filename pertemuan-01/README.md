@@ -19,6 +19,9 @@
 | ASEAN  | Entitas | Karena ASEAN adalah sebuah organisasi yang bisa berdiri sendiri dan memiliki identitas tersendirinya juga |
 | Universitas Sumatera Utara → accredited by → National Accreditation Board for Higher Education | Relasi | Dimana menghubungkan USU dengan lembaga yang memberinya akreditas |
 | 4 Juni 1952 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
+=======
+| 20 November 1957 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
+>>>>>>> 7c1e5a15c989c126653441e341b38e4768ebb0e0
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
 ## 3. Knowledge Graph Mini: Paris
@@ -51,13 +54,7 @@ Relasi :
 
 | Property | Fungsi | Contoh Nilai |
 |---|---|---|
-| Name | Menyatakan nama organisasi pendidikan | Universitas Sumatera Utara |
-| Description | Penjelasan tentang organisasi | Universitas negeri yang berada di Medan, Sumatera Utara, Indonesia |
-| Address | Menyatakan lokasi fisik organisasi pendidikan | Jl. Dr. T. Mansur No. 9, Kampus Padang Bulan, Medan, Sumatera Utara |
-| Slogan | Menyatakan moto terkait organisasi | The University for Industry |
-| FoundingDate | Tanggal berdirinya organisasi | 1952-06-04 |
-| URL | Menyatakan alamat website | https://www.usu.ac.id/ |
-
+| ... | ... | ... |
 
 ## 5. Pertanyaan Evaluasi
 
@@ -72,6 +69,9 @@ Sedangkan Web Semantik adalah pengembangan dari web tradisional, yang di mana in
 Jawaban: 
 
 Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
+=======
+Jawaban: Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
+>>>>>>> 7c1e5a15c989c126653441e341b38e4768ebb0e0
 
 Dalam Web Semantik, identifier unik digunakan untuk memastikan setiap entitas dapat diidentifikasi dan dihubungkan dengan benar. Contohnya, Universitas Sumatera Utara memiliki identifier Wikidata Q4200341, sehingga dapat dibedakan dari entitas universitas lainnya.
 
@@ -84,9 +84,9 @@ Perbedaan ketiga hal ini terletak pada peran dalam membentuk suatu pernyataan da
 
 ### 4. Apa keuntungan hubungan antarentitas?
 Jawaban: 
-- Makna yang jelas dan pencarian yang terstruktur : mencari jawaban yang terstruktur, identitas entitas juga unik global melalui URI, agar terhindar dari ambiguitas
+- Makna yang jelas dan pencarian yang terstruktur : mencari jawaban yang terstruktur, identitas entitas juga unik global melalui URI, agar terhindar dari ambiguitas.
 - Meningkatkan akurasi AI(GraphRAG) : menympan data sebagai knowledge graph untuk memberi fakta presisi dan relasi eksplisit yang dapat dilacak. kegunaannya agar kelemahan AI berbasis LLM tidak terlihat, seperti halusinasi, sumber yang tidak jelas, pengetahuan membek, dan sulit diaudit.
-- Memungkinkan Inferensi Otomatis : data yang terhubung akan menarik kesimpulan dari informasi yang sudah ada walaupun faktanya tidak pernah ditulis secara eksplisist, contohnya menyimpulkan letak provinsi secara transitif
+- Memungkinkan Inferensi Otomatis : data yang terhubung akan menarik kesimpulan dari informasi yang sudah ada walaupun faktanya tidak pernah ditulis secara eksplisist, contohnya menyimpulkan letak provinsi secara transitif.
 
 ### 5. Bagaimana Knowledge Graph membantu AI?
 Jawaban: 

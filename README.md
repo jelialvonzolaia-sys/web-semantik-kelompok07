@@ -32,9 +32,9 @@ Berdasarkan modul latihan, melalui pengerjaan tugas ini diharapkan mahasiswa mam
 - [x] Repository menggunakan format web-semantik-Kelompok.
 - [x] Folder pertemuan-01 sudah tersedia.
 - [ ] README.md sudah lengkap.
-- [x] triple.md berisi minimal 5 triple.
+- [ ] triple.md berisi minimal 5 triple.
 - [ ] knowledge-graph.png memiliki minimal 5 entitas.
-- [x] Screenshot Wikidata sudah tersedia.
+- [ ] Screenshot Wikidata sudah tersedia.
 - [ ] Minimal 5 properti Schema.org sudah dijelaskan.
 - [ ] Seluruh pertanyaan evaluasi sudah dijawab.
 - [ ] Seluruh perubahan sudah di-commit dan di-push ke GitHub.
