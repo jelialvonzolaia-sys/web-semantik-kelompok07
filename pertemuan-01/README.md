@@ -25,13 +25,7 @@
 
 | Property | Fungsi | Contoh Nilai |
 |---|---|---|
-| Name | Menyatakan nama organisasi pendidikan | Universitas Sumatera Utara |
-| Description | Penjelasan tentang organisasi | Universitas negeri yang berada di Medan, Sumatera Utara, Indonesia |
-| Address | Menyatakan lokasi fisik organisasi pendidikan | Jl. Dr. T. Mansur No. 9, Kampus Padang Bulan, Medan, Sumatera Utara |
-| Slogan | Menyatakan moto terkait organisasi | The University for Industry |
-| FoundingDate | Tanggal berdirinya organisasi | 1957-11-20 |
-| URL | Menyatakan alamat website | https://www.usu.ac.id/ |
-
+| ... | ... | ... |
 
 ## 4. Pertanyaan Evaluasi
 
