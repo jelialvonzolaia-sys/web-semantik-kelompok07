@@ -6,7 +6,7 @@
 - Deskripsi: National university in North Sumatera, Indonesia
 - Negara: Indonesia
 - Lokasi: Medan Tuntungan
-- Tahun berdiri: 20 November 1957
+- Tahun berdiri: 4 Juni 1952
 - Website: <https://www.usu.ac.id/>
 - Keanggotaan: ASEAN University Network
 - Akreditasi: National Accreditation Board for Higher Education
@@ -18,7 +18,7 @@
 | Indonesia | Entitas | Karena bisa berdiri sendiri dan memiliki identitas |
 | ASEAN  | Entitas | Karena ASEAN adalah sebuah organisasi yang bisa berdiri sendiri dan memiliki identitas tersendirinya juga |
 | Universitas Sumatera Utara → accredited by → National Accreditation Board for Higher Education | Relasi | Dimana menghubungkan USU dengan lembaga yang memberinya akreditas |
-| 20 Agustus 1957 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
+| 4 Juni 1952 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
 ## 3. Eksplorasi Schema.org
@@ -29,7 +29,7 @@
 | Description | Penjelasan tentang organisasi | Universitas negeri yang berada di Medan, Sumatera Utara, Indonesia |
 | Address | Menyatakan lokasi fisik organisasi pendidikan | Jl. Dr. T. Mansur No. 9, Kampus Padang Bulan, Medan, Sumatera Utara |
 | Slogan | Menyatakan moto terkait organisasi | The University for Industry |
-| FoundingDate | Tanggal berdirinya organisasi | 1957-11-20 |
+| FoundingDate | Tanggal berdirinya organisasi | 1952-06-04 |
 | URL | Menyatakan alamat website | https://www.usu.ac.id/ |
 
 
@@ -50,7 +50,11 @@ Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan seca
 Dalam Web Semantik, identifier unik digunakan untuk memastikan setiap entitas dapat diidentifikasi dan dihubungkan dengan benar. Contohnya, Universitas Sumatera Utara memiliki identifier Wikidata Q4200341, sehingga dapat dibedakan dari entitas universitas lainnya.
 
 ### 3. Jelaskan subject, predicate, dan object.
-Jawaban: ...
+Jawaban:
+- Subject adalah awal suatu pernyataan.
+- Predicate adalah jenis relasi subject dengan nilainya.
+- Object adalah nilai atau target tujuan relasi.
+Perbedaan ketiga hal ini terletak pada peran dalam membentuk suatu pernyataan data. Contohnya: Universitas Sumatera Utara (object) -> memberOf (predicate) -> ASEAN University Network (object).
 
 ### 4. Apa keuntungan hubungan antarentitas?
 Jawaban: 
