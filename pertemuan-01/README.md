@@ -36,10 +36,16 @@
 ## 4. Pertanyaan Evaluasi
 
 ### 1. Apa perbedaan web tradisional dan Web Semantik?
-Jawaban: ...
+Jawaban: 
+
+Web tradisional adalah web yang isinya dapat dibaca oleh manusia. Kontennya berbentuk halaman yang berisikan teks, gambar, atau video bebas seperti tulisan biasa, seperti artikel, blog, berita, dan lain-lain. Manusia bisa membaca dan paham maksud kontennya, akan tetapi komputer hanya bisa melihat bahwa itu adalah kumpulan huruf dan kata, tanpa mengerti makna atau hubungan antar informasinya.
+
+Sedangkan Web Semantik adalah pengembangan dari web tradisional, yang di mana informasi disusun dengan struktur yang jelas agar komputer/mesin bisa memahami. Caranya, informasi dipecah jadi entitas, atribut, dan relasi, lalu ditulis dalam pola Subject → Predicate → Object. Dengan format seperti itu, komputer bisa membaca hubungan antara data dan bisa mengelola datanya, misalnya untuk menyambungkan informasi dari berbagai sumber atau menjawab pertanyaan.
 
 ### 2. Mengapa entitas membutuhkan identifier unik?
-Jawaban: Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
+Jawaban: 
+
+Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
 
 Dalam Web Semantik, identifier unik digunakan untuk memastikan setiap entitas dapat diidentifikasi dan dihubungkan dengan benar. Contohnya, Universitas Sumatera Utara memiliki identifier Wikidata Q4200341, sehingga dapat dibedakan dari entitas universitas lainnya.
 
