@@ -1,13 +1,15 @@
 # Pertemuan 1 - Pengenalan Web Semantik
 
 ## 1. Eksplorasi Wikidata
-- Nama entitas: ...
-- Identifier Wikidata: ...
-- Deskripsi: ...
-- Negara: ...
-- Lokasi: ...
-- Tahun berdiri: ...
-- Website: ...
+- Nama entitas: Universitas Sumatera Utara
+- Identifier Wikidata: Q4200341
+- Deskripsi: National university in North Sumatera, Indonesia
+- Negara: Indonesia
+- Lokasi: Medan Tuntungan
+- Tahun berdiri: 20 November 1957
+- Website: <https://www.usu.ac.id/>
+- Keanggotaan: ASEAN University Network
+- Akreditasi: National Accreditation Board for Higher Education
 
 ## 2. Entitas, Atribut, dan Relasi
 
@@ -23,7 +25,13 @@
 
 | Property | Fungsi | Contoh Nilai |
 |---|---|---|
-| ... | ... | ... |
+| Name | Menyatakan nama organisasi pendidikan | Universitas Sumatera Utara |
+| Description | Penjelasan tentang organisasi | Universitas negeri yang berada di Medan, Sumatera Utara, Indonesia |
+| Address | Menyatakan lokasi fisik organisasi pendidikan | Jl. Dr. T. Mansur No. 9, Kampus Padang Bulan, Medan, Sumatera Utara |
+| Slogan | Menyatakan moto terkait organisasi | The University for Industry |
+| FoundingDate | Tanggal berdirinya organisasi | 1952-06-04 |
+| URL | Menyatakan alamat website | https://www.usu.ac.id/ |
+
 
 ## 4. Pertanyaan Evaluasi
 
