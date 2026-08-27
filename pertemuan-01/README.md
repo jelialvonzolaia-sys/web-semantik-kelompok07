@@ -21,7 +21,33 @@
 | 4 Juni 1952 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
-## 3. Eksplorasi Schema.org
+## 3. Knowledge Graph Mini: Paris
+Knowledge Graph berikut menggambarkan hubungan antarentitas yang berkaitan dengan Paris.
+
+Entitas : 
+- Paris
+- Prancis
+- Menara Eiffel
+- Museum Louvre
+- Notre-Dame
+- Sungai Seine
+- Pariwisata
+- Wisatawan
+  
+Relasi :
+- Paris → ibuKotaDari → Prancis
+- Menara Eiffel → beradaDi → Paris
+- Museum Louvre → beradaDi → Paris
+- Notre-Dame → beradaDi → Paris
+- Sungai Seine → mengalirMelalui → Paris
+- Pariwisata → berkembangDi → Paris
+- Wisatawan → mengunjungi → Menara Eiffel
+- Wisatawan → mengunjungi → Museum Louvre
+
+### Diagram Knowledge Graph
+![Knowledge Graph Paris](knowledge-graph.png)
+
+## 4. Eksplorasi Schema.org
 
 | Property | Fungsi | Contoh Nilai |
 |---|---|---|
@@ -33,7 +59,7 @@
 | URL | Menyatakan alamat website | https://www.usu.ac.id/ |
 
 
-## 4. Pertanyaan Evaluasi
+## 5. Pertanyaan Evaluasi
 
 ### 1. Apa perbedaan web tradisional dan Web Semantik?
 Jawaban: 
