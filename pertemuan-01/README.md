@@ -24,39 +24,13 @@
 >>>>>>> 7c1e5a15c989c126653441e341b38e4768ebb0e0
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
-## 3. Knowledge Graph Mini: Paris
-Knowledge Graph berikut menggambarkan hubungan antarentitas yang berkaitan dengan Paris.
-
-Entitas : 
-- Paris
-- Prancis
-- Menara Eiffel
-- Museum Louvre
-- Notre-Dame
-- Sungai Seine
-- Pariwisata
-- Wisatawan
-  
-Relasi :
-- Paris → ibuKotaDari → Prancis
-- Menara Eiffel → beradaDi → Paris
-- Museum Louvre → beradaDi → Paris
-- Notre-Dame → beradaDi → Paris
-- Sungai Seine → mengalirMelalui → Paris
-- Pariwisata → berkembangDi → Paris
-- Wisatawan → mengunjungi → Menara Eiffel
-- Wisatawan → mengunjungi → Museum Louvre
-
-### Diagram Knowledge Graph
-![Knowledge Graph Paris](knowledge-graph.png)
-
-## 4. Eksplorasi Schema.org
+## 3. Eksplorasi Schema.org
 
 | Property | Fungsi | Contoh Nilai |
 |---|---|---|
 | ... | ... | ... |
 
-## 5. Pertanyaan Evaluasi
+## 4. Pertanyaan Evaluasi
 
 ### 1. Apa perbedaan web tradisional dan Web Semantik?
 Jawaban: 
