@@ -1,6 +1,6 @@
 # 🌐 Web Semantik - Kelompok 07
 
-Repositori ini dibuat untuk memenuhi latihan 1 mata kuliah **Web Semantik**. Fokus utama dari repositori ini adalah mengeksplorasi bagaimana informasi di web dapat direpresentasikan sebagai **entitas, atribut, dan relasi**, serta menyusun fakta sederhana dalam bentuk **Subject – Predicate – Object** dan membuat *Knowledge Graph*.
+Repositori ini dibuat untuk mendokumentasikan seluruh rangkaian tugas, latihan, dan project kelompok untuk mata kuliah **Web Semantik**.
 
 ---
 
