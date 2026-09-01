@@ -1,6 +1,6 @@
 # 🌐 Web Semantik - Kelompok 07
 
-Repositori ini dibuat untuk mendokumentasikan seluruh rangkaian tugas, latihan, dan project kelompok untuk mata kuliah **Web Semantik**.
+Repository ini dibuat untuk mendokumentasikan seluruh rangkaian tugas, latihan, dan project kelompok untuk mata kuliah **Web Semantik**.
 
 ---
 
@@ -13,18 +13,6 @@ Repositori ini dibuat untuk mendokumentasikan seluruh rangkaian tugas, latihan, 
 | 3 | Vascha U. Lumbantoruan | 251402125 |
 | 4 | Chyntia R.A Hutabarat | 251402002 |
 | 5 | Jona Vebrian Gultom | 251402084 |
-
----
-
-## 🎯 Tujuan Latihan (Pertemuan 1)
-**Mengenali Web Semantik di Dunia Nyata**
-
-Berdasarkan modul latihan, melalui pengerjaan tugas ini diharapkan mahasiswa mampu:
-1. Membedakan web berbasis dokumen dengan web berbasis data.
-2. Mengenali konsep entitas, atribut, dan relasi.
-3. Memahami fungsi *identifier* unik dalam Web Semantik.
-4. Merepresentasikan fakta sederhana menggunakan pola **Subject – Predicate – Object**.
-5. Menjelaskan hubungan antara Web Semantik dan *Knowledge Graph*.
 
 ---
 
