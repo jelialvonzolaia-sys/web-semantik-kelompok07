@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Profil mahasiswa Web Semantik -->
+
+<profil nim="251402119">
+    <nama>Patricia Putri Josephine Situmeang</nama>
+    <angkatan>2025</angkatan>
+    <programStudi>Teknologi Informasi</programStudi>
+
+    <hobi>Membaca Buku</hobi>
+    <hobi>Mendengarkan Musik</hobi>
+
+    <deskripsi>
+        Halo, saya Patricia Putri Josephine Situmeang, mahasiswa Teknologi Informasi angkatan 2025
+        di Universitas Sumatera Utara. Saya suka mencoba hal-hal baru, terutama yang berhubungan dengan teknologi.
+        Selain itu, saya juga senang membaca dan mendengarkan musik. 
+    </deskripsi>
+</profil>
