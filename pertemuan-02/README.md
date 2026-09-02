@@ -7,9 +7,9 @@ Jelaskan secara singkat struktur XML yang Anda buat.
 
 | No | Bagian yang Salah | Alasan | Perbaikan |
 |---|---|---|---|
-| 1 | '<nama></Nama>' | pembuka tag '<nama>' dan penutup berbeda | '<nama></nama>' |
-| 2 | '<angkatan>' | penutup taglinenya tidak ada | '<angkatan></angkatan>' |
-| 3 | '<hobi>' | hobi di pakai 2 kali dapat merusak baik dari kerapian maupun jalannya program | menggunakan perulangan |
+| 1 | ` <nama></Nama> ` | pembuka tag ` <nama> ` dan penutup berbeda | `<nama></nama>` |
+| 2 | ` <angkatan> ` | penutup taglinenya tidak ada | `<angkatan></angkatan>` |
+| 3 | ` <hobi> ` | hobi di pakai 2 kali dapat merusak baik dari kerapian maupun jalannya program | menggunakan perulangan |
 
 ## 3. Analisis XML Schema
 1. Root element: ...
