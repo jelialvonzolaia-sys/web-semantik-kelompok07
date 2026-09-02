@@ -39,8 +39,7 @@ XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam
  4. Tidak boleh tumpang tindih
  5. Nilai atribut wajib diapit tanda kutip
  6. Nama tag tidak boleh diawali angka
- 7. 
- Jika aturan yang diberlakukan tidak sepenuhnya digunakan maka akan terjadi error.
+Jika aturan yang diberlakukan tidak sepenuhnya digunakan maka akan terjadi error.
  
 **3. Jelaskan perbedaan well-formed dan valid.**
 
