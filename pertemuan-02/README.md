@@ -12,11 +12,11 @@ Jelaskan secara singkat struktur XML yang Anda buat.
 | 3 | ` <hobi> ` | hobi di pakai 2 kali dapat merusak baik dari kerapian maupun jalannya program | menggunakan perulangan |
 
 ## 3. Analisis XML Schema
-1. Root element: ...
-2. Tipe data judul: ...
-3. Tipe data tahun: ...
-4. Tipe data harga: ...
-5. Atribut ISBN: ...
+1. Root element: 'buku' -> Didefinisikan pada '<xs:element name="buku">'
+2. Tipe data judul: 'string' -> Berupa teks/karakter
+3. Tipe data tahun: 'gYear' -> Merupakan format tahun Gregorian, contoh: 2026
+4. Tipe data harga: 'Decimal' -> Berupa angka
+5. Atribut ISBN: 'use="required"' merupakan deklarasi yang digunakan agar dokumen XML valid, jadi wajib dituliskan
 
 ## 4. Analisis Namespace
 1. Mengapa kedua elemen title tidak sama? ...
@@ -26,7 +26,18 @@ Jelaskan secara singkat struktur XML yang Anda buat.
 
 ## 5. Pertanyaan Evaluasi
 1. Apa perbedaan utama XML dan HTML?
+-> 'HTML' berfokus pada tampilan sehingga memiliki tag yang baku, sedangkan 'XML' berfokus pada makna yang berfokus pada tag yang dimodelkan sendiri sesuai konteks data.
+
 2. Apa yang dimaksud dokumen XML yang well-formed?
+-> XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam pembuatannya. Aturan yang ada antara lain:
+ a. Wajib memiliki tepat satu root element
+ b. Setiap tag pembuka wajib memiliki tag penutup
+ c. Bersifat case-sensitive
+ d. Tidak boleh tumpang tindih
+ e. Nilai atribut wajib diapit tanda kutip
+ f. Nama tag tidak boleh diawali angka
+ Jika aturan yang diberlakukan tidak sepenuhnya digunakan maka akan terjadi error.
+ 
 3. Jelaskan perbedaan well-formed dan valid.
 4. Mengapa XSD lebih kuat dibandingkan DTD?
 5. Mengapa namespace penting ketika data XML berasal dari beberapa kosakata berbeda?
