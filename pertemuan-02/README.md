@@ -27,9 +27,11 @@ Jelaskan secara singkat struktur XML yang Anda buat.
 
 ## 5. Pertanyaan Evaluasi
 **1. Apa perbedaan utama XML dan HTML?**
+
 'HTML' berfokus pada tampilan sehingga memiliki tag yang baku, sedangkan 'XML' berfokus pada makna yang berfokus pada tag yang dimodelkan sendiri sesuai konteks data.
 
 **2. Apa yang dimaksud dokumen XML yang well-formed?**
+
 XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam pembuatannya. Aturan yang ada antara lain:
  1. Wajib memiliki tepat satu root element
  2. Setiap tag pembuka wajib memiliki tag penutup
@@ -37,10 +39,13 @@ XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam
  4. Tidak boleh tumpang tindih
  5. Nilai atribut wajib diapit tanda kutip
  6. Nama tag tidak boleh diawali angka
+ 7. 
  Jika aturan yang diberlakukan tidak sepenuhnya digunakan maka akan terjadi error.
  
 **3. Jelaskan perbedaan well-formed dan valid.**
+
 **4. Mengapa XSD lebih kuat dibandingkan DTD?**
+
 XSD lebih unggul karena dapat menutup dua kekurangan utama dari DTD.
  1. Tipe Data => dalam DTD tidak memeliki data yang spesifik yang membuat angka dan teks diperlukan sama persis. Sedangkan XSD menggunakan tipe data bawaan secara eksplisit seperti string, int, date, gYear, decimal, dan boolean.
  2. Identitas kosakata => DTD tidak mendukung namespace, sedangkan XSD mendukung fitur namespace, kardinalitas, minOccrus/maxOccrus, dan derivasi tipe.
@@ -48,4 +53,5 @@ XSD lebih unggul karena dapat menutup dua kekurangan utama dari DTD.
  4. Kontrol struktur dan kardinalitas lanjutan => Pda DTD hanya menggunakan simbol '+', '*', '?'. Sedangkan XSD manggunakan fitur kardinalitas dari minOccrus/maxOccrus dan juga mendukung derivasi tipe.
 
 **5. Mengapa namespace penting ketika data XML berasal dari beberapa kosakata berbeda?**
+
 **6. Apa kegunaan XPath dalam pengolahan dokumen XML?**
