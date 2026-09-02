@@ -28,11 +28,13 @@ Struktur XML profil mahasiswa tersebut menggunakan satu elemen utama (*root elem
 
 ## 5. Pertanyaan Evaluasi
 **1. Apa perbedaan utama XML dan HTML?**
+
 Jawaban:
 
 'HTML' berfokus pada tampilan sehingga memiliki tag yang baku, sedangkan 'XML' berfokus pada makna yang berfokus pada tag yang dimodelkan sendiri sesuai konteks data.
 
 **2. Apa yang dimaksud dokumen XML yang well-formed?**
+
 Jawaban:
 
 XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam pembuatannya. Aturan yang ada antara lain:
@@ -45,6 +47,7 @@ XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam
 Jika aturan yang diberlakukan tidak sepenuhnya digunakan maka akan terjadi error.
  
 **3. Jelaskan perbedaan well-formed dan valid.**
+
 Jawaban:
 
 **Well-Formed:**
@@ -54,7 +57,8 @@ Sebuah dokumen XML dikatakan well-formed jika memenuhi aturan sintaksis dasar XM
 Sebuah dokumen XML dikatakan valid jika selain memenuhi aturan well-formed, dokumen tersebut juga mematuhi aturan struktur tambahan yang didefinisikan dalam suatu skema, seperti DTD (Document Type Definition) atau XSD (XML Schema Definition). Skema tersebut dapat menentukan elemen yang boleh digunakan, urutan atau hubungan antar-elemen, atribut yang diperlukan, serta tipe data yang diizinkan.
 
 **4. Mengapa XSD lebih kuat dibandingkan DTD?**
-Jawaban :
+
+Jawaban:
 
 XSD lebih unggul karena dapat menutup dua kekurangan utama dari DTD.
  - Tipe Data => dalam DTD tidak memeliki data yang spesifik yang membuat angka dan teks diperlukan sama persis. Sedangkan XSD menggunakan tipe data bawaan secara eksplisit seperti string, int, date, gYear, decimal, dan boolean.
@@ -63,8 +67,10 @@ XSD lebih unggul karena dapat menutup dua kekurangan utama dari DTD.
  - Kontrol struktur dan kardinalitas lanjutan => Pda DTD hanya menggunakan simbol '+', '*', '?'. Sedangkan XSD manggunakan fitur kardinalitas dari minOccrus/maxOccrus dan juga mendukung derivasi tipe.
 
 **5. Mengapa namespace penting ketika data XML berasal dari beberapa kosakata berbeda?**
-Jawaban :
+
+Jawaban:
 
 **6. Apa kegunaan XPath dalam pengolahan dokumen XML?**
-Jawaban :
+
+Jawaban:
 
