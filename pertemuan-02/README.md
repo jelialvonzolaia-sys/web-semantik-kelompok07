@@ -1,7 +1,8 @@
 # Pertemuan 2 - Format Dokumen XML
 
 ## 1. Profil XML
-Jelaskan secara singkat struktur XML yang Anda buat.
+
+Struktur XML profil mahasiswa tersebut menggunakan satu elemen utama (*root element*), yaitu `<profil>` dengan atribut `nim`. Di dalam elemen root terdapat beberapa elemen anak (*child elements*) yang mendeskripsikan data mahasiswa, yaitu `<nama>`, `<angkatan>`, `<programStudi>`, dua elemen `<hobi>` yang digunakan untuk menyimpan data hobi, serta `<deskripsi>` yang berisi informasi singkat tentang mahasiswa. Seluruh elemen disusun secara hierarkis dan konsisten sehingga dokumen XML memenuhi syarat *well-formed*.
 
 ## 2. Analisis Kesalahan XML
 
@@ -27,11 +28,13 @@ Jelaskan secara singkat struktur XML yang Anda buat.
 
 ## 5. Pertanyaan Evaluasi
 **1. Apa perbedaan utama XML dan HTML?**
-Jawaban :
+Jawaban:
+
 'HTML' berfokus pada tampilan sehingga memiliki tag yang baku, sedangkan 'XML' berfokus pada makna yang berfokus pada tag yang dimodelkan sendiri sesuai konteks data.
 
 **2. Apa yang dimaksud dokumen XML yang well-formed?**
-Jawaban :
+Jawaban:
+
 XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam pembuatannya. Aturan yang ada antara lain:
  1. Wajib memiliki tepat satu root element
  2. Setiap tag pembuka wajib memiliki tag penutup
@@ -42,10 +45,17 @@ XML well-formed adalah dokumen yang memilki seluruh aturan sintaksis dasar dalam
 Jika aturan yang diberlakukan tidak sepenuhnya digunakan maka akan terjadi error.
  
 **3. Jelaskan perbedaan well-formed dan valid.**
-Jawaban :
+Jawaban:
+
+**Well-Formed:**
+Sebuah dokumen XML dikatakan well-formed jika memenuhi aturan sintaksis dasar XML. Artinya, dokumen tersebut memiliki tepat satu root element, setiap tag pembuka memiliki tag penutup yang sesuai, elemen bersarang dengan benar, penulisan tag bersifat case-sensitive, dan atribut ditulis menggunakan tanda kutip. Jika aturan tersebut tidak dipenuhi, parser XML akan menolak dokumen tersebut.
+
+**Valid:**
+Sebuah dokumen XML dikatakan valid jika selain memenuhi aturan well-formed, dokumen tersebut juga mematuhi aturan struktur tambahan yang didefinisikan dalam suatu skema, seperti DTD (Document Type Definition) atau XSD (XML Schema Definition). Skema tersebut dapat menentukan elemen yang boleh digunakan, urutan atau hubungan antar-elemen, atribut yang diperlukan, serta tipe data yang diizinkan.
 
 **4. Mengapa XSD lebih kuat dibandingkan DTD?**
-Jawaban : 
+Jawaban :
+
 XSD lebih unggul karena dapat menutup dua kekurangan utama dari DTD.
  - Tipe Data => dalam DTD tidak memeliki data yang spesifik yang membuat angka dan teks diperlukan sama persis. Sedangkan XSD menggunakan tipe data bawaan secara eksplisit seperti string, int, date, gYear, decimal, dan boolean.
  - Identitas kosakata => DTD tidak mendukung namespace, sedangkan XSD mendukung fitur namespace, kardinalitas, minOccrus/maxOccrus, dan derivasi tipe.
