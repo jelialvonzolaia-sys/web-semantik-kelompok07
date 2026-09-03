@@ -89,6 +89,8 @@ XSD lebih unggul karena dapat menutup dua kekurangan utama dari DTD.
 
 Jawaban:
 
+Namespace penting karena dapat mencegah terjadinya konflik atau kebingungan antara elemen yang memiliki nama sama, tetapi berasal dari kosakata atau sumber yang berbeda. Dengan menggunakan namespace, setiap elemen memiliki identitas yang jelas berdasarkan URI atau prefix tertentu. Hal ini memungkinkan data XML dari beberapa sumber yang berbeda digabungkan dalam satu dokumen tanpa terjadi bentrokan nama elemen.
+
 **6. Apa kegunaan XPath dalam pengolahan dokumen XML?**
 
 Jawaban:
