@@ -21,10 +21,29 @@ Struktur XML profil mahasiswa tersebut menggunakan satu elemen utama (*root elem
 5. Atribut ISBN: 'use="required"' merupakan deklarasi yang digunakan agar dokumen XML valid, jadi wajib dituliskan
 
 ## 4. Analisis Namespace
-1. Mengapa kedua elemen title tidak sama? ...
-2. Fungsi prefix: ...
-3. Fungsi xmlns: ...
-4. Apakah URI namespace harus dapat dibuka? ...
+1. Mengapa kedua elemen title tersebut tidak dianggap sama?
+
+   Jawaban :
+   
+   Elemen `title` tidak sama karena URI namespace-nya berbeda melalui prefix-nya (`.../buku` vs `.../web`), maka meskipun local name-nya sama-sama "title", keduanya     dianggap sebagai elemen yang berbeda dan tidak akan saling bentrok. 
+   
+2. Apa fungsi prefix buku: dan web:?
+
+   Jawaban :
+
+   Prefix berfungsi sebagai singkatan untuk menghubungkan sebuah elemen ke URI namespace tertentu yang sudah dideklarasikan. Fungsinya adalah membedakan asal/konteks suatu elemen, sehingga elemen dengan nama sama tapi berasal dari "kosakata" (vocabulary/skema) yang berbeda tetap bisa dibedakan secara jelas dalam satu dokumen XML yang sama.
+
+3. Apa fungsi atribut xmlns?
+
+   Jawaban :
+
+   Atribut `xmlns` digunakan untuk mendeklarasikan sebuah namespace, yaitu mengaitkan sebuah prefix dengan sebuah URI unik. Contoh: `xmlns:buku="https://example.org/buku"` berarti setiap elemen/atribut yang memakai prefix `buku:` termasuk dalam namespace dengan identitas URI tersebut. Tujuannya adalah menghindari ambiguitas dan tabrakan nama (naming conflict) ketika beberapa skema/vocabulary XML digabungkan dalam satu dokumen.\
+   
+4. Apakah URI namespace harus dapat dibuka sebagai halaman web? Jelaskan.
+
+   Jawaban :
+
+   Tidak harus. URI pada `xmlns` berfungsi sebagai **identifier** , bukan sebagai alamat (locator) yang wajib bisa diakses atau menampilkan halaman/dokumen tertentu. Yang penting URI tersebut unik, sehingga tidak akan bertabrakan dengan namespace milik pihak lain dan biasanya digunakan URI berbasis domain yang dimiliki organisasi karena domain sudah dijamin unik. Meski begitu, dalam praktiknya banyak namespace (misalnya namespace RDF, XHTML) memang mengarah ke halaman yang berisi dokumentasi atau skema, sebagai bentuk kebaikan (best practice) agar orang lain bisa memahami maksud namespace tersebut (tapi ini opsional), bukan keharusan teknis dari spesifikasi XML.
 
 ## 5. Pertanyaan Evaluasi
 **1. Apa perbedaan utama XML dan HTML?**
