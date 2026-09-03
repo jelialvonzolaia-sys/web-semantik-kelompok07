@@ -19,9 +19,7 @@
 | ASEAN  | Entitas | Karena ASEAN adalah sebuah organisasi yang bisa berdiri sendiri dan memiliki identitas tersendirinya juga |
 | Universitas Sumatera Utara → accredited by → National Accreditation Board for Higher Education | Relasi | Dimana menghubungkan USU dengan lembaga yang memberinya akreditas |
 | 4 Juni 1952 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
-=======
 | 20 November 1957 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
->>>>>>> 7c1e5a15c989c126653441e341b38e4768ebb0e0
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
 ## 3. Eksplorasi Schema.org
@@ -43,9 +41,7 @@ Sedangkan Web Semantik adalah pengembangan dari web tradisional, yang di mana in
 Jawaban: 
 
 Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
-=======
 Jawaban: Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
->>>>>>> 7c1e5a15c989c126653441e341b38e4768ebb0e0
 
 Dalam Web Semantik, identifier unik digunakan untuk memastikan setiap entitas dapat diidentifikasi dan dihubungkan dengan benar. Contohnya, Universitas Sumatera Utara memiliki identifier Wikidata Q4200341, sehingga dapat dibedakan dari entitas universitas lainnya.
 
@@ -64,4 +60,5 @@ Jawaban:
 
 ### 5. Bagaimana Knowledge Graph membantu AI?
 Jawaban: 
+
 Menurut kelompok kami, **Knowledge Graph dapat membantu sistem pencarian atau AI dalam memahami informasi dengan cara menunjukkan hubungan antar informasi secara lebih jelas**. Jadi, AI tidak hanya melihat informasi sebagai kumpulan kata, tetapi juga bisa memahami keterkaitan antara satu entitas dengan entitas lainnya. Misalnya, sistem dapat mengetahui bahwa Menara Eiffel berada di Paris, dan Paris merupakan ibu kota Prancis. Dengan begitu, sistem pencarian atau AI dapat memberikan informasi yang lebih relevan, memahami konteks pertanyaan dengan lebih baik, serta menghasilkan jawaban yang lebih tepat.
