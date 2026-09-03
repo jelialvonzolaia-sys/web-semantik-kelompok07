@@ -93,3 +93,11 @@ Jawaban:
 
 Jawaban:
 
+XPath semacam "alamat" yang dipakai buat nemuin bagian tertentu di dalam file XML, misalnya mau cari elemen apa, ada di mana letaknya, atau mau ambil isinya.
+
+Jadi gunanya kurang lebih:
+- Membantu **mencari** elemen atau data tertentu di dalam XML tanpa harus baca semua isi filenya satu-satu.
+- Membantu **menunjukkan letak/posisi** suatu elemen, misalnya elemen `title` ada di dalam elemen `data`.
+- Sering dipakai kalau kita mau ambil data dari XML pakai program atau tools tertentu.
+
+
