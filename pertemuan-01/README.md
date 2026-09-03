@@ -19,7 +19,6 @@
 | ASEAN  | Entitas | Karena ASEAN adalah sebuah organisasi yang bisa berdiri sendiri dan memiliki identitas tersendirinya juga |
 | Universitas Sumatera Utara → accredited by → National Accreditation Board for Higher Education | Relasi | Dimana menghubungkan USU dengan lembaga yang memberinya akreditas |
 | 4 Juni 1952 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
-| 20 November 1957 | Atribut | Tidak bisa berdiri sendiri, karena merupakan sebuah nilai yaitu tanggal atau waktu |
 | USU → member of → ASEAN | Relasi | Disini menghubungkan para member/anggota antara ASEAN dan USU |
 
 ## 3. Eksplorasi Schema.org
