@@ -40,7 +40,6 @@ Sedangkan Web Semantik adalah pengembangan dari web tradisional, yang di mana in
 Jawaban: 
 
 Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
-Jawaban: Suatu entitas membutuhkan identifier unik agar dapat dikenali dan dibedakan secara tepat dari entitas lainnya. Identifier ini mencegah ambiguitas, terutama ketika beberapa entitas memiliki nama yang sama atau mirip. Selain itu, identifier unik mempermudah pencarian, pengelolaan, dan penghubungan data antarentitas.
 
 Dalam Web Semantik, identifier unik digunakan untuk memastikan setiap entitas dapat diidentifikasi dan dihubungkan dengan benar. Contohnya, Universitas Sumatera Utara memiliki identifier Wikidata Q4200341, sehingga dapat dibedakan dari entitas universitas lainnya.
 
