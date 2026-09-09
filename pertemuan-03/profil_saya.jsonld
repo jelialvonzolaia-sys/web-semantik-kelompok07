@@ -1,1 +1,17 @@
-//silahkan isi
+{
+  "@context": {
+    "schema": "https://schema.org/"
+  },
+  "@type": "schema:Person",
+  "@id": "https://example.org/evelin",
+  "schema:name": "Evelin",
+  "schema:identifier": "231401234",
+  "schema:alumniOf": {
+    "@type": "schema:CollegeOrUniversity",
+    "schema:name": "Universitas Sumatera Utara"
+  },
+  "schema:knowsAbout": [
+    "Teknologi Informasi",
+    "Pemrograman"
+  ]
+}
