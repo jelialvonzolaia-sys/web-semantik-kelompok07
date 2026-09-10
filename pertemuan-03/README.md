@@ -25,8 +25,14 @@
 
 ## 2. Pemeriksaan schema.org
 1. Alasan memilih tipe paling spesifik: 
-2. Nama properti dan bahasa nilai: ...
-3. Manfaat array pada `knowsAbout`: ...
+
+   Supaya data dibuat lebih jelas dan maknanya tepat untuk mesin pencarian. Jika hanya menggunakan tipe yang terlalu general seperti `thing`, mesin akan susah menentukan konteks datanya. Misalnya untuk mahasiswa menggunakan person dan untuk univ menggunakan CollegeOrUniversity. 
+2. Nama properti dan bahasa nilai: 
+
+   Karena nama propertinya sudah ditentukan dalam kosakata *schema.org* jadi harus mengikuti kosakatanya agar mesin pencariannya tidak bingung. Sedangkan nilainya itu hanya informasi dan data yang ingin kita sampaikan (bebas menggunakan bahasa apa).
+3. Manfaat array pada `knowsAbout`: 
+
+   Array pada `knowAbout` berfungsi untuk menyimpan data yang lebih dari satu nilai di dalamnya. Karena kita dapat memasukkan lebih dari satu keahlian yang kita miliki didalamnya misalnya `["Web Semantik", "Java", "C++"]` tanpa menulisnya berulang2.
 
 ## 3. Perbaikan Lima Kesalahan
 | No. | Bagian Salah | Alasan | Perbaikan |
