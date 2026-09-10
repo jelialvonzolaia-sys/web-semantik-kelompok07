@@ -1,8 +1,8 @@
 # Latihan Pertemuan 3 - JSON-LD dan Structured Data
 
 ## Identitas
-- Nama: ISI_NAMA
-- NIM: ISI_NIM
+- Nama: Evelin
+- NIM: 231401234
 
 ## Struktur Hasil
 - `profil_saya.jsonld`
