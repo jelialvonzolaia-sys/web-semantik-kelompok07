@@ -31,11 +31,11 @@
 ## 3. Perbaikan Lima Kesalahan
 | No. | Bagian Salah | Alasan | Perbaikan |
 |---|---|---|---|
-| 1 | ... | ... | ... |
-| 2 | ... | ... | ... |
-| 3 | ... | ... | ... |
-| 4 | ... | ... | ... |
-| 5 | ... | ... | ... |
+| 1 | "@type": "person" | Penulisan tipe yang ditentukan oleh Schema.org harus diawali huruf kapital | "@type": "Person" |
+| 2 | 'name': "Rina Anggraini" | Tanda kutip satu ditandai tidak valid sebagai JSON | "name": "Rina Anggraini" |
+| 3 | "birthDate": "12 September 2004" | Format tanggal yang sah adalah dengan sistem penanggalan Gregorian | "birthDate": "2004-09-12" |
+| 4 | "nomorInduk": "221401001" | Properti tersebut bukan properti standar di Schema.org untuk penyimpanan identitas seseorang | "identifier": "221401001" |
+| 5 | "nomorInduk": "221401001", | Properti terakhir tidak boleh diikuti tanda koma | "nomorInduk": "221401001" |
 
 ## 4. Triple dari JSON-LD Playground
 Tuliskan satu baris N-Quads yang terbentuk:
