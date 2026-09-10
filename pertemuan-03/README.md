@@ -47,18 +47,40 @@
 Tuliskan satu baris N-Quads yang terbentuk:
 
 ```text
-ISI_TRIPLE
+<https://example.org/evelin> <https://schema.org/name> "Evelin" .
 ```
 
 ## 5. Hasil Validasi
-- Schema Markup Validator: ...
-- Rich Results Test: ...
-- JSON-LD Playground: ...
+- Schema Markup Validator: 
+   Data terstruktur berhasil dikenali sebagai Person, dan properti yang digunakan valid serta tidak terdapat kesalahan atau peringatan.
+   
+- Rich Results Test: 
+   1 item valid terdeteksi sebagai Acara (Event), dengan 8 masalah non-kritis berupa properti opsional yang tidak tersedia.
+
+   Peringatan yang muncul:
+
+   - Kolom eventStatus tidak ada (opsional)
+   - Kolom description tidak ada (opsional)
+   - Kolom endDate tidak ada (opsional)
+   - Kolom offers tidak ada (opsional)
+   - Kolom performer tidak ada (opsional)
+   - Kolom image tidak ada (opsional)
+   - Kolom address tidak ada (opsional)
+   - Kolom url tidak ada (opsional)
+
+- JSON-LD Playground: 
+   JSON-LD berhasil dikonversi menjadi N-Quads dan menghasilkan triple yang sesuai dengan data yang dimasukkan.
 
 ## 6. Refleksi
 1. Mengapa `@context` disebut jembatan menuju makna?
+
+   @context disebut jembatan menuju makna karena menghubungkan istilah yang digunakan dalam JSON-LD dengan kosakata yang memiliki arti tertentu. Misalnya, schema:name menunjukkan bahwa data tersebut merupakan nama berdasarkan Schema.org.
 2. Apa perbedaan fungsi Schema Markup Validator dan Rich Results Test?
+
+   Schema Markup Validator digunakan untuk memeriksa apakah structured data menggunakan tipe dan properti Schema.org dengan benar. Sedangkan Rich Results Test digunakan untuk melihat apakah structured data tersebut memenuhi syarat dan dapat digunakan untuk hasil kaya di Google.
 3. Mengapa isi JSON-LD harus sama dengan konten yang terlihat pada halaman?
+
+   Karena JSON-LD berfungsi memberikan informasi terstruktur tentang isi halaman. Jika datanya berbeda dengan konten yang terlihat, informasi tersebut dapat dianggap tidak sesuai atau menyesatkan. Jadi, data terstruktur harus menggambarkan informasi yang benar-benar ada di halaman.
 
 ## Bukti
 ![Schema Markup Validator](screenshots/profil-schema-validator.png)
