@@ -26,17 +26,10 @@
 ## Refleksi
 1. Mengapa URI yang sama penting untuk Turtle dan JSON-LD?
 
-Jawaban:
-
-URI yang sama penting digunakan agar Turtle dan JSON-LD merujuk pada sumber yang sama. Walaupun format penulisannya berbeda, keduanya tetap menggunakan identitas sumber yang sama sehingga metadata yang dibuat tetap konsisten dan tidak dianggap sebagai dua sumber yang berbeda. Dengan menggunakan URI yang sama, data dari Turtle dan JSON-LD juga lebih mudah dibandingkan, dihubungkan, dan digunakan kembali dalam sistem Web Semantik.
+   URI yang sama penting digunakan agar Turtle dan JSON-LD merujuk pada sumber yang sama. Walaupun format penulisannya berbeda, keduanya tetap menggunakan identitas sumber yang sama sehingga metadata yang dibuat tetap konsisten dan tidak dianggap sebagai dua sumber yang berbeda. Dengan menggunakan URI yang sama, data dari Turtle dan JSON-LD juga lebih mudah dibandingkan, dihubungkan, dan digunakan kembali dalam sistem Web Semantik.
 
 2. Apa perbedaan peran DC Terms dan schema.org pada pekerjaan ini?
-
-Jawaban:
-
 3. Sebutkan satu risiko jika metadata HTML, Turtle, dan JSON-LD tidak konsisten.
-
-Jawaban:
 
 ## Catatan akhir
 [Tulis catatan singkat tentang konsistensi metadata Anda.]
