@@ -3,7 +3,7 @@
 ## Identitas sumber
 - Judul: Java How to Program, Tenth Edition, Early Objects
 - Pembuat: Paul Deitel dan Harvey Deitel
-- URI sumber: [isi URI yang dipakai di Turtle dan JSON-LD]
+- URI sumber: https://example.org/sumber/java-how-to-program-tenth-edition
 - Jenis sumber: Text
 
 ## Pemetaan Dublin Core Terms
@@ -29,6 +29,9 @@
 ->   URI yang sama penting digunakan agar Turtle dan JSON-LD merujuk pada sumber yang sama. Walaupun format penulisannya berbeda, keduanya tetap menggunakan identitas sumber yang sama sehingga metadata yang dibuat tetap konsisten dan tidak dianggap sebagai dua sumber yang berbeda. Dengan menggunakan URI yang sama, data dari Turtle dan JSON-LD juga lebih mudah dibandingkan, dihubungkan, dan digunakan kembali dalam sistem Web Semantik.
 
 2. Apa perbedaan peran DC Terms dan schema.org pada pekerjaan ini?
+
+   DC Terms dan schema.org memiliki peran yang berbeda dalam merepresentasikan metadata. DC Terms digunakan untuk memberikan istilah metadata yang umum dan terstruktur, seperti `title`, `creator`, `description`, `created`, dan `publisher`, sehingga informasi sumber dapat dipertukarkan dan dipahami secara konsisten. Sementara itu, schema.org digunakan untuk mendeskripsikan informasi menggunakan vocabulary yang lebih luas dan banyak digunakan dalam pengembangan web, sehingga metadata dapat lebih mudah dipahami oleh mesin pencari dan aplikasi web. 
+
 3. Sebutkan satu risiko jika metadata HTML, Turtle, dan JSON-LD tidak konsisten.
    
 ->   Salah satu resiko saat ketiga hal tersebut tidak konsisten ialah terjadinya perbedaan informasi saat data membaca oleh sistem yang berbeda Akibatnya, ketepatan data menjadi terganggu dikarenakan sumber mengenali informasi yang berbeda.
