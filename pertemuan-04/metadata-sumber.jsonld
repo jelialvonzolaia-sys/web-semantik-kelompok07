@@ -4,7 +4,7 @@
     "title": "dcterms:title",
     "creator": "dcterms:creator",
     "description": "dcterms:description",
-    "created": { "@id": "dcterms:created", "@type": "http://www.w3.org/2001/XMLSchema#date" },
+    "created": "dcterms:created",
     "type": "dcterms:type",
     "language": "dcterms:language",
     "rights": "dcterms:rights"

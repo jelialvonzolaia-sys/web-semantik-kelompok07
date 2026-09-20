@@ -20,19 +20,23 @@
 | dcterms:publisher | Pearson Education, Inc. | Menunjukkan penerbit sumber belajar. |
 
 ## Hasil validasi
-- JSON-LD Playground: [ringkasan hasil]
-- Schema Markup Validator: [ringkasan hasil]
+- JSON-LD Playground: Tidak terdapat syntax error. RDF/N-Quads menunjukkan subject URI yang sama dengan metadata Turtle.
+- Schema Markup Validator: Tidak terdapat error atau warning setelah properti `rights` diperbaiki menjadi `copyrightNotice`.
 
 ## Refleksi
-1. Mengapa URI yang sama penting untuk Turtle dan JSON-LD?
 
-   URI yang sama penting digunakan agar Turtle dan JSON-LD merujuk pada sumber yang sama. Walaupun format penulisannya berbeda, keduanya tetap menggunakan identitas sumber yang sama sehingga metadata yang dibuat tetap konsisten dan tidak dianggap sebagai dua sumber yang berbeda. Dengan menggunakan URI yang sama, data dari Turtle dan JSON-LD juga lebih mudah dibandingkan, dihubungkan, dan digunakan kembali dalam sistem Web Semantik.
+1. **Mengapa URI yang sama penting untuk Turtle dan JSON-LD?**
 
-2. Apa perbedaan peran DC Terms dan schema.org pada pekerjaan ini?
+   URI yang sama digunakan agar Turtle dan JSON-LD merujuk pada sumber yang sama. Walaupun format penulisannya berbeda, keduanya tetap menggunakan identitas sumber yang sama sehingga metadata yang dibuat tetap konsisten dan tidak dianggap sebagai dua sumber yang berbeda. Dengan menggunakan URI yang sama, data dari Turtle dan JSON-LD juga lebih mudah dibandingkan, dihubungkan, dan digunakan kembali dalam sistem Web Semantik.
 
-   DC Terms dan schema.org memiliki peran yang berbeda dalam merepresentasikan metadata. DC Terms digunakan untuk memberikan istilah metadata yang umum dan terstruktur, seperti `title`, `creator`, `description`, `created`, dan `publisher`, sehingga informasi sumber dapat dipertukarkan dan dipahami secara konsisten. Sementara itu, schema.org digunakan untuk mendeskripsikan informasi menggunakan vocabulary yang lebih luas dan banyak digunakan dalam pengembangan web, sehingga metadata dapat lebih mudah dipahami oleh mesin pencari dan aplikasi web. 
+2. **Apa perbedaan peran DC Terms dan schema.org pada pekerjaan ini?**
 
-3. Sebutkan satu risiko jika metadata HTML, Turtle, dan JSON-LD tidak konsisten.
+   DC Terms dan schema.org memiliki peran yang berbeda dalam merepresentasikan metadata. DC Terms digunakan untuk memberikan istilah metadata yang umum dan terstruktur, seperti `title`, `creator`, `description`, `created`, dan `publisher`, sehingga informasi sumber dapat dipertukarkan dan dipahami secara konsisten. Sementara itu, schema.org digunakan untuk mendeskripsikan informasi menggunakan vocabulary yang lebih luas dan banyak digunakan dalam pengembangan web, sehingga metadata dapat lebih mudah dipahami oleh mesin pencari dan aplikasi web.
+
+3. **Sebutkan satu risiko jika metadata HTML, Turtle, dan JSON-LD tidak konsisten.**
+
+   Salah satu risiko jika ketiga metadata tersebut tidak konsisten adalah terjadinya perbedaan informasi ketika data dibaca oleh sistem yang berbeda. Akibatnya, ketepatan data dapat terganggu karena sistem dapat mengenali informasi yang berbeda untuk sumber yang sama.
 
 ## Catatan akhir
-[Tulis catatan singkat tentang konsistensi metadata Anda.]
+
+Metadata HTML, Turtle, dan JSON-LD telah diselaraskan pada informasi utama seperti judul, pembuat, deskripsi, tanggal, bahasa, dan hak cipta. Ketiga format menggunakan informasi yang merujuk pada sumber yang sama sehingga metadata dapat lebih mudah dipertukarkan dan digunakan oleh sistem yang berbeda.
