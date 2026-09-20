@@ -1,0 +1,11 @@
+{
+    "@context": "http://schema.org",
+    "@type": "Book",
+    "@id" : "https://example.org/sumber/java-how-to-program-tenth-edition",
+    "name": "Java How to Program, Tenth Edition, Early Objects",
+    "author": "Paul Deitel dan Harvey Deitel",
+    "description": "An instructional book that covers java programming step by step, ranging from programming fundamentals, object orintied programming, data structures, and databases to web application development.",
+    "inLanguage" : "en",
+    "dateCreated" : "2015",
+    "rights" : "Copyright © 2015, 2012 and 2009 Pearson Education, Inc. All rights reserved."
+}
