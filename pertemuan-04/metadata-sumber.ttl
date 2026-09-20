@@ -1,0 +1,11 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://example.org/sumber/java-how-to-program-tenth-edition>
+    dcterms:title "Java How to Program, Tenth Edition, Early Objects" ;
+    dcterms:creator "Paul Deitel dan Harvey Deitel" ;
+    dcterms:description "Buku pembelajaran yang membahas pemrograman Java secara bertahap, mulai dari dasar pemrograman, object-oriented programming, struktur data, database, hingga pengembangan aplikasi web." ;
+    dcterms:created "2015" ;
+    dcterms:type "Text" ;
+    dcterms:language "en" ;
+    dcterms:rights "Copyright © 2015, 2012 and 2009 Pearson Education, Inc. All rights reserved." ;
+    dcterms:publisher "Pearson Education, Inc." .
