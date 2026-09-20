@@ -3,7 +3,7 @@
 ## Identitas sumber
 - Judul: Java How to Program, Tenth Edition, Early Objects
 - Pembuat: Paul Deitel dan Harvey Deitel
-- URI sumber: [isi URI yang dipakai di Turtle dan JSON-LD]
+- URI sumber: https://example.org/sumber/java-how-to-program-tenth-edition
 - Jenis sumber: Text
 
 ## Pemetaan Dublin Core Terms
