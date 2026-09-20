@@ -31,5 +31,6 @@
 2. Apa perbedaan peran DC Terms dan schema.org pada pekerjaan ini?
 3. Sebutkan satu risiko jika metadata HTML, Turtle, dan JSON-LD tidak konsisten.
 
+
 ## Catatan akhir
 [Tulis catatan singkat tentang konsistensi metadata Anda.]
