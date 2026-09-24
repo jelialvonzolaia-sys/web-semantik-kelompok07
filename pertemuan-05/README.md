@@ -2,15 +2,14 @@
 - IRI dasar: [isi IRI]
 - Domain: Kampus
 
-## Komponen ontology
 | Komponen | Isi yang dibuat |
-| --- | --- |
-| Class | [isi] |
-| Subclass | [isi] |
-| Object property | [isi] |
-| Datatype property | [isi] |
-| Individual | [isi] |
-| Axiom/disjointness | [isi] |
+| :--- | :--- |
+| **Class** | `Pizza` |
+| **Subclass** | `CheesyPizza` |
+| **Object property** | `hasTopping` |
+| **Datatype property** | `hasCaloricContent` |
+| **Individual** | `America` |
+| **Axiom/disjointness** | `DisjointClasses: Pizza, PizzaBase, PizzaTopping` |
 
 ## Layer Cake
 Jelaskan posisi ontology dalam Semantic Web Layer Cake: [isi jawaban]
