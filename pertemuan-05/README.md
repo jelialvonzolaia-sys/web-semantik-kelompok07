@@ -1,5 +1,5 @@
 ## Ontology mini kampus
-- IRI dasar: [isi IRI]
+- IRI dasar: (https://example.org/ontology/kampus#)
 - Domain: Kampus
 
 | Komponen | Isi yang dibuat |
