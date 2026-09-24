@@ -3,9 +3,9 @@
 | Lapis | Peran | Contoh Anda |
 | :--- | :--- | :--- |
 | URI dan Unicode | Identitas global dan representasi karakter | URI sumber pada `metadata-sumber.ttl` |
-| XML | Sintaks pertukaran data | `katalog_buku.xml` |
-| RDF dan RDFS | Pernyataan graph dan kosakata dasar | JSON-LD pada `profil_saya.jsonld` |
-| Ontology / OWL | Makna domain dan penalaran lebih kaya | Ontology kampus pada `ontology-kampus.owl` |
+| XML | Sintaks pertukaran data | XML pada file `katalog_buku.xml` |
+| RDF dan RDFS | Pernyataan graph dan kosakata dasar | RDF pada file `profil_saya.jsonld` |
+| Ontology / OWL | Makna domain dan penalaran lebih kaya | Ontology pada file `ontology-kampus.owl` |
 | SPARQL | Query graph RDF | Belum ada artefak terkait |
 | Rules, Proof, Trust | Aturan, pembuktian, dan kepercayaan | Belum ada artefak terkait |
 
