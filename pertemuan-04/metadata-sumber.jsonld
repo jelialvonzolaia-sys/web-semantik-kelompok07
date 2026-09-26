@@ -1,0 +1,20 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "title": "dcterms:title",
+    "creator": "dcterms:creator",
+    "description": "dcterms:description",
+    "created": "dcterms:created",
+    "type": "dcterms:type",
+    "language": "dcterms:language",
+    "rights": "dcterms:rights"
+  },
+  "@id": "https://example.org/sumber/java-how-to-program-tenth-edition",
+  "title": { "@value": "Java How to Program, Tenth Edition, Early Objects", "@language": "en" },
+  "creator": { "@value": "Paul Deitel dan Harvey Deitel", "@language": "en" },
+  "description": { "@value": "An instructional book that covers java programming step by step, ranging from programming fundamentals, object orintied programming, data structures, and databases to web application development.", "@language": "en" },
+  "created": "2015",
+  "type": "Text",
+  "language": "en",
+  "rights": "Copyright © 2015, 2012 and 2009 Pearson Education, Inc. All rights reserved."
+}

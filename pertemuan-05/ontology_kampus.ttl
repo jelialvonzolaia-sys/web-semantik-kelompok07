@@ -1,0 +1,140 @@
+@prefix : <https://example.org/ontology/kampus#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://example.org/ontology/kampus#> .
+
+<https://example.org/ontology/kampus> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://example.org/ontology/kampus#belongsToDepartment
+:belongsToDepartment rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Person ;
+                     rdfs:range :Department .
+
+
+###  https://example.org/ontology/kampus#takesCourse
+:takesCourse rdf:type owl:ObjectProperty ;
+             rdfs:domain :Student ;
+             rdfs:range :Course .
+
+
+###  https://example.org/ontology/kampus#teachesCourse
+:teachesCourse rdf:type owl:ObjectProperty ;
+               rdfs:domain :Lecturer ;
+               rdfs:range :Course .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://example.org/ontology/kampus#hasNIM
+:hasNIM rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Student ;
+        rdfs:range xsd:string .
+
+
+###  https://example.org/ontology/kampus#hasName
+:hasName rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Person ;
+         rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://example.org/ontology/kampus#Course
+:Course rdf:type owl:Class .
+
+
+###  https://example.org/ontology/kampus#Department
+:Department rdf:type owl:Class .
+
+
+###  https://example.org/ontology/kampus#Lecturer
+:Lecturer rdf:type owl:Class ;
+          rdfs:subClassOf :Person ;
+          owl:disjointWith :Student .
+
+
+###  https://example.org/ontology/kampus#Person
+:Person rdf:type owl:Class .
+
+
+###  https://example.org/ontology/kampus#Student
+:Student rdf:type owl:Class ;
+         rdfs:subClassOf :Person .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://example.org/ontology/kampus#Dept_TI
+:Dept_TI rdf:type owl:NamedIndividual ,
+                  :Department .
+
+
+###  https://example.org/ontology/kampus#MK_WebSemantik
+:MK_WebSemantik rdf:type owl:NamedIndividual ,
+                         :Course .
+
+
+###  https://example.org/ontology/kampus#Dosen_Isa
+:Dosen_Isa rdf:type owl:NamedIndividual ,
+                    :Lecturer ;
+           :belongsToDepartment :Dept_TI ;
+           :teachesCourse :MK_WebSemantik ;
+           :hasName "Muhammad Isa Dadi Hasibuan" .
+
+
+###  https://example.org/ontology/kampus#Mahasiswa_Jeli
+:Mahasiswa_Jeli rdf:type owl:NamedIndividual ,
+                         :Student ;
+                :belongsToDepartment :Dept_TI ;
+                :takesCourse :MK_WebSemantik ;
+                :hasNIM "251402101" ;
+                :hasName "Jeli Alvonzo Laia" .
+
+
+###  https://example.org/ontology/kampus#Mahasiswa_Patricia
+:Mahasiswa_Patricia rdf:type owl:NamedIndividual ,
+                             :Student ;
+                    :belongsToDepartment :Dept_TI ;
+                    :takesCourse :MK_WebSemantik ;
+                    :hasNIM "251402119" ;
+                    :hasName "Patricia Putri Josephine Situmeang" .
+
+
+###  https://example.org/ontology/kampus#Mahasiswa_Vascha
+:Mahasiswa_Vascha rdf:type owl:NamedIndividual ,
+                           :Student ;
+                  :belongsToDepartment :Dept_TI ;
+                  :takesCourse :MK_WebSemantik ;
+                  :hasNIM "251402125" ;
+                  :hasName "Vascha U. Lumbantoruan" .
+
+
+###  https://example.org/ontology/kampus#Mahasiswa_Chyntia
+:Mahasiswa_Chyntia rdf:type owl:NamedIndividual ,
+                            :Student ;
+                   :belongsToDepartment :Dept_TI ;
+                   :takesCourse :MK_WebSemantik ;
+                   :hasNIM "251402002" ;
+                   :hasName "Chyntia R.A Hutabarat" .
+
+
+###  https://example.org/ontology/kampus#Mahasiswa_Jona
+:Mahasiswa_Jona rdf:type owl:NamedIndividual ,
+                         :Student ;
+                :belongsToDepartment :Dept_TI ;
+                :takesCourse :MK_WebSemantik ;
+                :hasNIM "251402084" ;
+                :hasName "Jona Vebrian Gultom" .

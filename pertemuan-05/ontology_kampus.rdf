@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://example.org/ontology/kampus#"
+     xml:base="https://example.org/ontology/kampus"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <owl:Ontology rdf:about="https://example.org/ontology/kampus"/>
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- https://example.org/ontology/kampus#belongsToDepartment -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontology/kampus#belongsToDepartment">
+        <rdfs:domain rdf:resource="https://example.org/ontology/kampus#Person"/>
+        <rdfs:range rdf:resource="https://example.org/ontology/kampus#Department"/>
+    </owl:ObjectProperty>
+
+    <!-- https://example.org/ontology/kampus#takesCourse -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontology/kampus#takesCourse">
+        <rdfs:domain rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <rdfs:range rdf:resource="https://example.org/ontology/kampus#Course"/>
+    </owl:ObjectProperty>
+
+    <!-- https://example.org/ontology/kampus#teachesCourse -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontology/kampus#teachesCourse">
+        <rdfs:domain rdf:resource="https://example.org/ontology/kampus#Lecturer"/>
+        <rdfs:range rdf:resource="https://example.org/ontology/kampus#Course"/>
+    </owl:ObjectProperty>
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- https://example.org/ontology/kampus#hasNIM -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontology/kampus#hasNIM">
+        <rdfs:domain rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <!-- https://example.org/ontology/kampus#hasName -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontology/kampus#hasName">
+        <rdfs:domain rdf:resource="https://example.org/ontology/kampus#Person"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- https://example.org/ontology/kampus#Course -->
+
+    <owl:Class rdf:about="https://example.org/ontology/kampus#Course"/>
+
+    <!-- https://example.org/ontology/kampus#Department -->
+
+    <owl:Class rdf:about="https://example.org/ontology/kampus#Department"/>
+
+    <!-- https://example.org/ontology/kampus#Lecturer -->
+
+    <owl:Class rdf:about="https://example.org/ontology/kampus#Lecturer">
+        <rdfs:subClassOf rdf:resource="https://example.org/ontology/kampus#Person"/>
+        <owl:disjointWith rdf:resource="https://example.org/ontology/kampus#Student"/>
+    </owl:Class>
+
+    <!-- https://example.org/ontology/kampus#Person -->
+
+    <owl:Class rdf:about="https://example.org/ontology/kampus#Person"/>
+
+    <!-- https://example.org/ontology/kampus#Student -->
+
+    <owl:Class rdf:about="https://example.org/ontology/kampus#Student">
+        <rdfs:subClassOf rdf:resource="https://example.org/ontology/kampus#Person"/>
+    </owl:Class>
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- https://example.org/ontology/kampus#Dept_TI -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Dept_TI">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Department"/>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#MK_WebSemantik -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#MK_WebSemantik">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Course"/>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#Dosen_Isa -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Dosen_Isa">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Lecturer"/>
+        <belongsToDepartment rdf:resource="https://example.org/ontology/kampus#Dept_TI"/>
+        <teachesCourse rdf:resource="https://example.org/ontology/kampus#MK_WebSemantik"/>
+        <hasName>Muhammad Isa Dadi Hasibuan</hasName>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#Mahasiswa_Jeli -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Mahasiswa_Jeli">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <belongsToDepartment rdf:resource="https://example.org/ontology/kampus#Dept_TI"/>
+        <takesCourse rdf:resource="https://example.org/ontology/kampus#MK_WebSemantik"/>
+        <hasNIM>251402101</hasNIM>
+        <hasName>Jeli Alvonzo Laia</hasName>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#Mahasiswa_Patricia -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Mahasiswa_Patricia">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <belongsToDepartment rdf:resource="https://example.org/ontology/kampus#Dept_TI"/>
+        <takesCourse rdf:resource="https://example.org/ontology/kampus#MK_WebSemantik"/>
+        <hasNIM>251402119</hasNIM>
+        <hasName>Patricia Putri Josephine Situmeang</hasName>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#Mahasiswa_Vascha -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Mahasiswa_Vascha">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <belongsToDepartment rdf:resource="https://example.org/ontology/kampus#Dept_TI"/>
+        <takesCourse rdf:resource="https://example.org/ontology/kampus#MK_WebSemantik"/>
+        <hasNIM>251402125</hasNIM>
+        <hasName>Vascha U. Lumbantoruan</hasName>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#Mahasiswa_Chyntia -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Mahasiswa_Chyntia">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <belongsToDepartment rdf:resource="https://example.org/ontology/kampus#Dept_TI"/>
+        <takesCourse rdf:resource="https://example.org/ontology/kampus#MK_WebSemantik"/>
+        <hasNIM>251402002</hasNIM>
+        <hasName>Chyntia R.A Hutabarat</hasName>
+    </owl:NamedIndividual>
+
+    <!-- https://example.org/ontology/kampus#Mahasiswa_Jona -->
+
+    <owl:NamedIndividual rdf:about="https://example.org/ontology/kampus#Mahasiswa_Jona">
+        <rdf:type rdf:resource="https://example.org/ontology/kampus#Student"/>
+        <belongsToDepartment rdf:resource="https://example.org/ontology/kampus#Dept_TI"/>
+        <takesCourse rdf:resource="https://example.org/ontology/kampus#MK_WebSemantik"/>
+        <hasNIM>251402084</hasNIM>
+        <hasName>Jona Vebrian Gultom</hasName>
+    </owl:NamedIndividual>
+</rdf:RDF>
