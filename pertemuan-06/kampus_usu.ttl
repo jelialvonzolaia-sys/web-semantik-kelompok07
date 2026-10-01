@@ -1,10 +1,39 @@
 @prefix ex: <https://contoh.github.io/web-semantik/221202001/kampus#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:dedy_arisandi a ex:Lecturer ;
+    foaf:name "Dedy Arisandi S.T., M.Kom."@id ;
+    ex:mengajar ex:basis_data .
 
 ex:ida a ex:Lecturer ;
     foaf:name "Muhammad Isa Dadi Hasibuan S.Kom., M.Kom"@id ;
     ex:mengajar ex:web_semantik .
 
+ex:jeli a ex:Student ;
+    foaf:name "Jeli"@id ;
+    ex:mengambil ex:basis_data .
+
+ex:lia_silviana a ex:Lecturer ;
+    foaf:name "Lia Silviana S.TI., M.Kom"@id ;
+    ex:mengajar ex:matematika_diskrit .
+
+ex:patricia a ex:Student ;
+    foaf:name "Patricia"@id ;
+    ex:mengambil ex:web_semantik .
+
+ex:matematika_diskrit a ex:Course ;
+    foaf:name "Matematika Diskrit"@id ;
+    ex:hariKuliah "Kamis"@id ;
+    ex:jumlahKredit 3 .
+
+ex:basis_data a ex:Course ;
+    foaf:name "Manajemen Sistem Basis Data"@id ;
+    ex:hariKuliah "Rabu"@id ;
+    ex:jumlahKredit 3 .
+
 ex:web_semantik a ex:Course ;
-    foaf:name "Web Semantik"@id .
+    foaf:name "Web Semantik"@id ;
+    ex:hariKuliah "Jumat"@id ;
+    ex:jumlahKredit 3 .
 

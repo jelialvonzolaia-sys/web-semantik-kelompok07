@@ -17,6 +17,30 @@
     ]
   },
   {
+    "@id": "https://contoh.github.io/web-semantik/221202001/kampus#basis_data",
+    "@type": [
+      "https://contoh.github.io/web-semantik/221202001/kampus#Course"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Manajemen Sistem Basis Data"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#hariKuliah": [
+      {
+        "@language": "id",
+        "@value": "Rabu"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#jumlahKredit": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 3
+      }
+    ]
+  },
+  {
     "@id": "https://contoh.github.io/web-semantik/221202001/kampus#web_semantik",
     "@type": [
       "https://contoh.github.io/web-semantik/221202001/kampus#Course"
@@ -25,6 +49,110 @@
       {
         "@language": "id",
         "@value": "Web Semantik"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#hariKuliah": [
+      {
+        "@language": "id",
+        "@value": "Jumat"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#jumlahKredit": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 3
+      }
+    ]
+  },
+  {
+    "@id": "https://contoh.github.io/web-semantik/221202001/kampus#jeli",
+    "@type": [
+      "https://contoh.github.io/web-semantik/221202001/kampus#Student"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Jeli"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#mengambil": [
+      {
+        "@id": "https://contoh.github.io/web-semantik/221202001/kampus#basis_data"
+      }
+    ]
+  },
+  {
+    "@id": "https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit",
+    "@type": [
+      "https://contoh.github.io/web-semantik/221202001/kampus#Course"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Matematika Diskrit"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#hariKuliah": [
+      {
+        "@language": "id",
+        "@value": "Kamis"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#jumlahKredit": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 3
+      }
+    ]
+  },
+  {
+    "@id": "https://contoh.github.io/web-semantik/221202001/kampus#dedy_arisandi",
+    "@type": [
+      "https://contoh.github.io/web-semantik/221202001/kampus#Lecturer"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Dedy Arisandi S.T., M.Kom."
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#mengajar": [
+      {
+        "@id": "https://contoh.github.io/web-semantik/221202001/kampus#basis_data"
+      }
+    ]
+  },
+  {
+    "@id": "https://contoh.github.io/web-semantik/221202001/kampus#lia_silviana",
+    "@type": [
+      "https://contoh.github.io/web-semantik/221202001/kampus#Lecturer"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Lia Silviana S.TI., M.Kom"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#mengajar": [
+      {
+        "@id": "https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit"
+      }
+    ]
+  },
+  {
+    "@id": "https://contoh.github.io/web-semantik/221202001/kampus#patricia",
+    "@type": [
+      "https://contoh.github.io/web-semantik/221202001/kampus#Student"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Patricia"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/221202001/kampus#mengambil": [
+      {
+        "@id": "https://contoh.github.io/web-semantik/221202001/kampus#web_semantik"
       }
     ]
   }
