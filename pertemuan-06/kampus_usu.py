@@ -17,7 +17,7 @@ g.add((EX.web_semantik, FOAF.name, Literal("Web Semantik", lang="id")))
 
 g.add((EX.ida, EX.mengajar, EX.web_semantik))
 
-# Dosen dan mata kuliah (tripple baru)
+# Dosen dan mata kuliah (triple baru)
 g.add((EX.dedy_arisandi, RDF.type, EX.Lecturer))
 g.add((EX.dedy_arisandi, FOAF.name, Literal("Dedy Arisandi S.T., M.Kom.", lang="id")))
 
