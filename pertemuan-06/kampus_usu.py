@@ -3,7 +3,7 @@ from rdflib.namespace import RDF, FOAF, XSD
 
 g = Graph()
 
-EX = Namespace("https://contoh.github.io/web-semantik/251402101/kampus#")
+EX = Namespace("https://contoh.github.io/web-semantik/221202001/kampus#")
 
 g.bind("ex", EX)
 g.bind("foaf", FOAF)

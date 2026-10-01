@@ -1,4 +1,4 @@
-@prefix ex: <https://contoh.github.io/web-semantik/251402101/kampus#> .
+@prefix ex: <https://contoh.github.io/web-semantik/221202001/kampus#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 ex:ida a ex:Lecturer ;
