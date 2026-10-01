@@ -1,0 +1,31 @@
+[
+  {
+    "@id": "https://contoh.github.io/web-semantik/251402101/kampus#web_semantik",
+    "@type": [
+      "https://contoh.github.io/web-semantik/251402101/kampus#Course"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Web Semantik"
+      }
+    ]
+  },
+  {
+    "@id": "https://contoh.github.io/web-semantik/251402101/kampus#ida",
+    "@type": [
+      "https://contoh.github.io/web-semantik/251402101/kampus#Lecturer"
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "id",
+        "@value": "Muhammad Isa Dadi Hasibuan S.Kom., M.Kom"
+      }
+    ],
+    "https://contoh.github.io/web-semantik/251402101/kampus#mengajar": [
+      {
+        "@id": "https://contoh.github.io/web-semantik/251402101/kampus#web_semantik"
+      }
+    ]
+  }
+]
