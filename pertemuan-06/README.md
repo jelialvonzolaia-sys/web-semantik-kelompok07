@@ -3,9 +3,20 @@
 
 ## IRI, Literal, Blank Node, dan Prefix
 1. Identifikasi jenis node untuk `ex:ida`, `"Ida Adi"@id`, dan `[ ex:kota "Medan" ]`.
+   Jawaban :
+
+   
 2. Mengapa literal tidak boleh menjadi subject RDF?
+   Jawaban :
+
+   
 3. Buat IRI dasar untuk graf Anda dengan pola HTTP, misalnya `https://contoh.github.io/web-semantik/ISI_NIM/kampus#`.
+   Jawaban :
+
+   
 4. Tuliskan kepanjangan namespace `rdf`, `rdfs`, `xsd`, dan `foaf`.
+   Jawaban :
+   
 
 ## Ringkasan graf
 - Jumlah triple: [isi]
