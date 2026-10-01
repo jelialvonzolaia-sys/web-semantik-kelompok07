@@ -17,6 +17,9 @@ g.add((EX.web_semantik, FOAF.name, Literal("Web Semantik", lang="id")))
 
 g.add((EX.ida, EX.mengajar, EX.web_semantik))
 
+# Tambahkan triple Anda di bawah ini
+# g.add((EX...., ..., ...))
+
 print(g.serialize(format="turtle"))
 
 g.serialize("kampus_usu.ttl", format="turtle")
