@@ -30,9 +30,12 @@
    - `foaf` (Friend of a Friend): kosa kata populer yang biasa dipakai untuk mendeskripsikan data orang, nama, dan hubungan sosial.   
 
 ## Ringkasan graf
-- Jumlah triple: [isi]
-- Namespace yang digunakan: [isi]
-- Entitas: [isi]
+- Jumlah triple: 27 triple
+- Namespace yang digunakan: `ex`, `foaf`, `rdf`, dan `xsd`
+- Entitas:
+  - 3 Dosen: Muhammad Isa Dadi Hasibuan, Dedy Arisandi, Lia Silviana
+  - 3 Mata Kuliah: Web Semantik, Manajemen Sistem Basis Data, Matematika Diskrit
+  - 2 Mahasiswa: Patricia, Jeli
 
 ## Contoh triple
 1. [subject] - [predicate] - [object]
