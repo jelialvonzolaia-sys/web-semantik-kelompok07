@@ -1,5 +1,5 @@
 ## IRI dasar graf
-(https://contoh.github.io/web-semantik/221202001/kampus#)]
+(https://contoh.github.io/web-semantik/221202001/kampus#)
 
 ## IRI, Literal, Blank Node, dan Prefix
 1. Identifikasi jenis node untuk `ex:ida`, `"Ida Adi"@id`, dan `[ ex:kota "Medan" ]`.
