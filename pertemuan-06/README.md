@@ -12,6 +12,7 @@
 2. Mengapa literal tidak boleh menjadi subject RDF?
 
    Jawaban :
+   
    Karena literal itu nilai akhir (data mentah seperti teks, angka, tanggal). RDF didisain agar subject berupa ID unik (IRI atau Blank Node) yang bisa memiliki berbagai hubungan. Jika string `"Ida Adi"` dijadikan subject, sistem akan bingung karena teks biasa tidak punya ID unik untuk ditempeli relasi lain.
    
 3. Buat IRI dasar untuk graf Anda dengan pola HTTP, misalnya `https://contoh.github.io/web-semantik/ISI_NIM/kampus#`.
@@ -48,6 +49,7 @@
 2. Mengapa prefix membantu keterbacaan tanpa mengubah IRI?
 
    Jawaban :
+   
    Prefix hanya singkatan untuk mengganti URI namespace yang panjang. Penggunaan prefix membuat sintaks kode jauh lebih mudah dibaca tanpa mengubah arti maupun struktur data RDF yang sebenarnya.
 
    Saat program dijalankan atau diproses oleh parser, prefix akan otomatis digabungkan kembali dengan nama lokal entitas menjadi IRI yang utuh secara background.
@@ -71,18 +73,19 @@
 3. Sebutkan satu kesalahan pemodelan yang Anda hindari pada graf ini.
    
    Jawaban :
+   
    Yaitu menggunakan string/literal biasa untuk entitas objek yang harusnya memiliki properti lanjutan (seperti MatKul).
 
    Jika MatKul ditulis sebagai string teks biasa pada relasi mengajar, MatKul tersebut akan menjadi nilai terminal dan tidak bisa dihubungkan ke data lain seperti jumlah SKS, jadwal kuliah, atu daftar mahasiswa yang mengambil. Jadi, MatKul dimodelkan menggunakan IRI agar dapat berfungsi sebagai subjek di triple lain.
 
-   **Pemodelan yang salah**
+   **Model yang salah**
    ```turtle
       @prefix ex: <https://contoh.github.io/web-semantik/221202001/kampus#> .
 
       ex:ida ex:mengajar "Web Semantik" .
     ```
 
-   **Pemodelan yang benar**
+   **Model yang benar**
    ```turtle
       @prefix ex: <https://contoh.github.io/web-semantik/221202001/kampus#> .
       @prefix foaf: <http://xmlns.com/foaf/0.1/> .
