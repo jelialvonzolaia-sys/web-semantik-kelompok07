@@ -49,6 +49,9 @@
 
 ## Refleksi
 1. Kapan object harus berupa IRI dan kapan berupa literal?
+   Jawaban :
+   IRI (Internationalized Resource Identifier) digunakan saat objek dari sebuah pernyataan merupakan entitas atau konsep yang memiliki identitas sendiri dan bisa dihubungkan ke data lain (contohnya: menikahDengan -> orang lain). Sebaliknya, literal digunakan untuk menyatakan nilai murni atau atribut yang tak memiliki identitas sendiri, seperti teks/nama, angka, atau nilai boolean (contohnya: memilikiUsia -> 25).
+
 2. Mengapa prefix membantu keterbacaan tanpa mengubah IRI?
 
    Jawaban :
