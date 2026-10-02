@@ -38,9 +38,9 @@
   - 2 Mahasiswa: Patricia, Jeli
 
 ## Contoh triple
-1. [subject] - [predicate] - [object]
-2. [subject] - [predicate] - [object]
-3. [subject] - [predicate] - [object]
+1. [ex:ida] - [rdf:type] - [ex:Lecturer]
+2. [ex:ida] - [ex:teaches] - [ex:SemanticWeb]
+3. [ex:SemanticWeb] - [ex:name] - ["Web Semantik"]
 
 ## Perbandingan serialisasi
 - Turtle: [pengamatan]
