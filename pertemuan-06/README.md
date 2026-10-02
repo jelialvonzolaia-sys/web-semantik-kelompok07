@@ -38,9 +38,9 @@
   - 2 Mahasiswa: Patricia, Jeli
 
 ## Contoh triple
-1. [subject] - [predicate] - [object]
-2. [subject] - [predicate] - [object]
-3. [subject] - [predicate] - [object]
+1. [ex:ida] - [rdf:type] - [ex:Lecturer]
+2. [ex:ida] - [ex:teaches] - [ex:SemanticWeb]
+3. [ex:SemanticWeb] - [ex:name] - ["Web Semantik"]
 
 ## Perbandingan serialisasi
 - Turtle: [pengamatan]
@@ -49,6 +49,9 @@
 
 ## Refleksi
 1. Kapan object harus berupa IRI dan kapan berupa literal?
+   Jawaban :
+   IRI (Internationalized Resource Identifier) digunakan saat objek dari sebuah pernyataan merupakan entitas atau konsep yang memiliki identitas sendiri dan bisa dihubungkan ke data lain (contohnya: menikahDengan -> orang lain). Sebaliknya, literal digunakan untuk menyatakan nilai murni atau atribut yang tak memiliki identitas sendiri, seperti teks/nama, angka, atau nilai boolean (contohnya: memilikiUsia -> 25).
+
 2. Mengapa prefix membantu keterbacaan tanpa mengubah IRI?
 
    Jawaban :
