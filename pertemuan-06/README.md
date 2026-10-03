@@ -43,9 +43,9 @@
 3. [ex:SemanticWeb] - [ex:name] - ["Web Semantik"]
 
 ## Perbandingan serialisasi
-- Turtle: [pengamatan]
-- JSON-LD: [pengamatan]
-- Pernyataan yang sama: [isi]
+- Turtle: Pernyataan `ex:dedy_arisandi a ex:Lecturer .` ditulis secara ringkas menggunakan prefix `ex`.
+- JSON-LD: Pernyataan yang sama ditulis menggunakan struktur JSON dengan `@id` untuk identitas Dedy Arisandi dan `@type` untuk menunjukkan bahwa Dedy Arisandi merupakan `Lecturer`.
+- Pernyataan yang sama: Dedy Arisandi merupakan seorang `Lecturer`.
 
 ## Refleksi
 1. Kapan object harus berupa IRI dan kapan berupa literal?
