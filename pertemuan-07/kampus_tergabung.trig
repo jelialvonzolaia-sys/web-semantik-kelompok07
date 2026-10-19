@@ -1,0 +1,44 @@
+
+@prefix ex: <https://contoh.github.io/web-semantik/251402022/kampus#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<https://contoh.github.io/graph/kampus> {
+    ex:IsaAdi
+        a ex:Lecturer ;
+        foaf:name "M. Isa Adi" ;
+        ex:mengajar ex:WebSemantik .
+
+    ex:WebSemantik
+        a ex:MataKuliah ;
+        foaf:name "Web Semantik" .
+
+    ex:pernyataan1
+        a rdf:Statement ;
+        rdf:subject ex:IsaAdi ;
+        rdf:predicate ex:mengajar ;
+        rdf:object ex:WebSemantik ;
+        ex:dibuatOleh ex:IsaAdi .
+}
+
+<https://contoh.github.io/graph/fakultas> {
+    ex:FakultasIlmuKomputerdanTeknologiInformasi
+        a ex:Faculty ;
+        foaf:name "Fakultas Ilmu Komputer dan Teknologi Informasi" ;
+        ex:memilikiProdi ex:IlmuKomputer ;
+        ex:memilikiProdi ex:TeknologiInformasi ;
+        ex:memilikiProdi ex:TeknikInformatika ;
+        ex:berlokasi "Gedung A-B-C" .
+
+    ex:IlmuKomputer
+        a ex:ProgramStudi ;
+        foaf:name "Program Studi Ilmu Komputer" .
+
+    ex:TeknologiInformasi
+        a ex:ProgramStudi ;
+        foaf:name "Program Studi Teknologi Informasi" .
+
+    ex:TeknikInformatika
+        a ex:ProgramStudi ;
+        foaf:name "Program Studi Teknik Informatika" .
+}
