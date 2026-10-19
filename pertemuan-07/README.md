@@ -6,10 +6,50 @@
 - Named graph: [nama graf 1] dan [nama graf 2]
 
 ## Reifikasi dan provenance
-- Triple yang dianotasi: [isi]
-- Creator: [isi]
-- Date: [isi]
-- Source: [isi]
+- Triple yang dianotasi: ex:ida ex:mengajar ex:web_semantik
+- Creator: ex:ida
+- Date: 2026-10-01
+- Source: Data akademik kampus
+
+## Perbandingan
+- Format paling mudah dibaca manusia: Turtle, karena sintaksnya ringkas
+  (memakai prefix dan titik koma untuk menggabungkan predikat dari
+  subjek yang sama) sehingga mirip kalimat dan tidak penuh tanda kurung
+  atau tag.
+- Format untuk HTML/API: JSON-LD, karena berbasis JSON yang sudah
+  dipakai luas oleh web dan API, dan bisa disisipkan langsung ke HTML
+  lewat tag <script type="application/ld+json">.
+- Perbedaan reifikasi klasik dan RDF-star:
+
+  Reifikasi klasik lebih verbose karena RDF standar tidak bisa menjadikan
+  sebuah triple sebagai subjek triple lain. Untuk menganotasi satu triple,
+  triple itu harus "dibongkar" menjadi node perantara (`ex:stmt-01`) yang
+  memiliki `rdf:type rdf:Statement`, `rdf:subject`, `rdf:predicate`, dan
+  `rdf:object`. Baru setelah itu anotasi (creator, date, source) ditempelkan
+  ke node perantara tersebut. Pada program ini, 1 fakta membutuhkan
+  **7 triple tambahan**.
+
+```turtle
+  ex:stmt-01 a rdf:Statement ;
+      rdf:subject     ex:ida ;
+      rdf:predicate   ex:mengajar ;
+      rdf:object      ex:web_semantik ;
+      dcterms:creator ex:ida ;
+      dcterms:date    "2026-10-01"^^xsd:date ;
+      dcterms:source  "Data akademik kampus" .
+```
+
+  RDF-star menyelesaikan masalah yang sama secara berbeda: triple dibungkus
+  utuh dengan `<< >>` dan langsung dipakai sebagai subjek. Tidak ada node
+  perantara dan tidak ada pembongkaran, cukup 1 baris untuk satu anotasi.
+
+```turtle
+  << ex:ida ex:mengajar ex:web_semantik >> dct:creator ex:ida .
+```
+
+  Secara konsep: reifikasi klasik menjelaskan triple lewat deskripsi tentang
+  triple (node buatan), sedangkan RDF-star menjadikan triple itu sendiri
+  sebagai objek yang bisa dibicarakan (quoted triple).
 
 ## Tabel Membandingkan Serialisasi RDF
 | Format | Kekuatan Utama | Skenario Tepat |
