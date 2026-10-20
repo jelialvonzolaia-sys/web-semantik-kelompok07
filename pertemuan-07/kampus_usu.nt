@@ -1,0 +1,27 @@
+<https://contoh.github.io/web-semantik/221202001/kampus#basis_data> <https://contoh.github.io/web-semantik/221202001/kampus#hariKuliah> "Rabu"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#lia_silviana> <https://contoh.github.io/web-semantik/221202001/kampus#mengajar> <https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit> .
+<https://contoh.github.io/web-semantik/221202001/kampus#lia_silviana> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Lecturer> .
+<https://contoh.github.io/web-semantik/221202001/kampus#patricia> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Student> .
+<https://contoh.github.io/web-semantik/221202001/kampus#jeli> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Student> .
+<https://contoh.github.io/web-semantik/221202001/kampus#dedy_arisandi> <https://contoh.github.io/web-semantik/221202001/kampus#mengajar> <https://contoh.github.io/web-semantik/221202001/kampus#basis_data> .
+<https://contoh.github.io/web-semantik/221202001/kampus#dedy_arisandi> <http://xmlns.com/foaf/0.1/name> "Dedy Arisandi S.T., M.Kom."@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#basis_data> <http://xmlns.com/foaf/0.1/name> "Manajemen Sistem Basis Data"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#ida> <http://xmlns.com/foaf/0.1/name> "Muhammad Isa Dadi Hasibuan S.Kom., M.Kom"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Course> .
+<https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> <https://contoh.github.io/web-semantik/221202001/kampus#hariKuliah> "Jumat"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#jeli> <https://contoh.github.io/web-semantik/221202001/kampus#mengambil> <https://contoh.github.io/web-semantik/221202001/kampus#basis_data> .
+<https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> <http://xmlns.com/foaf/0.1/name> "Web Semantik"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit> <https://contoh.github.io/web-semantik/221202001/kampus#jumlahKredit> "3"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit> <https://contoh.github.io/web-semantik/221202001/kampus#hariKuliah> "Kamis"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#ida> <https://contoh.github.io/web-semantik/221202001/kampus#mengajar> <https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> .
+<https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> <https://contoh.github.io/web-semantik/221202001/kampus#jumlahKredit> "3"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit> <http://xmlns.com/foaf/0.1/name> "Matematika Diskrit"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#basis_data> <https://contoh.github.io/web-semantik/221202001/kampus#jumlahKredit> "3"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://contoh.github.io/web-semantik/221202001/kampus#lia_silviana> <http://xmlns.com/foaf/0.1/name> "Lia Silviana S.TI., M.Kom"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Course> .
+<https://contoh.github.io/web-semantik/221202001/kampus#patricia> <http://xmlns.com/foaf/0.1/name> "Patricia"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#ida> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Lecturer> .
+<https://contoh.github.io/web-semantik/221202001/kampus#jeli> <http://xmlns.com/foaf/0.1/name> "Jeli"@id .
+<https://contoh.github.io/web-semantik/221202001/kampus#dedy_arisandi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Lecturer> .
+<https://contoh.github.io/web-semantik/221202001/kampus#patricia> <https://contoh.github.io/web-semantik/221202001/kampus#mengambil> <https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> .
+<https://contoh.github.io/web-semantik/221202001/kampus#basis_data> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://contoh.github.io/web-semantik/221202001/kampus#Course> .
