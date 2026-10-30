@@ -8,9 +8,30 @@
 - Peran ?mk: [isi]
 
 ## Langkah 2 - ASK dan dunia terbuka
-1. [jawaban]
-2. [jawaban]
-3. [jawaban]
+1. Hasil ASK { ex:budi ex:mengajar ex:tif2410 } & Tafsir OWA:
+
+   Jawaban :
+
+   - Hasil : false
+   - Di OWA, false itu artinya data tersebut belum tercatat/belum diketahui di database, bukan berarti Budi pasti tidak mengajar TIF2410.
+
+2. Hasil SELECT ?a ?b & Kenapa ?a Bisa Sama Dengan ?b
+
+   Jawaban : 
+
+   - Jumlah baris ada 5 baris:
+     1. ?a = ex:budi, ?b = ex:budi (sama-sama mengajar ex:tif2305)
+     2. ?a = ex:budi, ?b = ex:sari (sama-sama mengajar ex:tif2305)
+     3. ?a = ex:sari, ?b = ex:budi (sama-sama mengajar ex:tif2305)
+     4. ?a = ex:sari, ?b = ex:sari (sama-sama mengajar ex:tif2305)
+     5. ?a = ex:sari, ?b = ex:sari (sama-sama mengajar ex:tif2410)
+   - ?a = ?b: Karena di query-nya tidak pakai FILTER(?a != ?b), jadi SPARQL bebas memasangkan dosen dengan dirinya sendiri dari pola triple yang sama.
+
+3. Penyebab Pola "Web Semantik" dapat 0 Baris
+
+   Jawaban :
+
+   Karena SPARQL membaca string biasa ("Web Semantik") dan string yang pakai tag bahasa ("Web Semantik"@id) sebagai dua hal yang beda. Karena tidak exact match, datanya tidak ketemu.
 
 ## Langkah 3 - Query lokal
 - IRI dasar graf: [isi]
