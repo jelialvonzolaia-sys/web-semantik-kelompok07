@@ -56,4 +56,4 @@
    Jawaban :
 
    - Hasil : Query pencocokan nama mata kuliah ?mk ex:nama "Web Semantik" mengembalikan 0 baris (kosong), padahal data "Web Semantik"@id jelas-jelas ada di dalam graf.
-   -Penyebab : Terjadi karena perbedaan tipe data literal. SPARQL memperlakukan string biasa ("Web Semantik") dan string yang diberi tag bahasa ("Web Semantik"@id) sebagai dua nilai yang berbeda. Karena SPARQL melakukan pencocokan secara persis (exact match), pencarian gagal jika tag bahasanya tidak diikutkan.
+   - Penyebab : Terjadi karena perbedaan tipe data literal. SPARQL memperlakukan string biasa ("Web Semantik") dan string yang diberi tag bahasa ("Web Semantik"@id) sebagai dua nilai yang berbeda. Karena SPARQL melakukan pencocokan secara persis (exact match), pencarian gagal jika tag bahasanya tidak diikutkan.
