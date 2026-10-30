@@ -2,10 +2,13 @@
 
 ## Langkah 1 - Tabel binding
 | Tahap | ?dosen | ?mk | ?namaMK |
-|-------|--------|-----|---------|
-| [isi] | [isi]  | [isi] | [isi] |
-- Jumlah baris hasil akhir: [isi]
-- Peran ?mk: [isi]
+|Pola 1, Baris 1|3x:budi|ex:tif2305|---------|
+|Pola 1, Baris 2|ex:sari|ex:tif2410|---------|
+|Pola 1, Baris 3|ex:sari|ex:tif2305|---------|
+|Pola 2|--|ex:tif2305, ex:tif2410|"Web Semantik", "Data Mining"|
+|Hasil Akhir|ex:budi, ex:sari, ex:sari|ex:tif2305, ex:tif2410, ex:tif2305| ex:tif2305 "Web Semantik", "Data Mining", "Web Semantik"|
+- Jumlah baris hasil akhir:[3 baris]
+- Peran ?mk: [Karena ?mk tidak diminta dalam klaim SELECT, melainkan hanya bertindak sebagai jembatan (join) untuk menghubungkan data dosen dengan nama mata kuliah secara logis.]
 
 ## Langkah 2 - ASK dan dunia terbuka
 1. Hasil ASK { ex:budi ex:mengajar ex:tif2410 } & Tafsir OWA:
@@ -50,7 +53,17 @@
 
 ## Refleksi
 1. Di titik mana SPARQL berbeda dari SQL?
+
+Struktur Data: SQL memakai tabel berisikan baris dan kolom yang kaku, sedangkan SPARQL memakai graf triple (subjek-predikat-objek) yang lebih fleksibel.
+
+Mekanisme Join: SPARQL melakukan join secara otomatis hanya dengan menyamakan nama variabel (seperti ?mk), tanpa perlu perintah JOIN ... ON ... seperti di SQL.
+
+Asumsi Pengetahuan: SPARQL memakai Open World Assumption (data yang tidak tercatat belum tentu salah), sedangkan SQL memakai dunia tertutup (data yang tidak ada langsung dianggap tidak ada).
+
 2. Kapan Anda memakai graf lokal (rdflib) dan kapan endpoint publik?
+
+Penggunaan graf lokal dengan rdflib tepat dilakukan saat kita mengelola data privat skala kecil milik sendiri—seperti data internal Kampus USU—serta ketika memerlukan akses offline atau ingin memodifikasi data secara langsung menggunakan perintah INSERT DATA. Sebaliknya, endpoint publik digunakan ketika kita membutuhkan akses ke pengetahuan global berskala besar yang dikelola secara real-time oleh pihak luar, contohnya saat mengambil data universitas atau sungai dari Wikidata tanpa perlu menyimpan seluruh basis data tersebut di penyimpanan lokal.
+
 3. Sebutkan satu hasil query yang mengejutkan dan jelaskan penyebabnya.
 
    Jawaban :
