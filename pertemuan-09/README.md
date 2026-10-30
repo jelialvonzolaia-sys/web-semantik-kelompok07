@@ -53,7 +53,17 @@
 
 ## Refleksi
 1. Di titik mana SPARQL berbeda dari SQL?
+
+Struktur Data: SQL memakai tabel berisikan baris dan kolom yang kaku, sedangkan SPARQL memakai graf triple (subjek-predikat-objek) yang lebih fleksibel.
+
+Mekanisme Join: SPARQL melakukan join secara otomatis hanya dengan menyamakan nama variabel (seperti ?mk), tanpa perlu perintah JOIN ... ON ... seperti di SQL.
+
+Asumsi Pengetahuan: SPARQL memakai Open World Assumption (data yang tidak tercatat belum tentu salah), sedangkan SQL memakai dunia tertutup (data yang tidak ada langsung dianggap tidak ada).
+
 2. Kapan Anda memakai graf lokal (rdflib) dan kapan endpoint publik?
+
+Penggunaan graf lokal dengan rdflib tepat dilakukan saat kita mengelola data privat skala kecil milik sendiri—seperti data internal Kampus USU—serta ketika memerlukan akses offline atau ingin memodifikasi data secara langsung menggunakan perintah INSERT DATA. Sebaliknya, endpoint publik digunakan ketika kita membutuhkan akses ke pengetahuan global berskala besar yang dikelola secara real-time oleh pihak luar, contohnya saat mengambil data universitas atau sungai dari Wikidata tanpa perlu menyimpan seluruh basis data tersebut di penyimpanan lokal.
+
 3. Sebutkan satu hasil query yang mengejutkan dan jelaskan penyebabnya.
 
    Jawaban :
