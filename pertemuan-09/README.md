@@ -37,9 +37,9 @@
    Karena SPARQL membaca string biasa ("Web Semantik") dan string yang pakai tag bahasa ("Web Semantik"@id) sebagai dua hal yang beda. Karena tidak exact match, datanya tidak ketemu.
 
 ## Langkah 3 - Query lokal
-- IRI dasar graf: [isi]
-- Jumlah triple awal / akhir: [isi] / [isi]
-- Fakta yang ditambahkan: [isi]
+- IRI dasar graf: https://contoh.github.io/web-semantik/221202001/kampus#
+- Jumlah triple awal / akhir: 27 / 29
+- Fakta yang ditambahkan: Dosen Muhammad Isa Dadi Hasibuan (ex:ida) mengajar mata kuliah Kecerdasan Buatan (ex:kecerdasan_buatan).
 
 ## Langkah 4 - Wikidata
 - Jumlah baris Q1 dengan wdt:P31: [isi]
