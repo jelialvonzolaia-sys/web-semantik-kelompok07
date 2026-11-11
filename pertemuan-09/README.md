@@ -2,6 +2,7 @@
 
 ## Langkah 1 - Tabel binding
 | Tahap | ?dosen | ?mk | ?namaMK |
+
 |Pola 1, Baris 1|3x:budi|ex:tif2305|---------|
 |Pola 1, Baris 2|ex:sari|ex:tif2410|---------|
 |Pola 1, Baris 3|ex:sari|ex:tif2305|---------|
