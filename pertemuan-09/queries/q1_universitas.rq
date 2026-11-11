@@ -1,0 +1,10 @@
+SELECT ?universitasLabel ?kotaLabel WHERE {
+?universitas wdt:P31 wd:Q3918;  # P31: jenis entitas, Q3918: universitas
+             wdt:P17 wd:Q252;   # P17: negara, Q252: Indonesia
+             wdt:P131 ?kota.    # P131: wilayah administratif tempat universitas berada
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "id,en".
+  }
+}
+LIMIT 20

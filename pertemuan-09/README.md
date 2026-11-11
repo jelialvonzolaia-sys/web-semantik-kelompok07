@@ -42,9 +42,14 @@
 - Fakta yang ditambahkan: Dosen Muhammad Isa Dadi Hasibuan (ex:ida) mengajar mata kuliah Kecerdasan Buatan (ex:kecerdasan_buatan).
 
 ## Langkah 4 - Wikidata
-- Jumlah baris Q1 dengan wdt:P31: [isi]
-- Jumlah baris Q1 dengan wdt:P31/wdt:P279*: [isi]
-- Penjelasan perbedaan: [isi]
+- Jumlah baris Q1 dengan wdt:P31: 1049
+- Jumlah baris Q1 dengan wdt:P31/wdt:P279*: 1985
+- Penjelasan perbedaan: Penggunaan wdt:P31 hanya mencari
+  entitas yang secara langsung memiliki tipe universitas.
+  Sementara itu, penggunaan wdt:P31/wdt:P279* juga menelusuri
+  kelas-kelas turunan melalui hubungan subclass of.
+  Oleh karena itu, cakupan pencarian menjadi lebih luas
+  dan menghasilkan lebih banyak data.
 
 ## Langkah 5 - Endpoint dari Python
 - agent=UA: [isi]
