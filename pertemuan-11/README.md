@@ -46,10 +46,10 @@
 ## Refleksi
 1. Mengapa jumlah triple hasil CONSTRUCT bisa lebih kecil dari jumlah baris SELECT dengan WHERE yang sama?
    
-**Jawab:** Soalnya SELECT menampilkan satu baris untuk setiap solution, sedangkan CONSTRUCT hasilnya berupa graf, dan graf itu himpunan, jadi triple yang sama persis cuma disimpan sekali. Kalau beberapa solution mencetak triple yang identik, hasilnya digabung jadi satu. Contohnya di tugas ini, "ex:tif2108 a ex:MataKuliahAktif" tercetak dari 2 solution (budi dan sari), tapi di graf hasil cuma ada 1. Jadi kalau templatenya cuma mencetak satu pola triple per solution, jumlah triple bisa menjadi lebih kecil dari jumlah baris SELECT karena ada yang duplikat.
+   **Jawab:** Soalnya SELECT menampilkan satu baris untuk setiap solution, sedangkan CONSTRUCT hasilnya berupa graf, dan graf itu himpunan, jadi triple yang sama persis cuma disimpan sekali. Kalau beberapa solution mencetak triple yang identik, hasilnya digabung jadi satu. Contohnya di tugas ini, "ex:tif2108 a ex:MataKuliahAktif" tercetak dari 2 solution (budi dan sari), tapi di graf hasil cuma ada 1. Jadi kalau templatenya cuma mencetak satu pola triple per solution, jumlah triple bisa menjadi lebih kecil dari jumlah baris SELECT karena ada yang duplikat.
 
-3. Bila taksonomi di graf kampus Anda berubah bulan depan, apa yang terjadi pada triple turunan di kampus_usu_v4.ttl?
+2. Bila taksonomi di graf kampus Anda berubah bulan depan, apa yang terjadi pada triple turunan di kampus_usu_v4.ttl?
    
-**Jawab:** Triple turunan di kampus_usu_v4.ttl tidak ikut berubah otomatis. Triple itu cuma hasil CONSTRUCT yang sudah disimpan ke file, jadi isinya "foto" dari kondisi saat query dijalankan. Kalau taksonomi berubah, triple turunan bisa jadi sudah ketinggalan zaman (basi) atau tidak sesuai lagi dengan data aslinya. Supaya update, query CONSTRUCT-nya harus dijalankan ulang dan filenya dibuat ulang dari data yang baru.
+   **Jawab:** Triple turunan di kampus_usu_v4.ttl tidak ikut berubah otomatis. Triple itu cuma hasil CONSTRUCT yang sudah disimpan ke file, jadi isinya "foto" dari kondisi saat query dijalankan. Kalau taksonomi berubah, triple turunan bisa jadi sudah ketinggalan zaman (basi) atau tidak sesuai lagi dengan data aslinya. Supaya update, query CONSTRUCT-nya harus dijalankan ulang dan filenya dibuat ulang dari data yang baru.
 
-5. Kapan Anda menyimpan hasil query sebagai tabel (CSV), dan kapan sebagai graf (Turtle)?
+3. Kapan Anda menyimpan hasil query sebagai tabel (CSV), dan kapan sebagai graf (Turtle)?
