@@ -16,10 +16,10 @@
 ## Langkah 2 - Tebak lalu cek
 | Soal | Tebakan | Hasil mesin | Penjelasan bila meleset |
 |------|---------|-------------|-------------------------|
-| A    | [isi]   | [isi]       | [isi]                   |
-| B    | [isi]   | [isi]       | [isi]                   |
-| C    | [isi]   | [isi]       | [isi]                   |
-| D    | [isi]   | [isi]       | [isi]                   |
+| A | 2 baris | 3 baris | `rdfs:subClassOf*` mencakup panjang nol, sehingga `ex:Dosen` ikut muncul bersama `DosenTetap` dan `DosenTamu` |
+| B | 4 baris | 4 baris, 2 kali sari muncul | Sari bertipe `DosenTetap` dan `DosenTamu`, keduanya ke `pegawai` dari jalur berbeda. Jadi Sari muncul 2 kali ditambah `DosenTetap` dan `DosenTamu` |
+| C | 2 tripel | 3 tripel | CONSTRUCT menduplikasi tripel unik sehingga `ex:sari a ex:Pegawai` hanya dicetak sekali |
+| D | 0 tripel | 0 tripel | karena `ex:rudi` tidak memiliki `ex:nama` jadi variable n (`?n`) tidak terikat. Triple template di lewati diam diam tanpa error dan grafnya kosong |
 
 ## Langkah 3 - Graf kampus lokal
 - Berkas sumber dan IRI dasar graf: [isi]
@@ -53,3 +53,5 @@
    **Jawab:** Triple turunan di kampus_usu_v4.ttl tidak ikut berubah otomatis. Triple itu cuma hasil CONSTRUCT yang sudah disimpan ke file, jadi isinya "foto" dari kondisi saat query dijalankan. Kalau taksonomi berubah, triple turunan bisa jadi sudah ketinggalan zaman (basi) atau tidak sesuai lagi dengan data aslinya. Supaya update, query CONSTRUCT-nya harus dijalankan ulang dan filenya dibuat ulang dari data yang baru.
 
 3. Kapan Anda menyimpan hasil query sebagai tabel (CSV), dan kapan sebagai graf (Turtle)?
+
+   **Jawab:** Gunakan CSV ketika hasil query `SELECT` hanya butuh dianalisis dalam bentuk tabel, karena bentuknya datar dan mudah dibuka di Excel. Gunakan Turtle saat query `CONSTRUCT` yang dipakai sebagai data RDF baru yang ingin disimpan dan digunakan kembali kedalam *knowledge graph*.
