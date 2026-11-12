@@ -3,11 +3,11 @@
 ## Langkah 1 - Tabel binding
 | Tahap | ?dosen | ?mk | ?namaMK |
 |---|---|---|---|
-|Pola 1, Baris 1|ex:budi|ex:tif2305|'-'|
-|Pola 1, Baris 2|ex:sari|ex:tif2410|'-'|
-|Pola 1, Baris 3|ex:sari|ex:tif2305|'-'|
-|Pola 2|'-'|ex:tif2305, ex:tif2410|"Web Semantik", "Data Mining"|
-|Hasil Akhir|ex:budi, ex:sari, ex:sari|ex:tif2305, ex:tif2410, ex:tif2305| ex:tif2305 "Web Semantik", "Data Mining", "Web Semantik"|
+| Pola 1, Baris 1 | ex:budi | ex:tif230 | ! |
+| Pola 1, Baris 2 | ex:sari | ex:tif2410 | ! |
+| Pola 1, Baris 3 | ex:sari | ex:tif2305 | ! |
+| Pola 2 | ! | ex:tif2305, ex:tif2410 | "Web Semantik", "Data Mining |
+| Hasil Akhir | ex:budi, ex:sari, ex:sari | ex:tif2305, ex:tif2410, ex:tif2305 | ex:tif2305 "Web Semantik", "Data Mining", "Web Semantik" |
 - Jumlah baris hasil akhir:[3 baris]
 - Peran ?mk: [Karena ?mk tidak diminta dalam klaim SELECT, melainkan hanya bertindak sebagai jembatan (join) untuk menghubungkan data dosen dengan nama mata kuliah secara logis.]
 
