@@ -30,11 +30,11 @@
 - Dosen baru setelah program selesai: [jawaban]
 
 ## Langkah 4 - Wikidata
-- Jumlah triple Q6: [isi]
-- Jumlah baris Q6 versi SELECT: [isi]
-- Penjelasan perbedaan: [isi]
-- Q7 dengan + vs *: [isi]
-- Kelas yang mengejutkan dan alasannya: [isi]
+- Jumlah triple Q6: 144
+- Jumlah baris Q6 versi SELECT: 50
+- Penjelasan perbedaan: Jumlah triple hasil `CONSTRUCT` (144) tidak sama dengan 3 × jumlah baris `SELECT` (3 × 50 = 150). Hal ini terjadi karena dalam satu graf RDF, kumpulan triple bersifat himpunan (*set*) sehingga triple yang identik otomatis dide-duplikasi dan hanya disimpan satu kali. Pada versi `SELECT`, beberapa universitas yang tercatat memiliki lebih dari satu wilayah administratif (`wdt:P131`)—seperti Universitas Indonesia dan Universitas Andalas—muncul dalam beberapa baris terpisah, tetapi pada `CONSTRUCT`, triple `a ex:Universitas` dan `ex:nama` untuk universitas tersebut tidak digandakan.
+- Q7 dengan + vs *: Secara jumlah baris terlihat tidak ada perubahan (sama-sama 30 baris karena terpotong klausa `LIMIT 30`), namun secara isi terdapat perbedaan pada awal hasil: operator `+` (*one or more steps*) hanya menelusuri subkelas turunan di bawah `wd:Q3918` (*universitas*), sedangkan operator `*` (*zero or more steps*) juga menyertakan kelas induk `wd:Q3918` (universitas itu sendiri) pada jalur dengan panjang nol.
+- Kelas yang mengejutkan dan alasannya: **`wd:Q2406423` (*university in the Netherlands* / universitas di Belanda)** (dan juga `wd:Q11421293` / universitas negeri di Jepang). Awalnya mengejutkan karena kategori berbasis wilayah negara muncul sebagai kelas (*subclass*), bukan sekadar instansi universitas di negara tersebut. Hal ini terjadi karena ontologi Wikidata memodelkan pengelompokan institusi spesifik per negara/status (seperti universitas di Belanda atau universitas negeri di Jepang) sebagai subkelas khusus dari kelas umum universitas (`wd:Q3918`) melalui rantai properti `wdt:P279` (*subclass of*).
 
 ## Langkah 5 - Graf dari Python
 - Jumlah triple universitas.ttl: [142]
