@@ -37,11 +37,11 @@
 - Kelas yang mengejutkan dan alasannya: [isi]
 
 ## Langkah 5 - Graf dari Python
-- Jumlah triple universitas.ttl: [isi]
-- Jumlah baris universitas_per_kota.csv: [isi]
-- setReturnFormat(TURTLE): [isi]
-- Graph().parse(data=...): [isi]
-- Mengapa q_kota tidak memanggil endpoint: [isi]
+- Jumlah triple universitas.ttl: [142]
+- Jumlah baris universitas_per_kota.csv: [40] (Tidak termasuk header)
+- setReturnFormat(TURTLE): [ Digunakan untuk menentukan bahwa hasil query dari endpoint Wikidata diminta dalam format Turtle (Turtle RDF), sehingga data yang diterima dapat digunakan sebagai graf RDF ]
+- Graph().parse(data=...): [ Digunakan untuk membaca data Turtle dari hasil endpoint dan mengubahnya menjadi graf RDF menggunakan library RDFLib. Graf tersebut kemudian disimpan ke dalam file universitas.ttl ]
+- Mengapa q_kota tidak memanggil endpoint:[ Karena data universitas sudah diambil satu kali dari Wikidata dan disimpan dalam file universitas.ttl. Query q_kota dijalankan langsung pada graf RDF lokal menggunakan objek g, sehingga tidak perlu mengirim permintaan lagi ke endpoint Wikidata. Hal ini juga mengurangi permintaan ke endpoint publik dan menjadikan file Turtle sebagai cache data ]
 
 ## Refleksi
 1. Mengapa jumlah triple hasil CONSTRUCT bisa lebih kecil dari jumlah baris SELECT dengan WHERE yang sama?
