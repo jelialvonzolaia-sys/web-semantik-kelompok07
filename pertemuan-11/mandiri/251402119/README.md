@@ -22,26 +22,33 @@
 - Output demo_c.py: 48 triple, film tanpa tanggal: 16
 - Sumber data: DBpedia 
 - Triple yang tetap tercetak untuk film tanpa tanggal
+  
   **Jawaban:** rdf:type schema:Movie, schema:name, dan schema:director. Triple schema:datePublished tidak tercetak karena OPTIONAL tetap meloloskan film meskipun ?rilis tidak memiliki nilai (unbound). Akibatnya, triple pada template yang memuat variabel tersebut dilewati, bukan dianggap sebagai error. Pada hasil saya, terdapat 16 film tanpa tanggal, sehingga totalnya 16 × 3 = 48 triple.
 
 - Query lokal tanpa internet
+  
   **Jawaban:** Berhasil dijalankan. Query diproses oleh RDFLib di laptop menggunakan file film_nolan.ttl, sehingga tidak membutuhkan koneksi internet. Hasilnya tetap menunjukkan 16 film tanpa tanggal. Sebaliknya, jika seluruh demo_c.py dijalankan tanpa internet, program akan gagal saat mengakses DBpedia melalui sp.queryAndConvert(), sehingga proses selanjutnya tidak berjalan.
   
 - Mengapa dbo:Film memberi 0 pada film_nolan.ttl
+  
   **Jawaban:** Karena hasil CONSTRUCT menggunakan tipe schema:Movie, bukan dbo:Film. dbo:Film hanya digunakan pada bagian WHERE untuk mengambil data dari DBpedia dan tidak dimasukkan ke graf hasil. Oleh karena itu, query yang mencari individu bertipe dbo:Film tidak menemukan data yang cocok.
 
 ## Bagian C - Materialisasi
 - Output demo_d.py: Sebelum: 0, Sesudah: 3, Ada Rina: 3
 - Mengapa Ada Rina bernilai 3
+  
   **Jawaban:** Materialisasi hanya berjalan sekali, yaitu sebelum Rina ditambahkan. Rina masuk hanya dengan satu triple asli (ex:rina a ex:DosenTetap), sedangkan triple turunan seperti ex:rina a ex:Dosen dan ex:rina a foaf:Person belum pernah dibuat. Query ?x a foaf:Person hanya mencocokkan triple yang benar-benar ada di graf, dan RDFLib tidak menyimpulkan sendiri bahwa ex:DosenTetap merupakan turunan dari foaf:Person. Agar Rina terhitung, aturan CONSTRUCT harus dijalankan ulang.
 
 - Output materialisasi_ulang.py
+  
   **Jawaban:** Putaran 1: 4 triple baru | Person: 3; Rina masuk | Person: 3; Putaran 2 | Person: 4; Triple turunan disimpan terpisah: 6.
 
 - Tiga triple yang bukan baru
+  
   **Jawaban:** ex:budi a ex:DosenTetap, ex:sari a ex:Dosen, dan ex:andi a ex:Mahasiswa. Ketiganya dicetak oleh bagian a dari jalur a/rdfs:subClassOf* ketika rdfs:subClassOf* berjalan nol langkah, sehingga ?super sama dengan tipe langsung individunya. Triple ini sudah ada di kampus.ttl, jadi tidak dihitung sebagai triple baru. Keempat triple baru (budi a Dosen, budi a foaf:Person, sari a foaf:Person, dan andi a foaf:Person) berasal dari satu langkah atau lebih melalui rdfs:subClassOf.
 
 - Kegunaan kampus_turunan.ttl dan langkah manual yang tersisa
+  
   **Jawaban:** Berkas ini hanya berisi triple hasil inferensi, terpisah dari data asli, sedangkan di kampus_v4.ttl triple asli dan turunan sudah bercampur. Jadi, bila suatu hari ex:Dosen tidak lagi menjadi subkelas foaf:Person, triple turunan lama bisa dikenali dan dibuang tanpa menyentuh data asli. Langkah manual yang tetap harus dilakukan adalah mengubah atau menghapus pernyataan rdfs:subClassOf di kampus.ttl, membangun ulang graf dari data asli agar triple turunan lama yang sudah tidak valid tidak ikut terbawa, kemudian menjalankan kembali materialisasi dan menyimpan hasilnya. Tidak ada proses otomatis yang mendeteksi dan menghapus triple turunan yang sudah tidak sesuai dengan aturan baru.
 
 ## Bagian D - Diagnosis
