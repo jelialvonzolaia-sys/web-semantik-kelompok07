@@ -54,9 +54,9 @@
   dan menghasilkan lebih banyak data.
 
 ## Langkah 5 - Endpoint dari Python
-- agent=UA: [isi]
-- setReturnFormat(JSON): [isi]
-- b.get("kotaLabel", {}): [isi]
+- agent=UA: Mengirimkan identitas/email pengakses ke server Wikidata sebagai bentuk etika penggunaan endpoint publik agar pengelola server dapat mengenali lalu lintas aplikasi.
+- setReturnFormat(JSON): Mengatur agar format data balasan dari server SPARQL dikembalikan dalam bentuk JSON sehingga mudah diurai (parsed) di dalam program Python.
+- b.get("kotaLabel", {}): Mengambil nilai data kota secara aman untuk mencegah terjadinya error (KeyError) apabila ada data universitas di Wikidata yang kebetulan tidak memiliki informasi kota. 
 
 ## Refleksi
 1. Di titik mana SPARQL berbeda dari SQL?
