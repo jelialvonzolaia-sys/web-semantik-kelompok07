@@ -2,13 +2,15 @@
 
 ## Langkah 1 - Tabel binding
 | Tahap | ?dosen | ?mk | ?namaMK |
-|Pola 1, Baris 1|3x:budi|ex:tif2305|---------|
-|Pola 1, Baris 2|ex:sari|ex:tif2410|---------|
-|Pola 1, Baris 3|ex:sari|ex:tif2305|---------|
-|Pola 2|--|ex:tif2305, ex:tif2410|"Web Semantik", "Data Mining"|
-|Hasil Akhir|ex:budi, ex:sari, ex:sari|ex:tif2305, ex:tif2410, ex:tif2305| ex:tif2305 "Web Semantik", "Data Mining", "Web Semantik"|
+|---|---|---|---|
+| Pola 1, Baris 1 | ex:budi | ex:tif230 | ! |
+| Pola 1, Baris 2 | ex:sari | ex:tif2410 | ! |
+| Pola 1, Baris 3 | ex:sari | ex:tif2305 | ! |
+| Pola 2 | ! | ex:tif2305, ex:tif2410 | "Web Semantik", "Data Mining |
+| Hasil Akhir | ex:budi, ex:sari, ex:sari | ex:tif2305, ex:tif2410, ex:tif2305 | ex:tif2305 "Web Semantik", "Data Mining", "Web Semantik" |
 - Jumlah baris hasil akhir:[3 baris]
 - Peran ?mk: [Karena ?mk tidak diminta dalam klaim SELECT, melainkan hanya bertindak sebagai jembatan (join) untuk menghubungkan data dosen dengan nama mata kuliah secara logis.]
+
 
 ## Langkah 2 - ASK dan dunia terbuka
 1. Hasil ASK { ex:budi ex:mengajar ex:tif2410 } & Tafsir OWA:
@@ -52,9 +54,9 @@
   dan menghasilkan lebih banyak data.
 
 ## Langkah 5 - Endpoint dari Python
-- agent=UA: [isi]
-- setReturnFormat(JSON): [isi]
-- b.get("kotaLabel", {}): [isi]
+- agent=UA: Mengirimkan identitas/email pengakses ke server Wikidata sebagai bentuk etika penggunaan endpoint publik agar pengelola server dapat mengenali lalu lintas aplikasi.
+- setReturnFormat(JSON): Mengatur agar format data balasan dari server SPARQL dikembalikan dalam bentuk JSON sehingga mudah diurai (parsed) di dalam program Python.
+- b.get("kotaLabel", {}): Mengambil nilai data kota secara aman untuk mencegah terjadinya error (KeyError) apabila ada data universitas di Wikidata yang kebetulan tidak memiliki informasi kota. 
 
 ## Refleksi
 1. Di titik mana SPARQL berbeda dari SQL?
