@@ -4,7 +4,8 @@
 - Triple dengan LIMIT 10: 30
 - Triple dengan LIMIT 30: 90
 - Baris SELECT LIMIT 10 / kota berbeda: 10 / 10
-- Mengapa tidak (atau mengapa tepat) 30 triple 
+- Mengapa tidak (atau mengapa tepat) 30 triple
+  
   **Jawaban:** Hasil saya tepat 30. `LIMIT` membatasi jumlah solution, bukan jumlah
   triple, dan template CONSTRUCT-nya punya 3 pola, jadi 10 solution
   menghasilkan paling banyak 10 × 3 = 30 triple. Dari tabel SELECT, kesepuluh
