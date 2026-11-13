@@ -14,18 +14,20 @@
 - Mengapa dbo:Film memberi 0 pada film_nolan.ttl: Karena `film_nolan.ttl` adalah graf baru hasil perintah `CONSTRUCT` yang memetakan kosakata sumber DBpedia (`dbo:Film`) ke kosakata target `schema.org` (`schema:Movie`). Triple dengan predikat `rdf:type dbo:Film` hanya dipakai untuk pencocokan pola di klausa `WHERE` pada saat query ke DBpedia, dan tidak ikut dicetak ke dalam templat `CONSTRUCT`, sehingga di dalam berkas `film_nolan.ttl` sama sekali tidak ada triple dengan kelas `dbo:Film`.
 
 ## Bagian C - Materialisasi
-- Output demo_d.py: [isi]
-- Mengapa Ada Rina bernilai 3: [jawaban]
-- Output materialisasi_ulang.py: [isi]
-- Tiga triple yang bukan baru: [jawaban]
-- Kegunaan kampus_turunan.ttl dan langkah manual yang tersisa: [jawaban]
+- Output demo_d.py: `Sebelum: 0`, `Sesudah: 3`, `Ada Rina: 3`
+- Mengapa Ada Rina bernilai 3: Karena `CONSTRUCT` hanya melakukan materialisasi satu kali sebelum data `ex:rina a ex:DosenTetap` ditambahkan ke dalam graf `g`. Ketika fakta baru tentang `ex:rina` diparsing setelahnya, aturan materialisasi `CONSTRUCT { ?x a ?super } WHERE { ?x a/rdfs:subClassOf* ?super }` tidak dijalankan ulang, dan graf lokal RDFLib tanpa *reasoner* tidak secara otomatis menurunkan triple `ex:rina a ex:Dosen` maupun `ex:rina a foaf:Person`. Akibatnya, query `Q_ORANG` yang hanya mencari pola eksplisit `?x a foaf:Person` tetap hanya menemukan 3 individu lama (`ex:budi`, `ex:sari`, dan `ex:andi`).
+- Output materialisasi_ulang.py: `Putaran 1: 4 triple baru | Person: 3`, `Rina masuk | Person: 3`, `Putaran 2 | Person: 4`, `Triple turunan disimpan terpisah: 6`
+- Tiga triple yang bukan baru: Tiga triple yang sudah ada sejak awal di dalam `kampus.ttl` adalah `ex:budi a ex:DosenTetap`, `ex:sari a ex:Dosen`, dan `ex:andi a ex:Mahasiswa`. Ketiganya tetap tercetak oleh query `ATURAN` karena bagian `*` (*zero or more steps*) pada jalur properti `a/rdfs:subClassOf*` menyertakan jalur sepanjang nol langkah (`rdfs:subClassOf` nol kali), sehingga setiap individu juga dipasangkan kembali dengan kelas asalnya sendiri (`?super` terikat ke kelas langsung milik `?x`).
+- Kegunaan kampus_turunan.ttl dan langkah manual yang tersisa: Menyimpan triple hasil inferensi secara terpisah di `kampus_turunan.ttl` memudahkan audit asal-usul data (*provenance*) serta memungkinkan kita menghapus atau membangun ulang seluruh triple turunan secara bersih tanpa merusak fakta dasar di `kampus.ttl` ketika aturan taksonomi berubah. Jika suatu hari `ex:Dosen` tidak lagi menjadi subkelas `foaf:Person`, langkah manual yang tetap harus dilakukan adalah menghapus triple `ex:Dosen rdfs:subClassOf foaf:Person` dari ontologi/graf utama, membuang berkas `kampus_turunan.ttl` yang lama, lalu menjalankan ulang proses materialisasi dari awal pada graf fakta dasar (`kampus.ttl` + data baru seperti Rina) agar kesimpulan usang seperti `ex:budi a foaf:Person`, `ex:sari a foaf:Person`, dan `ex:rina a foaf:Person` tidak tertinggal.
 
 ## Bagian D - Diagnosis
-| Query | Hasil mesin | Gejala | Penyebab (baris yang salah) | Hasil setelah diperbaiki |
-|-------|-------------|--------|-----------------------------|--------------------------|
-| rusak_a | [isi] | [isi] | [isi] | [isi] |
-| rusak_b | [isi] | [isi] | [isi] | [isi] |
-| rusak_c | [isi] | [isi] | [isi] | [isi] |
+
+| Query | Hasil Rusak | Gejala | Penyebab (Baris Salah) | Hasil Setelah Perbaikan |
+| :--- | :--- | :--- | :--- | :--- |
+| `rusak_a.rq` | `0 triple` | Graf kosong, tanpa error | Pada baris `CONSTRUCT { ?film ex:judul ?j . }`, nama variabel subjek ditulis `?film` sedangkan di klausa `WHERE` menggunakan `?f`, sehingga `?film` tidak pernah terikat (*unbound*) dan seluruh triple di templat dilewati. | `3 triple` (`dbr:Following`, `dbr:Insomnia`, `dbr:Memento`) |
+| `rusak_b.rq` | `4 triple` | Dua nilai yang tampak sama | Pada baris `?o foaf:name|rdfs:label|schema:name ?n .`, `dbr:Christopher_Nolan` memiliki dua literal berbeda tipe/tag bahasa (`"Christopher Nolan"` tanpa tag bahasa pada `foaf:name` dan `"Christopher Nolan"@en` bertag bahasa pada `rdfs:label`), sehingga RDFLib menganggap keduanya dua node RDF berbeda dan tidak menggabungkannya. | `3 triple` (`dbr:Christopher_Nolan`, `dbr:Joko_Anwar`, `dbr:Mira_Lesmana`) |
+| `rusak_c.rq` | `0 triple` | Superkelas tidak ditemukan | Pada baris `?x a ex:Permukiman .` di dalam `WHERE`, query hanya mencari instans langsung `ex:Permukiman` tanpa jalur properti `a/rdfs:subClassOf*`, padahal individu di `kota.ttl` bertipe subkelasnya (`ex:KotaMetropolitan`, `ex:KotaDiIndonesia`, `ex:Desa`) dan graf belum dimaterialisasi. | `3 triple` (`ex:Medan`, `ex:Surabaya`, `ex:Tomok`) |
+
 
 ## Bagian E - Etika dan diskusi
 | Aturan | a_kota_limit.rq | demo_c.py |
