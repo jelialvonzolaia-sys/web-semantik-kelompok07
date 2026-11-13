@@ -58,7 +58,7 @@ WHERE {
   FILTER ( LANG(?namaKota) = "id" )
 }
 LIMIT 10
-
+```
 
 ### Diskusi 1 - Taksonomi berubah
 Jika hasil materialisasi dari Demo D disimpan langsung ke graf produksi dan setahun kemudian aturan taksonomi berubah—misalnya `ex:Dosen` tidak lagi menjadi subkelas `foaf:Person` atau `ex:DosenTetap` dipisahkan dari `ex:Dosen`—maka triple tipe turunan seperti `ex:budi a ex:Dosen`, `ex:budi a foaf:Person`, `ex:sari a foaf:Person`, serta `ex:rina a ex:Dosen` dan `ex:rina a foaf:Person` menjadi salah. Masalah utamanya adalah sulit menemukan mana saja triple yang harus dihapus karena fakta eksplisit dan fakta hasil inferensi sudah tercampur dalam satu berkas. Pada `kampus_v4.ttl` dari bagian C1, seluruh triple dasar dari `kampus.ttl` (seperti `ex:budi a ex:DosenTetap`) digabung menjadi satu berkas dengan triple hasil `CONSTRUCT` (`ex:budi a foaf:Person`), sehingga tidak ada penanda asal-usul (*provenance*) untuk membedakan mana fakta asli dan mana kesimpulan lama. Sebaliknya, `kampus_turunan.ttl` dari bagian C2 menyimpan 6 triple hasil inferensi secara terpisah dari fakta dasar `kampus.ttl`. Dengan pemisahan seperti di `kampus_turunan.ttl`, tim cukup menghapus berkas turunan yang usang, memperbarui relasi `rdfs:subClassOf` pada ontologi inti, lalu menjalankan ulang materialisasi pada fakta dasar agar graf produksi kembali konsisten.
