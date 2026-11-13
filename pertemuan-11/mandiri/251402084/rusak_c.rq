@@ -1,0 +1,12 @@
+
+PREFIX ex: <http://contoh.id/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Kasus C — Query tanpa penelusuran subclass
+
+CONSTRUCT {
+    ?kota a ex:Kota .
+}
+WHERE {
+    ?kota a ex:Kota .
+}

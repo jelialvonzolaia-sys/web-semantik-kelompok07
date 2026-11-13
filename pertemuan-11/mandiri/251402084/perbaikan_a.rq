@@ -1,0 +1,14 @@
+PREFIX ex: <http://contoh.id/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Kasus A - Perbaikan variabel tidak terikat
+
+CONSTRUCT {
+    ?f ex:judul ?j .
+}
+WHERE {
+    ?f dbo:director dbr:Christopher_Nolan ;
+       rdfs:label ?j .
+}
