@@ -44,7 +44,6 @@
 **2. Versi `a_kota_limit.rq` yang Melanggar Aturan 4 & Mengapa Jauh Lebih Mahal:**
 
 ```sparql
-# CONTOH BURUK — JANGAN DIJALANKAN DI ENDPOINT
 CONSTRUCT {
   ?kota a [http://contoh.id/Kota](http://contoh.id/Kota) ;
         rdfs:label ?namaKota ;
