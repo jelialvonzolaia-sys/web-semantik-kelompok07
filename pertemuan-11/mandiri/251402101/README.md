@@ -30,25 +30,47 @@
 
 
 ## Bagian E - Etika dan diskusi
-| Aturan | a_kota_limit.rq | demo_c.py |
-|--------|-----------------|-----------|
-| 1 User-Agent | [isi] | [isi] |
-| 2 LIMIT | [isi] | [isi] |
-| 3 Simpan, jangan ulangi | [isi] | [isi] |
-| 4 Jangkar jalur | [isi] | [isi] |
-- Versi yang melanggar aturan 4 (tidak dijalankan) dan alasannya: [isi]
+### E1. Etika Endpoint
+
+**1. Pemeriksaan `a_kota_limit.rq` dan `demo_c.py` terhadap Empat Aturan Endpoint:**
+
+| Aturan | `a_kota_limit.rq` | `demo_c.py` |
+| :--- | :--- | :--- |
+| **1. User-Agent bermakna** | Tidak relevan pada berkas `.rq` karena header HTTP `User-Agent` dikirim otomatis oleh antarmuka web browser saat mengakses Wikidata Query Service. | **Terpenuhi** pada baris `UA = "KelasWebSemantik/1.0 (jelialvonzolaia@gmail.com)"` dan `sp = SPARQLWrapper("https://dbpedia.org/sparql", agent=UA)`. |
+| **2. LIMIT saat eksplorasi** | **Terpenuhi** pada baris terakhir `LIMIT 10` yang membatasi hasil menjadi 10 *solution* (30 triple) saat eksplorasi data kota. | Tidak relevan karena kueri menyaring satu sutradara spesifik (`dbo:director dbr:Christopher_Nolan`) yang himpunan hasilnya sudah kecil dan terukur (16 film / 48 triple). |
+| **3. Simpan, jangan ulangi** | Tidak relevan secara otomatis di berkas `.rq` karena kueri dijalankan interaktif di browser tanpa skrip penyimpanan lokal. | **Terpenuhi** pada baris `g.serialize("film_nolan.ttl", format="turtle")` yang menyimpan graf hasil DBpedia ke penyimpanan lokal satu kali, lalu baris `lokal = Graph().parse("film_nolan.ttl")` yang menjalankan kueri lanjutan (`Q_TANPA_TANGGAL`) secara luring tanpa mengulang permintaan ke server. |
+| **4. Jangkar jalur** | **Terpenuhi** pada baris `?kota wdt:P31/wdt:P279* wd:Q515 ;` karena jalur transitif `wdt:P279*` berjangkar pada IRI kelas spesifik `wd:Q515` (*city*), bukan diapit dua variabel bebas. | Tidak relevan karena kueri `q_demo_b.rq` yang dimuat oleh `demo_c.py` tidak menggunakan operator jalur properti (`*` maupun `+`). |
+
+**2. Versi `a_kota_limit.rq` yang Melanggar Aturan 4 & Mengapa Jauh Lebih Mahal:**
+
+```sparql
+# CONTOH BURUK — JANGAN DIJALANKAN DI ENDPOINT
+CONSTRUCT {
+  ?kota a [http://contoh.id/Kota](http://contoh.id/Kota) ;
+        rdfs:label ?namaKota ;
+        [http://contoh.id/populasi](http://contoh.id/populasi) ?populasi .
+}
+WHERE {
+  ?kota wdt:P31/wdt:P279* ?kelasKota ;
+        wdt:P17 wd:Q252 ;
+        wdt:P1082 ?populasi ;
+        rdfs:label ?namaKota .
+  FILTER ( LANG(?namaKota) = "id" )
+}
+LIMIT 10
+
 
 ### Diskusi 1 - Taksonomi berubah
-[150-250 kata]
+Jika hasil materialisasi dari Demo D disimpan langsung ke graf produksi dan setahun kemudian aturan taksonomi berubah—misalnya `ex:Dosen` tidak lagi menjadi subkelas `foaf:Person` atau `ex:DosenTetap` dipisahkan dari `ex:Dosen`—maka triple tipe turunan seperti `ex:budi a ex:Dosen`, `ex:budi a foaf:Person`, `ex:sari a foaf:Person`, serta `ex:rina a ex:Dosen` dan `ex:rina a foaf:Person` menjadi salah. Masalah utamanya adalah sulit menemukan mana saja triple yang harus dihapus karena fakta eksplisit dan fakta hasil inferensi sudah tercampur dalam satu berkas. Pada `kampus_v4.ttl` dari bagian C1, seluruh triple dasar dari `kampus.ttl` (seperti `ex:budi a ex:DosenTetap`) digabung menjadi satu berkas dengan triple hasil `CONSTRUCT` (`ex:budi a foaf:Person`), sehingga tidak ada penanda asal-usul (*provenance*) untuk membedakan mana fakta asli dan mana kesimpulan lama. Sebaliknya, `kampus_turunan.ttl` dari bagian C2 menyimpan 6 triple hasil inferensi secara terpisah dari fakta dasar `kampus.ttl`. Dengan pemisahan seperti di `kampus_turunan.ttl`, tim cukup menghapus berkas turunan yang usang, memperbarui relasi `rdfs:subClassOf` pada ontologi inti, lalu menjalankan ulang materialisasi pada fakta dasar agar graf produksi kembali konsisten.
 
 ### Diskusi 2 - SELECT atau CONSTRUCT
-[150-250 kata]
+Untuk kebutuhan tampilan langsung dashboard populasi kota dari satu sumber data, kueri `SELECT` lebih tepat karena langsung menghasilkan data tabular (baris dan kolom) yang siap dirender ke grafik atau tabel antarmuka tanpa beban serialisasi graf RDF. Namun, pada percobaan Bagian A (`LIMIT 10`) terlihat bahwa `SELECT ?kota ?namaKota ?populasi` mengembalikan 10 baris mentah (*solution*), di mana pada kueri tanpa pembatasan khusus satu kota di Wikidata dapat muncul berulang kali apabila memiliki lebih dari satu catatan populasi dari sensus berbeda, sehingga aplikasi tetap perlu melakukan agregasi atau pemfilteran. Sebaliknya, untuk menggabungkan data kota dari tiga sumber berbeda ke dalam satu model data terpadu, `CONSTRUCT` jauh lebih unggul karena mampu memetakan berbagai kosakata sumber yang heterogen menjadi satu skema target yang seragam. Bukti pentingnya tahap normalisasi dalam `CONSTRUCT` terlihat pada `rusak_b.rq` di Bagian D: tanpa penyelarasan bentuk literal, `"Christopher Nolan"` tanpa tag bahasa (`foaf:name`) dan `"Christopher Nolan"@en` (`rdfs:label`) dianggap dua node RDF terpisah sehingga menghasilkan `4` triple alih-alih `3`. Setelah dinormalisasi dengan `BIND(STR(?n) AS ?nama)` pada `perbaikan_b.rq`, `CONSTRUCT` otomatis melebur duplikat menjadi `3` triple bersih—mekanisme yang krusial saat menyatukan data kota dari tiga sumber eksternal.
 
 ### Cek diri
 | Pernyataan | Bukti dari tugas ini |
 |------------|----------------------|
-| 1 | [isi] |
-| 2 | [isi] |
-| 3 | [isi] |
-| 4 | [isi] |
-| 5 | [isi] |
+| 1 | Pada **Bagian A (`a_kota_limit.rq`)**, `LIMIT 10` menghasilkan 10 *solution* dan tepat `30` triple (3 pola triple per *solution*), serta pada **Bagian D (`perbaikan_b.rq`)**, 4 baris *solution* dilebur menjadi `3` triple setelah duplikat `"Christopher Nolan"` disatukan. |
+| 2 | Pada **Bagian B2 (`demo_c.py` / `film_nolan.ttl`)**, ke-16 film Christopher Nolan tidak memiliki `dbo:releaseDate` sehingga variabel `?rilis` pada blok `OPTIONAL` tidak terikat, membuat triple `?film schema:datePublished ?rilis` dilewati tanpa error (tercetak `48` triple dari $16 \times 3$, bukan 64). |
+| 3 | Pada **Bagian D (`perbaikan_b.rq`)**, klausa `VALUES ?o { dbr:Christopher_Nolan dbr:Joko_Anwar dbr:Mira_Lesmana }` bersama jalur alternatif `foaf:name\|rdfs:label\|schema:name` menyatukan tiga predikat nama berbeda menjadi satu predikat `ex:nama` untuk `3` tokoh. |
+| 4 | Pada **Bagian D (`perbaikan_c.rq` pada `kota.ttl`)**, pola `?x a/rdfs:subClassOf* ex:Permukiman` menemukan `3` instans (`ex:Medan`, `ex:Surabaya`, `ex:Tomok`) tanpa menyebut kelas perantara `ex:Kota`, `ex:KotaMetropolitan`, `ex:KotaDiIndonesia`, maupun `ex:Desa`. |
+| 5 | Pada **Bagian C1 (`demo_d.py`)**, penambahan `ex:rina a ex:DosenTetap` setelah materialisasi awal menahan jumlah `foaf:Person` di angka `3`, dan baru naik menjadi `4` (`6` triple turunan di `kampus_turunan.ttl`) setelah `materialisasi(g)` dihitung ulang pada putaran kedua di **Bagian C2 (`materialisasi_ulang.py`)**. |
