@@ -1,0 +1,11 @@
+@prefix schema: <https://schema.org/> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#dedy_arisandi> a schema:Person ;
+    schema:name "Dedy Arisandi S.T., M.Kom."@id .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#ida> a schema:Person ;
+    schema:name "Muhammad Isa Dadi Hasibuan S.Kom., M.Kom"@id .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#lia_silviana> a schema:Person ;
+    schema:name "Lia Silviana S.TI., M.Kom"@id .
+

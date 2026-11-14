@@ -22,12 +22,13 @@
 | D | 0 tripel | 0 tripel | karena `ex:rudi` tidak memiliki `ex:nama` jadi variable n (`?n`) tidak terikat. Triple template di lewati diam diam tanpa error dan grafnya kosong |
 
 ## Langkah 3 - Graf kampus lokal
-- Berkas sumber dan IRI dasar graf: [isi]
-- Kelas dosen dan properti nama: [isi]
-- Triple hasil pemetaan: [isi]
-- foaf:Person sebelum / sesudah: [isi] / [isi]
-- Triple asli vs triple turunan: [jawaban]
-- Dosen baru setelah program selesai: [jawaban]
+
+- Berkas sumber dan IRI dasar graf: `pertemuan-09/kampus_usu_v2.ttl` — `https://contoh.github.io/web-semantik/221202001/kampus#`
+- Kelas dosen dan properti nama: `ex:Lecturer` dan `foaf:name`
+- Triple hasil pemetaan: **6 triple**
+- `foaf:Person` sebelum / sesudah: **0 / 3**
+- Triple asli vs triple turunan: **29 triple awal / 6 triple turunan baru**
+- Dosen baru setelah program selesai: **3 individu**, yaitu `ex:dedy_arisandi`, `ex:ida`, dan `ex:lia_silviana`, sekarang juga teridentifikasi sebagai `foaf:Person`. Hal ini terjadi karena `ex:Lecturer` merupakan subclass dari `ex:Pegawai`, sedangkan `ex:Pegawai` merupakan subclass dari `foaf:Person`. Melalui materialisasi, program menghasilkan triple tipe baru berdasarkan hubungan hierarki kelas tersebut tanpa menghapus triple asli.
 
 ## Langkah 4 - Wikidata
 - Jumlah triple Q6: 144
