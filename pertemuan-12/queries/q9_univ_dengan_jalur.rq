@@ -1,0 +1,12 @@
+
+# Q9 - Universitas di Indonesia dengan property path
+# Langkah 4: Wikidata Tidak Menalar untuk Anda
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT (COUNT(DISTINCT ?univ) AS ?jumlahUniversitas)
+WHERE {
+  ?univ wdt:P31/wdt:P279* wd:Q3918 ;
+        wdt:P17 wd:Q252 .
+}
