@@ -52,5 +52,8 @@ Dokumentasi tugas kelompok Web Semantik Pertemuan 12.
 
 ## Refleksi
 1. Mengapa graf asserted disimpan terpisah dari graf inferred, dan apa akibatnya bila keduanya dicampur seperti kampus_usu_v4.ttl?
+
 2. Pada Langkah 2, profil RDFS tidak memberi tahu bahwa aksioma OWL diabaikan. Bagaimana Anda akan memastikan profil yang dipakai sudah tepat untuk data Anda?
+Jawaban: Untuk memastikan profil inferensi yang digunakan sudah tepat dan menghindari diabaikannya aksioma OWL secara diam-diam oleh profil RDFS, langkah utama yang harus dilakukan adalah menganalisis kebutuhan skema data (file Turtle) terlebih dahulu sebelum memilih profil. Jika data melibatkan aksioma tingkat lanjut seperti owl:TransitiveProperty atau owl:inverseOf, kita wajib menggunakan profil yang lebih tinggi seperti OWL RL, karena RDFS secara desain tidak mendukung fitur tersebut dan akan mengabaikannya tanpa pesan error. Selain itu, validasi silang dengan membandingkan hasil kueri antarprofil (misalnya RDFS vs OWL RL) perlu dilakukan untuk memastikan seluruh aturan relasi dan inferensi tereksekusi dengan benar sesuai ekspektasi data.
+
 3. Kapan Anda memilih menulis jalur seperti wdt:P279* di query, dan kapan memilih menjalankan reasoner lalu menyimpan closure?
