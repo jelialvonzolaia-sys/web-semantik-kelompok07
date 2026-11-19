@@ -71,7 +71,7 @@
 ## Refleksi
 1. Mengapa graf asserted disimpan terpisah dari graf inferred, dan apa akibatnya bila keduanya dicampur seperti kampus_usu_v4.ttl?
 
-Jawaban: Graf asserted dan inferred sebaiknya disimpan terpisah supaya kita bisa membedakan data yang memang sudah ada sejak awal dengan data yang dihasilkan oleh proses inferensi. Dengan begitu, kita lebih mudah memeriksa asal suatu informasi dan mengetahui mana fakta awal dan mana hasil penalaran. Jika keduanya dicampur seperti pada kampus_usu_v4.ttl, kita bisa kesulitan membedakan kedua jenis data tersebut. Selain itu, ketika data awal berubah, hasil inferensi yang sudah tersimpan juga perlu diperiksa kembali agar tidak ada informasi yang sudah tidak sesuai.
+  Jawaban: Graf asserted dan inferred sebaiknya disimpan terpisah supaya kita bisa membedakan data yang memang sudah ada sejak awal dengan data yang dihasilkan oleh proses inferensi. Dengan begitu, kita lebih mudah memeriksa asal suatu informasi dan mengetahui mana fakta awal dan mana hasil penalaran. Jika keduanya dicampur seperti pada kampus_usu_v4.ttl, kita bisa kesulitan membedakan kedua jenis data tersebut. Selain itu, ketika data awal berubah, hasil inferensi yang sudah tersimpan juga perlu diperiksa kembali agar tidak ada informasi yang sudah tidak sesuai.
 
 2. Pada Langkah 2, profil RDFS tidak memberi tahu bahwa aksioma OWL diabaikan. Bagaimana Anda akan memastikan profil yang dipakai sudah tepat untuk data Anda?
 
