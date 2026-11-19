@@ -1,0 +1,22 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#Lecturer> rdfs:subClassOf foaf:Person .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#basis_data> a <https://contoh.github.io/web-semantik/221202001/kampus#MataKuliah> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#dedy_arisandi> a foaf:Person,
+        <https://contoh.github.io/web-semantik/221202001/kampus#Pegawai> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#ida> a foaf:Person,
+        <https://contoh.github.io/web-semantik/221202001/kampus#Pegawai> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#kecerdasan_buatan> a <https://contoh.github.io/web-semantik/221202001/kampus#MataKuliah> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#lia_silviana> a foaf:Person,
+        <https://contoh.github.io/web-semantik/221202001/kampus#Pegawai> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#matematika_diskrit> a <https://contoh.github.io/web-semantik/221202001/kampus#MataKuliah> .
+
+<https://contoh.github.io/web-semantik/221202001/kampus#web_semantik> a <https://contoh.github.io/web-semantik/221202001/kampus#MataKuliah> .
+
