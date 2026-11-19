@@ -32,11 +32,11 @@
 | D | OWL RL | False | False | Tebakan tepat. Berdasarkan *Open World Assumption*, relasi `ex:medan` sebagai `ex:Tempat` tidak dideklarasikan secara eksplisit di data sehingga dianggap belum diketahui (`false`). |
 
 ## Langkah 3 - Reasoner pada graf kampus
-- Berkas sumber dan IRI dasar graf: [isi]
-- Asserted / closure / inferred / bermakna: [isi] / [isi] / [isi] / [isi]
-- Triple di v4 yang tidak ada di asserted: [isi]
-- Turunan yang muncul karena domain dan range ex:mengajar: [jawaban]
-- Bila menambah dosen baru: [jawaban]
+- Berkas sumber dan IRI dasar graf: `../pertemuan-09/kampus_usu_v2.ttl` dan `https://contoh.github.io/web-semantik/221202001/kampus#`
+- Asserted / closure / inferred / bermakna: 33 / 93 / 60 / 11
+- Triple di v4 yang tidak ada di asserted: 6
+- Turunan yang muncul karena domain dan range ex:mengajar: Empat triple tipe `ex:MataKuliah` yang dihasilkan oleh `ex:mengajar rdfs:range ex:MataKuliah`, yaitu `ex:basis_data a ex:MataKuliah`, `ex:kecerdasan_buatan a ex:MataKuliah`, `ex:web_semantik a ex:MataKuliah`, dan `ex:matematika_diskrit a ex:MataKuliah` (pada `v4` tidak ada `ex:MataKuliah`; tiga mata kuliah hanya bertipe `ex:Course` dan `ex:kecerdasan_buatan` belum memiliki tipe kelas sama sekali). Sementara itu, aturan `rdfs:domain ex:Lecturer` tidak menghasilkan triple baru untuk ketiga dosen saat ini karena ketiganya (`ex:dedy_arisandi`, `ex:ida`, `ex:lia_silviana`) sudah secara eksplisit bertipe `ex:Lecturer` di graf asal.
+- Bila menambah dosen baru: Cukup tambahkan data *asserted* dosen baru tersebut (beserta mata kuliah yang diajar lewat `ex:mengajar`) ke berkas graf sumber, lalu jalankan ulang `reasoner_lokal.py`. Tidak perlu menuliskan tipe turunan (`ex:Pegawai`, `foaf:Person`, maupun `ex:MataKuliah` atau `ex:Lecturer` dari *domain*) secara manual karena *reasoner* akan menurunkan semuanya otomatis ke `kampus_usu_inferred.ttl`.
 
 ## Langkah 4 — Wikidata
 
