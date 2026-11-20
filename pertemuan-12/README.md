@@ -62,11 +62,26 @@
   tercatat di Wikidata.
 
 ## Langkah 5 - Konsistensi
-- Pesan galat RDFS / OWL RL: [isi] / [isi]
-- Individu yang disebut pesan: [isi]
-- Setelah baris terbalik dihapus: [isi]
-- Isi laporan_kelas.csv sebelum dan sesudah: [isi]
-- Dari mana dosen menjadi mata kuliah: [jawaban]
+- Pesan galat RDFS / OWL RL: `0` pesan galat (RDFS, 101 triple) / `2` pesan galat (OWL RL, 200 triple)
+- Individu yang disebut pesan: `ex:ida` (`https://contoh.github.io/web-semantik/221202001/kampus#ida`) dan `ex:web_semantik` (`https://contoh.github.io/web-semantik/221202001/kampus#web_semantik`)
+- Setelah baris terbalik dihapus: RDFS menghasilkan `0` pesan galat (96 triple) dan OWL RL juga menghasilkan `0` pesan galat (191 triple).
+- Isi laporan_kelas.csv sebelum dan sesudah:
+  - **Sebelum (dengan triple terbalik `ex:web_semantik ex:mengajar ex:ida`):**
+    ```csv
+    kelas,asserted,rdfs,owl_rl
+    Lecturer,3,4,4
+    Pegawai,0,4,4
+    MataKuliah,0,5,5
+    ```
+  - **Sesudah (baris terbalik dihapus):**
+    ```csv
+    kelas,asserted,rdfs,owl_rl
+    Lecturer,3,3,3
+    Pegawai,0,3,3
+    MataKuliah,0,4,4
+    ```
+- Dari mana dosen menjadi mata kuliah: Dari triple terbalik `ex:web_semantik ex:mengajar ex:ida`, aturan `rdfs:range` pada `ex:mengajar` (`ex:mengajar rdfs:range ex:MataKuliah`) menyimpulkan bahwa objek `ex:ida` adalah instans `ex:MataKuliah`. Di sisi lain, fakta dasar `ex:ida a ex:Lecturer` bersama hierarki `ex:Lecturer rdfs:subClassOf ex:Pegawai` (aturan `rdfs9`) menyimpulkan bahwa `ex:ida` juga merupakan instans `ex:Pegawai` (demikian pula `ex:web_semantik` disimpulkan sebagai `ex:Lecturer` dan `ex:Pegawai` melalui `rdfs:domain`, selain menjadi `ex:MataKuliah`). Karena aksioma `ex:Pegawai owl:disjointWith ex:MataKuliah` melarang satu individu menjadi anggota kedua kelas tersebut sekaligus, profil **OWL RL** mendeteksi pelanggaran kontradiksi pada `ex:ida` dan `ex:web_semantik` lalu menerbitkan dua triple `ErrorMessage`. Sebaliknya, profil **RDFS** tidak melaporkan apa pun karena kosakata semantik RDFS tidak mengenal aksioma `owl:disjointWith` sehingga deklarasi *disjoint* tersebut diabaikan secara diam-diam tanpa error.
+
 
 ## Refleksi
 1. Mengapa graf asserted disimpan terpisah dari graf inferred, dan apa akibatnya bila keduanya dicampur seperti kampus_usu_v4.ttl?
