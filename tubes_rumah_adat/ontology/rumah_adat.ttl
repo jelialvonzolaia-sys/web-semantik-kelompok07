@@ -236,6 +236,10 @@ ra:wil_desa_hutaimbaru_padangsidimpuan a ra:Wilayah ;
     ra:bagianDariWilayah ra:wil_kota_padangsidimpuan .
 
 # --- Bagian Jeli: Nias, Nias Selatan, Nias Utara, Nias Barat, Gunungsitoli, Medan, Deli Serdang ---
+ra:wil_kab_nias a ra:Wilayah ;
+    ra:nama "Kabupaten Nias" ;
+    ra:bagianDariWilayah ra:wil_sumatera_utara .
+
 ra:wil_kab_nias_selatan a ra:Wilayah ;
     ra:nama "Kabupaten Nias Selatan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
@@ -720,7 +724,7 @@ ra:rumah_omo_hada_omo_sebua_nias a ra:RumahAdat ;
     ra:maknaFilosofis "Konsep owo (perahu) - omo (rumah) - gomo (tanah asal) yang melambangkan 'perahu darat' perlindungan keluarga." ;
     ra:linkFoto "https://museum-nias.org/arsitektur-nias/"^^xsd:anyURI ;
     ra:referensi "Museum Pusaka Nias & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
-    ra:berasalDariWilayah ra:wil_kab_nias_selatan ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
     ra:memilikiMarga ra:marga_duha, ra:marga_fau, ra:marga_laia, ra:marga_telaumbanua, ra:marga_zebua, ra:marga_hia, ra:marga_ho ;
     ra:menggunakanBahasa ra:bhs_nias ;
