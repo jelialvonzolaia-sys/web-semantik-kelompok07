@@ -46,9 +46,14 @@ ra:Ornamen a owl:Class ;
 
 ra:berasalDariWilayah a owl:ObjectProperty ;
     rdfs:label "berasal dari wilayah" ;
-    rdfs:comment "Lokasi asal rumah adat." ;
-    rdfs:domain ra:RumahAdat ;
+    rdfs:comment "Lokasi asal rumah adat atau persebaran wilayah marga dan komunitas adat." ;
     rdfs:range ra:Wilayah .
+
+ra:berkerabatDenganMarga a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:label "berkerabat dengan marga" ;
+    rdfs:comment "Relasi kekerabatan atau ikatan rumpun adat antar-marga." ;
+    rdfs:domain ra:Marga ;
+    rdfs:range ra:Marga .
 
 ra:dimilikiOlehSuku a owl:ObjectProperty ;
     rdfs:label "dimiliki oleh suku" ;
@@ -197,6 +202,12 @@ ra:wil_sipirok_tapsel a ra:Wilayah ;
 
 ra:wil_muara_tais_tapsel a ra:Wilayah ;
     ra:nama "Muara Tais, Kabupaten Tapanuli Selatan" ;
+    rdfs:label "Muara Tais, Kabupaten Tapanuli Selatan" ;
+    ra:bagianDariWilayah ra:wil_kab_tapanuli_selatan .
+
+ra:wil_bunga_bondar_tapsel a ra:Wilayah ;
+    ra:nama "Bunga Bondar, Kabupaten Tapanuli Selatan" ;
+    rdfs:label "Bunga Bondar, Kabupaten Tapanuli Selatan" ;
     ra:bagianDariWilayah ra:wil_kab_tapanuli_selatan .
 
 ra:wil_kab_padang_lawas a ra:Wilayah ;
@@ -341,6 +352,27 @@ ra:wil_kab_samosir a ra:Wilayah ;
 
 ra:wil_pulau_samosir a ra:Wilayah ;
     ra:nama "Pulau Samosir" ;
+    rdfs:label "Pulau Samosir" ;
+    ra:bagianDariWilayah ra:wil_kab_samosir .
+
+ra:wil_huta_siallagan_samosir a ra:Wilayah ;
+    ra:nama "Huta Siallagan, Pulau Samosir" ;
+    rdfs:label "Huta Siallagan, Pulau Samosir" ;
+    ra:bagianDariWilayah ra:wil_kab_samosir .
+
+ra:wil_simanindo_samosir a ra:Wilayah ;
+    ra:nama "Kecamatan Simanindo, Kabupaten Samosir" ;
+    rdfs:label "Kecamatan Simanindo, Kabupaten Samosir" ;
+    ra:bagianDariWilayah ra:wil_kab_samosir .
+
+ra:wil_tomok_samosir a ra:Wilayah ;
+    ra:nama "Desa Tomok, Kecamatan Simanindo" ;
+    rdfs:label "Desa Tomok, Kecamatan Simanindo" ;
+    ra:bagianDariWilayah ra:wil_kab_samosir .
+
+ra:wil_desa_hutaginjang_samosir a ra:Wilayah ;
+    ra:nama "Desa Hutaginjang, Kecamatan Sianjur Mula-mula" ;
+    rdfs:label "Desa Hutaginjang, Kecamatan Sianjur Mula-mula" ;
     ra:bagianDariWilayah ra:wil_kab_samosir .
 
 # --- Bagian Patricia: Simalungun, Pematangsiantar, Asahan, Batu Bara, Tanjungbalai, Serdang Bedagai, Tebing Tinggi, Labuhanbatu/Labura/Labusel ---
@@ -484,47 +516,754 @@ ra:suku_melayu a ra:Suku ;
 # 4D. MASTER MARGA (ra:Marga)
 # =====================================================================
 
-ra:marga_nasution a ra:Marga ; ra:nama "Nasution" ; ra:bagianDariSuku ra:suku_batak_mandailing .
-ra:marga_lubis a ra:Marga ; ra:nama "Lubis" ; ra:bagianDariSuku ra:suku_batak_mandailing .
-ra:marga_harahap a ra:Marga ; ra:nama "Harahap" ; ra:bagianDariSuku ra:suku_batak_angkola .
-ra:marga_siregar a ra:Marga ; ra:nama "Siregar" ; ra:bagianDariSuku ra:suku_batak_angkola .
-ra:marga_hasibuan a ra:Marga ; ra:nama "Hasibuan" ; ra:bagianDariSuku ra:suku_batak_angkola .
-ra:marga_ritonga a ra:Marga ; ra:nama "Ritonga" ; ra:bagianDariSuku ra:suku_batak_angkola .
-ra:marga_daulay a ra:Marga ; ra:nama "Daulay" ; ra:bagianDariSuku ra:suku_batak_angkola_mandailing .
-ra:marga_rambe a ra:Marga ; ra:nama "Rambe" ; ra:bagianDariSuku ra:suku_batak_angkola_mandailing .
-ra:marga_tanjung_raja_sorkam a ra:Marga ; ra:nama "Tanjung (Raja Sorkam)" ; ra:bagianDariSuku ra:suku_etnis_pasisi .
-ra:marga_laia a ra:Marga ; ra:nama "Laia" ; rdfs:label "Laia" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_harefa a ra:Marga ; ra:nama "Harefa" ; rdfs:label "Harefa" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_halawa a ra:Marga ; ra:nama "Halawa" ; rdfs:label "Halawa" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_gulo a ra:Marga ; ra:nama "Gulö" ; rdfs:label "Gulö" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_hia a ra:Marga ; ra:nama "Hia" ; rdfs:label "Hia" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_mendrofa a ra:Marga ; ra:nama "Mendröfa" ; rdfs:label "Mendröfa" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_ndruru a ra:Marga ; ra:nama "Ndruru" ; rdfs:label "Ndruru" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_nazara a ra:Marga ; ra:nama "Nazara" ; rdfs:label "Nazara" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_waruwu a ra:Marga ; ra:nama "Waruwu" ; rdfs:label "Waruwu" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_zega a ra:Marga ; ra:nama "Zega" ; rdfs:label "Zega" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_telaumbanua a ra:Marga ; ra:nama "Telaumbanua" ; rdfs:label "Telaumbanua" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_zendrato a ra:Marga ; ra:nama "Zendratö" ; rdfs:label "Zendratö" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_lase a ra:Marga ; ra:nama "Lase" ; rdfs:label "Lase" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_hulu a ra:Marga ; ra:nama "Hulu" ; rdfs:label "Hulu" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_laoli a ra:Marga ; ra:nama "Laoli" ; rdfs:label "Laoli" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_tengku a ra:Marga ; ra:nama "Tengku" ; rdfs:label "Tengku" ; ra:bagianDariSuku ra:suku_melayu_deli .
-ra:marga_datuk a ra:Marga ; ra:nama "Datuk" ; rdfs:label "Datuk" ; ra:bagianDariSuku ra:suku_melayu_deli .
-ra:marga_wan a ra:Marga ; ra:nama "Wan" ; rdfs:label "Wan" ; ra:bagianDariSuku ra:suku_melayu_deli .
-ra:marga_oku a ra:Marga ; ra:nama "Oku (Orang Kaya)" ; rdfs:label "Oku (Orang Kaya)" ; ra:bagianDariSuku ra:suku_melayu_deli .
-ra:marga_sitepu a ra:Marga ; ra:nama "Sitepu" ; ra:bagianDariSuku ra:suku_batak_karo .
-ra:marga_ginting a ra:Marga ; ra:nama "Ginting" ; rdfs:label "Ginting" ; ra:bagianDariSuku ra:suku_batak_karo .
-ra:marga_sembiring a ra:Marga ; ra:nama "Sembiring" ; rdfs:label "Sembiring" ; ra:bagianDariSuku ra:suku_batak_karo .
-ra:marga_tarigan a ra:Marga ; ra:nama "Tarigan" ; rdfs:label "Tarigan" ; ra:bagianDariSuku ra:suku_batak_karo .
-ra:marga_karo_karo a ra:Marga ; ra:nama "Karo-karo" ; rdfs:label "Karo-karo" ; ra:bagianDariSuku ra:suku_batak_karo .
-ra:marga_perangin_angin a ra:Marga ; ra:nama "Perangin-angin" ; rdfs:label "Perangin-angin" ; ra:bagianDariSuku ra:suku_batak_karo .
-ra:marga_sinambela a ra:Marga ; ra:nama "Sinambela (Dinasti Sisingamangaraja)" ; ra:bagianDariSuku ra:suku_batak_toba .
-ra:marga_siallagan a ra:Marga ; ra:nama "Siallagan" ; ra:bagianDariSuku ra:suku_batak_toba .
-ra:marga_sidauruk a ra:Marga ; ra:nama "Sidauruk" ; ra:bagianDariSuku ra:suku_batak_toba .
-ra:marga_sidabutar a ra:Marga ; ra:nama "Sidabutar" ; ra:bagianDariSuku ra:suku_batak_toba .
-ra:marga_sagala a ra:Marga ; ra:nama "Sagala" ; ra:bagianDariSuku ra:suku_batak_toba .
-ra:marga_purba a ra:Marga ; ra:nama "Purba" ; ra:bagianDariSuku ra:suku_batak_simalungun .
+ra:marga_rajagukguk a ra:Marga ;
+    ra:nama "Rajagukguk" ;
+    rdfs:label "Rajagukguk" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_utara, ra:wil_pulau_sibandang_taput ;
+    ra:berkerabatDenganMarga ra:marga_parhusip, ra:marga_simare_mare, ra:marga_situmorang .
 
+ra:marga_situmorang a ra:Marga ;
+    ra:nama "Situmorang" ;
+    rdfs:label "Situmorang" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_utara, ra:wil_pulau_sibandang_taput, ra:wil_kab_samosir ;
+    ra:berkerabatDenganMarga ra:marga_parhusip, ra:marga_rajagukguk, ra:marga_simare_mare, ra:marga_sinaga .
+
+ra:marga_parhusip a ra:Marga ;
+    ra:nama "Parhusip" ;
+    rdfs:label "Parhusip" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_utara, ra:wil_pulau_sibandang_taput, ra:wil_kab_samosir ;
+    ra:berkerabatDenganMarga ra:marga_rajagukguk, ra:marga_simare_mare, ra:marga_situmorang .
+
+ra:marga_simare_mare a ra:Marga ;
+    ra:nama "Simare-mare" ;
+    rdfs:label "Simare-mare" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_utara, ra:wil_pulau_sibandang_taput ;
+    ra:berkerabatDenganMarga ra:marga_parhusip, ra:marga_rajagukguk, ra:marga_situmorang .
+
+ra:marga_silalahi a ra:Marga ;
+    ra:nama "Silalahi" ;
+    rdfs:label "Silalahi" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_toba, ra:wil_balige_toba, ra:wil_kab_dairi ;
+    ra:berkerabatDenganMarga ra:marga_manik, ra:marga_manurung, ra:marga_panjaitan, ra:marga_sinambela, ra:marga_sitorus, ra:marga_tampubolon .
+
+ra:marga_sitorus a ra:Marga ;
+    ra:nama "Sitorus" ;
+    rdfs:label "Sitorus" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_toba, ra:wil_balige_toba ;
+    ra:berkerabatDenganMarga ra:marga_manurung, ra:marga_panjaitan, ra:marga_silalahi, ra:marga_tampubolon .
+
+ra:marga_tampubolon a ra:Marga ;
+    ra:nama "Tampubolon" ;
+    rdfs:label "Tampubolon" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_toba, ra:wil_balige_toba ;
+    ra:berkerabatDenganMarga ra:marga_manurung, ra:marga_panjaitan, ra:marga_silalahi, ra:marga_sitorus .
+
+ra:marga_panjaitan a ra:Marga ;
+    ra:nama "Panjaitan" ;
+    rdfs:label "Panjaitan" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_toba, ra:wil_balige_toba ;
+    ra:berkerabatDenganMarga ra:marga_manurung, ra:marga_silalahi, ra:marga_sitorus, ra:marga_tampubolon .
+
+ra:marga_manurung a ra:Marga ;
+    ra:nama "Manurung" ;
+    rdfs:label "Manurung" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_toba, ra:wil_desa_jangga_dolok_toba ;
+    ra:berkerabatDenganMarga ra:marga_panjaitan, ra:marga_silalahi, ra:marga_sinambela, ra:marga_sitorus, ra:marga_tampubolon .
+
+ra:marga_sinambela a ra:Marga ;
+    ra:nama "Sinambela" ;
+    rdfs:label "Sinambela" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_humbang_hasundutan, ra:wil_bakkara_humbahas ;
+    ra:berkerabatDenganMarga ra:marga_manurung, ra:marga_marbun, ra:marga_siallagan, ra:marga_silalahi .
+
+ra:marga_siallagan a ra:Marga ;
+    ra:nama "Siallagan" ;
+    rdfs:label "Siallagan" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_samosir, ra:wil_pulau_samosir ;
+    ra:berkerabatDenganMarga ra:marga_manik, ra:marga_sagala, ra:marga_sidabutar, ra:marga_sidauruk, ra:marga_sinaga, ra:marga_sinambela .
+
+ra:marga_sidauruk a ra:Marga ;
+    ra:nama "Sidauruk" ;
+    rdfs:label "Sidauruk" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_samosir, ra:wil_pulau_samosir ;
+    ra:berkerabatDenganMarga ra:marga_manik, ra:marga_sagala, ra:marga_siallagan, ra:marga_sidabutar .
+
+ra:marga_sidabutar a ra:Marga ;
+    ra:nama "Sidabutar" ;
+    rdfs:label "Sidabutar" ;
+    ra:bagianDariSuku ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_samosir, ra:wil_pulau_samosir ;
+    ra:berkerabatDenganMarga ra:marga_manik, ra:marga_sagala, ra:marga_siallagan, ra:marga_sidauruk .
+
+ra:marga_manik a ra:Marga ;
+    ra:nama "Manik" ;
+    rdfs:label "Manik" ;
+    ra:bagianDariSuku ra:suku_batak_toba, ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_samosir, ra:wil_kab_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_bintang, ra:marga_boangmanalu, ra:marga_gajahmanik, ra:marga_padang, ra:marga_sagala, ra:marga_siallagan, ra:marga_sidabutar, ra:marga_sidauruk, ra:marga_silalahi, ra:marga_sinamo .
+
+ra:marga_sagala a ra:Marga ;
+    ra:nama "Sagala" ;
+    rdfs:label "Sagala" ;
+    ra:bagianDariSuku ra:suku_batak_toba, ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_samosir, ra:wil_kab_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_limbong, ra:marga_manik, ra:marga_padang, ra:marga_siallagan, ra:marga_sidabutar, ra:marga_sidauruk, ra:marga_sinamo .
+
+ra:marga_karo_karo a ra:Marga ;
+    ra:nama "Karo-karo" ;
+    rdfs:label "Karo-karo" ;
+    ra:bagianDariSuku ra:suku_batak_karo ;
+    ra:berasalDariWilayah ra:wil_kab_karo, ra:wil_desa_lingga_karo, ra:wil_desa_dokan_karo, ra:wil_kab_deli_serdang ;
+    ra:berkerabatDenganMarga ra:marga_ginting, ra:marga_perangin_angin, ra:marga_sembiring, ra:marga_sitepu, ra:marga_tarigan .
+
+ra:marga_ginting a ra:Marga ;
+    ra:nama "Ginting" ;
+    rdfs:label "Ginting" ;
+    ra:bagianDariSuku ra:suku_batak_karo ;
+    ra:berasalDariWilayah ra:wil_kab_karo, ra:wil_desa_lingga_karo, ra:wil_desa_dokan_karo, ra:wil_kab_deli_serdang ;
+    ra:berkerabatDenganMarga ra:marga_karo_karo, ra:marga_perangin_angin, ra:marga_sembiring, ra:marga_sitepu, ra:marga_tarigan .
+
+ra:marga_tarigan a ra:Marga ;
+    ra:nama "Tarigan" ;
+    rdfs:label "Tarigan" ;
+    ra:bagianDariSuku ra:suku_batak_karo ;
+    ra:berasalDariWilayah ra:wil_kab_karo, ra:wil_desa_lingga_karo, ra:wil_desa_dokan_karo, ra:wil_kab_deli_serdang ;
+    ra:berkerabatDenganMarga ra:marga_ginting, ra:marga_karo_karo, ra:marga_perangin_angin, ra:marga_sembiring, ra:marga_sitepu .
+
+ra:marga_sembiring a ra:Marga ;
+    ra:nama "Sembiring" ;
+    rdfs:label "Sembiring" ;
+    ra:bagianDariSuku ra:suku_batak_karo ;
+    ra:berasalDariWilayah ra:wil_kab_karo, ra:wil_desa_lingga_karo, ra:wil_desa_dokan_karo, ra:wil_kab_deli_serdang ;
+    ra:berkerabatDenganMarga ra:marga_ginting, ra:marga_karo_karo, ra:marga_perangin_angin, ra:marga_sitepu, ra:marga_tarigan .
+
+ra:marga_perangin_angin a ra:Marga ;
+    ra:nama "Perangin-angin" ;
+    rdfs:label "Perangin-angin" ;
+    ra:bagianDariSuku ra:suku_batak_karo ;
+    ra:berasalDariWilayah ra:wil_kab_karo, ra:wil_desa_lingga_karo, ra:wil_desa_dokan_karo, ra:wil_kab_deli_serdang ;
+    ra:berkerabatDenganMarga ra:marga_ginting, ra:marga_karo_karo, ra:marga_sembiring, ra:marga_sitepu, ra:marga_tarigan .
+
+ra:marga_sitepu a ra:Marga ;
+    ra:nama "Sitepu" ;
+    rdfs:label "Sitepu" ;
+    ra:bagianDariSuku ra:suku_batak_karo ;
+    ra:berasalDariWilayah ra:wil_kab_karo, ra:wil_desa_dokan_karo ;
+    ra:berkerabatDenganMarga ra:marga_ginting, ra:marga_karo_karo, ra:marga_perangin_angin, ra:marga_sembiring, ra:marga_tarigan .
+
+ra:marga_bancin a ra:Marga ;
+    ra:nama "Bancin" ;
+    rdfs:label "Bancin" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_banurea, ra:marga_berutu, ra:marga_bintang, ra:marga_boangmanalu, ra:marga_kombih, ra:marga_manik, ra:marga_padang, ra:marga_padang_batanghari, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin .
+
+ra:marga_banurea a ra:Marga ;
+    ra:nama "Banurea" ;
+    rdfs:label "Banurea" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_berutu, ra:marga_bintang, ra:marga_boangmanalu, ra:marga_manik, ra:marga_padang, ra:marga_padang_batanghari, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin .
+
+ra:marga_berutu a ra:Marga ;
+    ra:nama "Berutu" ;
+    rdfs:label "Berutu" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_bancin, ra:marga_banurea, ra:marga_bintang, ra:marga_boangmanalu, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_kombih, ra:marga_kudadiri, ra:marga_lembeng, ra:marga_lingga, ra:marga_maha, ra:marga_maibang, ra:marga_manik, ra:marga_matanari, ra:marga_meka, ra:marga_munthe, ra:marga_padang, ra:marga_padang_batanghari, ra:marga_pasi, ra:marga_pinayungan, ra:marga_pohan, ra:marga_purba, ra:marga_ramin, ra:marga_sagala, ra:marga_sambo, ra:marga_saraan, ra:marga_siketang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung .
+
+ra:marga_boangmanalu a ra:Marga ;
+    ra:nama "Boangmanalu" ;
+    rdfs:label "Boangmanalu" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_bintang, ra:marga_manik, ra:marga_padang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin .
+
+ra:marga_bintang a ra:Marga ;
+    ra:nama "Bintang" ;
+    rdfs:label "Bintang" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_boangmanalu, ra:marga_manik, ra:marga_padang, ra:marga_sinamo .
+
+ra:marga_bako a ra:Marga ;
+    ra:nama "Bako" ;
+    rdfs:label "Bako" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_kudadiri, ra:marga_maha, ra:marga_padang .
+
+ra:marga_capah a ra:Marga ;
+    ra:nama "Capah" ;
+    rdfs:label "Capah" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_berutu, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_kudadiri, ra:marga_maha, ra:marga_padang .
+
+ra:marga_cibro a ra:Marga ;
+    ra:nama "Cibro" ;
+    rdfs:label "Cibro" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_berutu, ra:marga_capah, ra:marga_gajah, ra:marga_kudadiri, ra:marga_maha, ra:marga_padang, ra:marga_saraan .
+
+ra:marga_gajah a ra:Marga ;
+    ra:nama "Gajah" ;
+    rdfs:label "Gajah" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_berutu, ra:marga_capah, ra:marga_cibro, ra:marga_gajahmanik, ra:marga_kudadiri, ra:marga_maha, ra:marga_padang .
+
+ra:marga_gajahmanik a ra:Marga ;
+    ra:nama "Gajahmanik" ;
+    rdfs:label "Gajahmanik" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_berutu, ra:marga_capah, ra:marga_gajah, ra:marga_kudadiri, ra:marga_manik, ra:marga_padang .
+
+ra:marga_galo a ra:Marga ;
+    ra:nama "Galo" ;
+    rdfs:label "Galo" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_lembeng, ra:marga_lingga, ra:marga_matanari, ra:marga_padang .
+
+ra:marga_kaloko a ra:Marga ;
+    ra:nama "Kaloko" ;
+    rdfs:label "Kaloko" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_galo, ra:marga_kesogihen, ra:marga_lembeng, ra:marga_lingga, ra:marga_matanari, ra:marga_padang .
+
+ra:marga_kesogihen a ra:Marga ;
+    ra:nama "Kesogihen" ;
+    rdfs:label "Kesogihen" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_galo, ra:marga_kaloko, ra:marga_lembeng, ra:marga_lingga, ra:marga_matanari, ra:marga_padang .
+
+ra:marga_kombih a ra:Marga ;
+    ra:nama "Kombih" ;
+    rdfs:label "Kombih" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_berutu, ra:marga_padang, ra:marga_sinamo, ra:marga_solin, ra:marga_tumangger .
+
+ra:marga_kudadiri a ra:Marga ;
+    ra:nama "Kudadiri" ;
+    rdfs:label "Kudadiri" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_berutu, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_maha, ra:marga_padang, ra:marga_sinamo .
+
+ra:marga_lembeng a ra:Marga ;
+    ra:nama "Lembeng" ;
+    rdfs:label "Lembeng" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_lingga, ra:marga_matanari, ra:marga_padang .
+
+ra:marga_lingga a ra:Marga ;
+    ra:nama "Lingga" ;
+    rdfs:label "Lingga" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_lembeng, ra:marga_matanari, ra:marga_padang .
+
+ra:marga_maha a ra:Marga ;
+    ra:nama "Maha" ;
+    rdfs:label "Maha" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_berutu, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_kudadiri, ra:marga_maibang, ra:marga_meka, ra:marga_munthe, ra:marga_padang .
+
+ra:marga_maibang a ra:Marga ;
+    ra:nama "Maibang" ;
+    rdfs:label "Maibang" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_maha, ra:marga_meka, ra:marga_munthe, ra:marga_padang .
+
+ra:marga_matanari a ra:Marga ;
+    ra:nama "Matanari" ;
+    rdfs:label "Matanari" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_lembeng, ra:marga_lingga, ra:marga_padang .
+
+ra:marga_meka a ra:Marga ;
+    ra:nama "Meka" ;
+    rdfs:label "Meka" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_maha, ra:marga_maibang, ra:marga_munthe, ra:marga_padang .
+
+ra:marga_munthe a ra:Marga ;
+    ra:nama "Munthe" ;
+    rdfs:label "Munthe" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_maha, ra:marga_maibang, ra:marga_meka, ra:marga_padang .
+
+ra:marga_padang a ra:Marga ;
+    ra:nama "Padang" ;
+    rdfs:label "Padang" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bako, ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_bintang, ra:marga_boangmanalu, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_kombih, ra:marga_kudadiri, ra:marga_lembeng, ra:marga_lingga, ra:marga_maha, ra:marga_maibang, ra:marga_manik, ra:marga_matanari, ra:marga_meka, ra:marga_munthe, ra:marga_padang_batanghari, ra:marga_pasi, ra:marga_pinayungan, ra:marga_pohan, ra:marga_purba, ra:marga_ramin, ra:marga_sagala, ra:marga_sambo, ra:marga_saraan, ra:marga_siketang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung .
+
+ra:marga_padang_batanghari a ra:Marga ;
+    ra:nama "Padang Batanghari" ;
+    rdfs:label "Padang Batanghari" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_padang, ra:marga_sinamo .
+
+ra:marga_pasi a ra:Marga ;
+    ra:nama "Pasi" ;
+    rdfs:label "Pasi" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_pinayungan, ra:marga_sinamo, ra:marga_solin .
+
+ra:marga_pinayungan a ra:Marga ;
+    ra:nama "Pinayungan" ;
+    rdfs:label "Pinayungan" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_pasi, ra:marga_sinamo, ra:marga_solin .
+
+ra:marga_ramin a ra:Marga ;
+    ra:nama "Ramin" ;
+    rdfs:label "Ramin" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_sambo, ra:marga_saraan, ra:marga_siketang, ra:marga_sinamo .
+
+ra:marga_saraan a ra:Marga ;
+    ra:nama "Saraan" ;
+    rdfs:label "Saraan" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_cibro, ra:marga_padang, ra:marga_ramin, ra:marga_sambo, ra:marga_siketang, ra:marga_sinamo .
+
+ra:marga_sambo a ra:Marga ;
+    ra:nama "Sambo" ;
+    rdfs:label "Sambo" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_ramin, ra:marga_saraan, ra:marga_siketang, ra:marga_sinamo .
+
+ra:marga_siketang a ra:Marga ;
+    ra:nama "Siketang" ;
+    rdfs:label "Siketang" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_ramin, ra:marga_sambo, ra:marga_saraan, ra:marga_sinamo .
+
+ra:marga_sinamo a ra:Marga ;
+    ra:nama "Sinamo" ;
+    rdfs:label "Sinamo" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_bintang, ra:marga_boangmanalu, ra:marga_kombih, ra:marga_kudadiri, ra:marga_manik, ra:marga_padang, ra:marga_padang_batanghari, ra:marga_pasi, ra:marga_pinayungan, ra:marga_ramin, ra:marga_sagala, ra:marga_sambo, ra:marga_saraan, ra:marga_siketang, ra:marga_sitakar, ra:marga_solin, ra:marga_tinendung, ra:marga_tumangger .
+
+ra:marga_sitakar a ra:Marga ;
+    ra:nama "Sitakar" ;
+    rdfs:label "Sitakar" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_boangmanalu, ra:marga_padang, ra:marga_sinamo, ra:marga_solin, ra:marga_tinendung, ra:marga_tumangger .
+
+ra:marga_solin a ra:Marga ;
+    ra:nama "Solin" ;
+    rdfs:label "Solin" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_boangmanalu, ra:marga_kombih, ra:marga_padang, ra:marga_pasi, ra:marga_pinayungan, ra:marga_sinamo, ra:marga_sitakar, ra:marga_tinendung, ra:marga_tumangger .
+
+ra:marga_tendang a ra:Marga ;
+    ra:nama "Tendang" ;
+    rdfs:label "Tendang" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung .
+
+ra:marga_tinambunan a ra:Marga ;
+    ra:nama "Tinambunan" ;
+    rdfs:label "Tinambunan" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_tendang, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung .
+
+ra:marga_tinendung a ra:Marga ;
+    ra:nama "Tinendung" ;
+    rdfs:label "Tinendung" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung .
+
+ra:marga_tumangger a ra:Marga ;
+    ra:nama "Tumangger" ;
+    rdfs:label "Tumangger" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi, ra:wil_kab_pakpak_bharat ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_kombih, ra:marga_padang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_turuten, ra:marga_ujung .
+
+ra:marga_turuten a ra:Marga ;
+    ra:nama "Turuten" ;
+    rdfs:label "Turuten" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_ujung .
+
+ra:marga_ujung a ra:Marga ;
+    ra:nama "Ujung" ;
+    rdfs:label "Ujung" ;
+    ra:bagianDariSuku ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_dairi, ra:wil_sidikalang_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_padang, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten .
+
+ra:marga_purba a ra:Marga ;
+    ra:nama "Purba" ;
+    rdfs:label "Purba" ;
+    ra:bagianDariSuku ra:suku_batak_simalungun, ra:suku_pakpak ;
+    ra:berasalDariWilayah ra:wil_kab_simalungun, ra:wil_nagori_pamatang_purba_simalungun, ra:wil_kota_pematangsiantar, ra:wil_kab_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_damanik, ra:marga_padang, ra:marga_saragih, ra:marga_sinaga .
+
+ra:marga_sinaga a ra:Marga ;
+    ra:nama "Sinaga" ;
+    rdfs:label "Sinaga" ;
+    ra:bagianDariSuku ra:suku_batak_simalungun, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_simalungun, ra:wil_kota_pematangsiantar, ra:wil_kab_samosir ;
+    ra:berkerabatDenganMarga ra:marga_damanik, ra:marga_purba, ra:marga_saragih, ra:marga_siallagan, ra:marga_situmorang .
+
+ra:marga_saragih a ra:Marga ;
+    ra:nama "Saragih" ;
+    rdfs:label "Saragih" ;
+    ra:bagianDariSuku ra:suku_batak_simalungun ;
+    ra:berasalDariWilayah ra:wil_kab_simalungun, ra:wil_kota_pematangsiantar ;
+    ra:berkerabatDenganMarga ra:marga_damanik, ra:marga_purba, ra:marga_sinaga .
+
+ra:marga_damanik a ra:Marga ;
+    ra:nama "Damanik" ;
+    rdfs:label "Damanik" ;
+    ra:bagianDariSuku ra:suku_batak_simalungun ;
+    ra:berasalDariWilayah ra:wil_kab_simalungun, ra:wil_kota_pematangsiantar ;
+    ra:berkerabatDenganMarga ra:marga_purba, ra:marga_saragih, ra:marga_sinaga .
+
+ra:marga_tengku a ra:Marga ;
+    ra:nama "Tengku" ;
+    rdfs:label "Tengku" ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:berkerabatDenganMarga ra:marga_datuk, ra:marga_oku, ra:marga_wan .
+
+ra:marga_wan a ra:Marga ;
+    ra:nama "Wan" ;
+    rdfs:label "Wan" ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:berkerabatDenganMarga ra:marga_datuk, ra:marga_oku, ra:marga_tengku .
+
+ra:marga_datuk a ra:Marga ;
+    ra:nama "Datuk" ;
+    rdfs:label "Datuk" ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:berkerabatDenganMarga ra:marga_oku, ra:marga_tengku, ra:marga_wan .
+
+ra:marga_oku a ra:Marga ;
+    ra:nama "Oku (Orang Kaya)" ;
+    rdfs:label "Oku (Orang Kaya)" ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:berkerabatDenganMarga ra:marga_datuk, ra:marga_tengku, ra:marga_wan .
+
+ra:marga_nasution a ra:Marga ;
+    ra:nama "Nasution" ;
+    rdfs:label "Nasution" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_desa_panyabungan_tonga, ra:wil_desa_pidoli_dolok, ra:wil_desa_huta_godang_ulu_pungkut, ra:wil_kab_padang_lawas ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_hasibuan, ra:marga_lubis, ra:marga_matondang, ra:marga_parinduri, ra:marga_pulungan, ra:marga_rangkuti .
+
+ra:marga_lubis a ra:Marga ;
+    ra:nama "Lubis" ;
+    rdfs:label "Lubis" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_desa_panyabungan_tonga, ra:wil_desa_pidoli_dolok, ra:wil_desa_huta_godang_ulu_pungkut, ra:wil_kab_padang_lawas ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_hasibuan, ra:marga_matondang, ra:marga_nasution, ra:marga_parinduri, ra:marga_pulungan, ra:marga_rangkuti .
+
+ra:marga_batubara a ra:Marga ;
+    ra:nama "Batubara" ;
+    rdfs:label "Batubara" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_desa_panyabungan_tonga ;
+    ra:berkerabatDenganMarga ra:marga_daulay, ra:marga_hasibuan, ra:marga_lubis, ra:marga_matondang, ra:marga_nasution, ra:marga_parinduri, ra:marga_pulungan, ra:marga_rangkuti .
+
+ra:marga_matondang a ra:Marga ;
+    ra:nama "Matondang" ;
+    rdfs:label "Matondang" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola, ra:suku_etnis_pasisi ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_kab_tapanuli_tengah ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_hasibuan, ra:marga_lubis, ra:marga_nasution, ra:marga_parinduri, ra:marga_pasaribu, ra:marga_pohan, ra:marga_pulungan, ra:marga_rangkuti, ra:marga_tanjung .
+
+ra:marga_rangkuti a ra:Marga ;
+    ra:nama "Rangkuti" ;
+    rdfs:label "Rangkuti" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_lubis, ra:marga_matondang, ra:marga_nasution, ra:marga_parinduri, ra:marga_pulungan .
+
+ra:marga_parinduri a ra:Marga ;
+    ra:nama "Parinduri" ;
+    rdfs:label "Parinduri" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_lubis, ra:marga_matondang, ra:marga_nasution, ra:marga_pulungan, ra:marga_rangkuti .
+
+ra:marga_pulungan a ra:Marga ;
+    ra:nama "Pulungan" ;
+    rdfs:label "Pulungan" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_lubis, ra:marga_matondang, ra:marga_nasution, ra:marga_parinduri, ra:marga_rangkuti .
+
+ra:marga_daulay a ra:Marga ;
+    ra:nama "Daulay" ;
+    rdfs:label "Daulay" ;
+    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_kab_tapanuli_selatan, ra:wil_kab_padang_lawas, ra:wil_kab_padang_lawas_utara ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_harahap, ra:marga_hasibuan, ra:marga_lubis, ra:marga_matondang, ra:marga_nasution, ra:marga_pane, ra:marga_pulungan, ra:marga_rambe, ra:marga_ritonga, ra:marga_siregar .
+
+ra:marga_hasibuan a ra:Marga ;
+    ra:nama "Hasibuan" ;
+    rdfs:label "Hasibuan" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_mandailing, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_kab_mandailing_natal, ra:wil_kab_padang_lawas, ra:wil_kab_padang_lawas_utara, ra:wil_kota_padangsidimpuan ;
+    ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_harahap, ra:marga_hutasuhut, ra:marga_lubis, ra:marga_matondang, ra:marga_nasution, ra:marga_pane, ra:marga_rambe, ra:marga_ritonga, ra:marga_siregar, ra:marga_tobing .
+
+ra:marga_harahap a ra:Marga ;
+    ra:nama "Harahap" ;
+    rdfs:label "Harahap" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_sipirok_tapsel, ra:wil_kab_padang_lawas, ra:wil_kab_padang_lawas_utara, ra:wil_kota_padangsidimpuan, ra:wil_desa_hutaimbaru_padangsidimpuan ;
+    ra:berkerabatDenganMarga ra:marga_daulay, ra:marga_hasibuan, ra:marga_hutasuhut, ra:marga_pane, ra:marga_rambe, ra:marga_ritonga, ra:marga_siregar, ra:marga_tobing .
+
+ra:marga_siregar a ra:Marga ;
+    ra:nama "Siregar" ;
+    rdfs:label "Siregar" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_sipirok_tapsel, ra:wil_kab_padang_lawas, ra:wil_kab_padang_lawas_utara, ra:wil_kota_padangsidimpuan, ra:wil_desa_hutaimbaru_padangsidimpuan ;
+    ra:berkerabatDenganMarga ra:marga_daulay, ra:marga_harahap, ra:marga_hasibuan, ra:marga_hutasuhut, ra:marga_pane, ra:marga_rambe, ra:marga_ritonga, ra:marga_tobing .
+
+ra:marga_ritonga a ra:Marga ;
+    ra:nama "Ritonga" ;
+    rdfs:label "Ritonga" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_sipirok_tapsel, ra:wil_kab_padang_lawas, ra:wil_kab_padang_lawas_utara, ra:wil_kota_padangsidimpuan, ra:wil_desa_hutaimbaru_padangsidimpuan ;
+    ra:berkerabatDenganMarga ra:marga_daulay, ra:marga_harahap, ra:marga_hasibuan, ra:marga_hutasuhut, ra:marga_pane, ra:marga_rambe, ra:marga_siregar, ra:marga_tobing .
+
+ra:marga_rambe a ra:Marga ;
+    ra:nama "Rambe" ;
+    rdfs:label "Rambe" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_sipirok_tapsel, ra:wil_kab_padang_lawas, ra:wil_kab_padang_lawas_utara ;
+    ra:berkerabatDenganMarga ra:marga_daulay, ra:marga_harahap, ra:marga_hasibuan, ra:marga_pane, ra:marga_ritonga, ra:marga_siregar .
+
+ra:marga_pane a ra:Marga ;
+    ra:nama "Pane" ;
+    rdfs:label "Pane" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_kab_padang_lawas_utara ;
+    ra:berkerabatDenganMarga ra:marga_daulay, ra:marga_harahap, ra:marga_hasibuan, ra:marga_rambe, ra:marga_ritonga, ra:marga_siregar .
+
+ra:marga_hutasuhut a ra:Marga ;
+    ra:nama "Hutasuhut" ;
+    rdfs:label "Hutasuhut" ;
+    ra:bagianDariSuku ra:suku_batak_angkola ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_selatan, ra:wil_kota_padangsidimpuan, ra:wil_desa_hutaimbaru_padangsidimpuan ;
+    ra:berkerabatDenganMarga ra:marga_harahap, ra:marga_hasibuan, ra:marga_ritonga, ra:marga_siregar, ra:marga_tobing .
+
+ra:marga_tobing a ra:Marga ;
+    ra:nama "Tobing" ;
+    rdfs:label "Tobing" ;
+    ra:bagianDariSuku ra:suku_batak_angkola, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kota_padangsidimpuan, ra:wil_desa_hutaimbaru_padangsidimpuan, ra:wil_kab_tapanuli_utara ;
+    ra:berkerabatDenganMarga ra:marga_harahap, ra:marga_hasibuan, ra:marga_hutasuhut, ra:marga_ritonga, ra:marga_siregar .
+
+ra:marga_tanjung a ra:Marga ;
+    ra:nama "Tanjung" ;
+    rdfs:label "Tanjung" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_etnis_pasisi_sibolga ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_sorkam_kanan_tapteng, ra:wil_kota_sibolga ;
+    ra:berkerabatDenganMarga ra:marga_bondar, ra:marga_limbong, ra:marga_marbun, ra:marga_matondang, ra:marga_pasaribu, ra:marga_pohan, ra:marga_sikumbang, ra:marga_tarihoran .
+
+ra:marga_pohan a ra:Marga ;
+    ra:nama "Pohan" ;
+    rdfs:label "Pohan" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_etnis_pasisi_sibolga, ra:suku_pakpak, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_kota_sibolga, ra:wil_kab_dairi ;
+    ra:berkerabatDenganMarga ra:marga_berutu, ra:marga_bondar, ra:marga_limbong, ra:marga_marbun, ra:marga_matondang, ra:marga_padang, ra:marga_pasaribu, ra:marga_sikumbang, ra:marga_tanjung, ra:marga_tarihoran .
+
+ra:marga_pasaribu a ra:Marga ;
+    ra:nama "Pasaribu" ;
+    rdfs:label "Pasaribu" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_etnis_pasisi_sibolga, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_kota_sibolga ;
+    ra:berkerabatDenganMarga ra:marga_bondar, ra:marga_limbong, ra:marga_marbun, ra:marga_matondang, ra:marga_pohan, ra:marga_sikumbang, ra:marga_tanjung, ra:marga_tarihoran .
+
+ra:marga_limbong a ra:Marga ;
+    ra:nama "Limbong" ;
+    rdfs:label "Limbong" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_etnis_pasisi_sibolga, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_kota_sibolga, ra:wil_kab_samosir ;
+    ra:berkerabatDenganMarga ra:marga_bondar, ra:marga_marbun, ra:marga_pasaribu, ra:marga_pohan, ra:marga_sagala, ra:marga_sikumbang, ra:marga_tanjung, ra:marga_tarihoran .
+
+ra:marga_tarihoran a ra:Marga ;
+    ra:nama "Tarihoran" ;
+    rdfs:label "Tarihoran" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_sorkam_kanan_tapteng ;
+    ra:berkerabatDenganMarga ra:marga_bondar, ra:marga_limbong, ra:marga_marbun, ra:marga_pasaribu, ra:marga_pohan, ra:marga_tanjung .
+
+ra:marga_bondar a ra:Marga ;
+    ra:nama "Bondar" ;
+    rdfs:label "Bondar" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_sorkam_kanan_tapteng ;
+    ra:berkerabatDenganMarga ra:marga_limbong, ra:marga_marbun, ra:marga_pasaribu, ra:marga_pohan, ra:marga_tanjung, ra:marga_tarihoran .
+
+ra:marga_marbun a ra:Marga ;
+    ra:nama "Marbun" ;
+    rdfs:label "Marbun" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi, ra:suku_batak_toba ;
+    ra:berasalDariWilayah ra:wil_kab_tapanuli_tengah, ra:wil_kab_humbang_hasundutan ;
+    ra:berkerabatDenganMarga ra:marga_bondar, ra:marga_limbong, ra:marga_pasaribu, ra:marga_pohan, ra:marga_sinambela, ra:marga_tanjung, ra:marga_tarihoran .
+
+ra:marga_sikumbang a ra:Marga ;
+    ra:nama "Sikumbang" ;
+    rdfs:label "Sikumbang" ;
+    ra:bagianDariSuku ra:suku_etnis_pasisi_sibolga ;
+    ra:berasalDariWilayah ra:wil_kota_sibolga ;
+    ra:berkerabatDenganMarga ra:marga_limbong, ra:marga_pasaribu, ra:marga_pohan, ra:marga_tanjung .
+
+ra:marga_laia a ra:Marga ;
+    ra:nama "Laia" ;
+    rdfs:label "Laia" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
+    ra:berkerabatDenganMarga ra:marga_gulo, ra:marga_halawa, ra:marga_harefa, ra:marga_hia, ra:marga_ndruru, ra:marga_telaumbanua, ra:marga_waruwu .
+
+ra:marga_harefa a ra:Marga ;
+    ra:nama "Harefa" ;
+    rdfs:label "Harefa" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara, ra:wil_kota_gunungsitoli ;
+    ra:berkerabatDenganMarga ra:marga_halawa, ra:marga_hulu, ra:marga_laia, ra:marga_laoli, ra:marga_mendrofa, ra:marga_nazara, ra:marga_telaumbanua, ra:marga_zega, ra:marga_zendrato .
+
+ra:marga_halawa a ra:Marga ;
+    ra:nama "Halawa" ;
+    rdfs:label "Halawa" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
+    ra:berkerabatDenganMarga ra:marga_gulo, ra:marga_harefa, ra:marga_hia, ra:marga_laia, ra:marga_ndruru, ra:marga_telaumbanua, ra:marga_waruwu .
+
+ra:marga_gulo a ra:Marga ;
+    ra:nama "Gulö" ;
+    rdfs:label "Gulö" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan, ra:wil_kab_nias_barat ;
+    ra:berkerabatDenganMarga ra:marga_halawa, ra:marga_hia, ra:marga_laia, ra:marga_ndruru, ra:marga_waruwu .
+
+ra:marga_hia a ra:Marga ;
+    ra:nama "Hia" ;
+    rdfs:label "Hia" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
+    ra:berkerabatDenganMarga ra:marga_gulo, ra:marga_halawa, ra:marga_laia, ra:marga_ndruru .
+
+ra:marga_mendrofa a ra:Marga ;
+    ra:nama "Mendröfa" ;
+    rdfs:label "Mendröfa" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kota_gunungsitoli, ra:wil_kab_nias_utara ;
+    ra:berkerabatDenganMarga ra:marga_harefa, ra:marga_laoli, ra:marga_nazara, ra:marga_telaumbanua, ra:marga_zega .
+
+ra:marga_ndruru a ra:Marga ;
+    ra:nama "Ndruru" ;
+    rdfs:label "Ndruru" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
+    ra:berkerabatDenganMarga ra:marga_gulo, ra:marga_halawa, ra:marga_hia, ra:marga_laia, ra:marga_waruwu .
+
+ra:marga_nazara a ra:Marga ;
+    ra:nama "Nazara" ;
+    rdfs:label "Nazara" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara ;
+    ra:berkerabatDenganMarga ra:marga_harefa, ra:marga_mendrofa, ra:marga_zega, ra:marga_zendrato .
+
+ra:marga_waruwu a ra:Marga ;
+    ra:nama "Waruwu" ;
+    rdfs:label "Waruwu" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan, ra:wil_kab_nias_utara ;
+    ra:berkerabatDenganMarga ra:marga_gulo, ra:marga_halawa, ra:marga_laia, ra:marga_lase, ra:marga_ndruru, ra:marga_zega .
+
+ra:marga_zega a ra:Marga ;
+    ra:nama "Zega" ;
+    rdfs:label "Zega" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara, ra:wil_kota_gunungsitoli ;
+    ra:berkerabatDenganMarga ra:marga_harefa, ra:marga_mendrofa, ra:marga_nazara, ra:marga_waruwu .
+
+ra:marga_telaumbanua a ra:Marga ;
+    ra:nama "Telaumbanua" ;
+    rdfs:label "Telaumbanua" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan, ra:wil_kab_nias_utara ;
+    ra:berkerabatDenganMarga ra:marga_halawa, ra:marga_harefa, ra:marga_laia, ra:marga_mendrofa, ra:marga_zendrato .
+
+ra:marga_zendrato a ra:Marga ;
+    ra:nama "Zendratö" ;
+    rdfs:label "Zendratö" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara ;
+    ra:berkerabatDenganMarga ra:marga_harefa, ra:marga_hulu, ra:marga_lase, ra:marga_nazara, ra:marga_telaumbanua .
+
+ra:marga_lase a ra:Marga ;
+    ra:nama "Lase" ;
+    rdfs:label "Lase" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara, ra:wil_kab_nias_selatan ;
+    ra:berkerabatDenganMarga ra:marga_hulu, ra:marga_laoli, ra:marga_waruwu, ra:marga_zendrato .
+
+ra:marga_hulu a ra:Marga ;
+    ra:nama "Hulu" ;
+    rdfs:label "Hulu" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara ;
+    ra:berkerabatDenganMarga ra:marga_harefa, ra:marga_laoli, ra:marga_lase, ra:marga_zendrato .
+
+ra:marga_laoli a ra:Marga ;
+    ra:nama "Laoli" ;
+    rdfs:label "Laoli" ;
+    ra:bagianDariSuku ra:suku_nias ;
+    ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_utara, ra:wil_kota_gunungsitoli ;
+    ra:berkerabatDenganMarga ra:marga_harefa, ra:marga_hulu, ra:marga_lase, ra:marga_mendrofa .
 # =====================================================================
 # 4E. MASTER ORNAMEN (ra:Ornamen)
 # =====================================================================
@@ -578,7 +1317,7 @@ ra:rumah_bagas_godang_panyabungan_tonga a ra:RumahAdat ;
     ra:referensi "Kajian Arsitektur Bagas Godang Panyabungan Tonga & Pidoli Dolok (Univ. Malikussaleh): https://rama.unimal.ac.id/id/eprint/14451/ ; Efriani (UNIMED): https://digilib.unimed.ac.id/id/eprint/17742/ ; Saragi (UNIMED): https://media.neliti.com/ ; Serupa UNP: https://ejournal.unp.ac.id/index.php/serupa/" ;
     ra:berasalDariWilayah ra:wil_desa_panyabungan_tonga ;
     ra:dimilikiOlehSuku ra:suku_batak_mandailing ;
-    ra:memilikiMarga ra:marga_nasution, ra:marga_lubis ;
+    ra:memilikiMarga ra:marga_nasution, ra:marga_lubis, ra:marga_batubara, ra:marga_matondang, ra:marga_rangkuti, ra:marga_parinduri, ra:marga_daulay, ra:marga_hasibuan, ra:marga_pulungan ;
     ra:menggunakanBahasa ra:bhs_mandailing ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -595,7 +1334,7 @@ ra:rumah_bagas_godang_pidoli_dolok a ra:RumahAdat ;
     ra:referensi "Kajian Arsitektur Bagas Godang Panyabungan Tonga & Pidoli Dolok (Univ. Malikussaleh): https://rama.unimal.ac.id/id/eprint/14451/" ;
     ra:berasalDariWilayah ra:wil_desa_pidoli_dolok ;
     ra:dimilikiOlehSuku ra:suku_batak_mandailing ;
-    ra:memilikiMarga ra:marga_nasution, ra:marga_lubis ;
+    ra:memilikiMarga ra:marga_nasution, ra:marga_lubis, ra:marga_batubara, ra:marga_matondang, ra:marga_rangkuti, ra:marga_parinduri, ra:marga_daulay, ra:marga_hasibuan, ra:marga_pulungan ;
     ra:menggunakanBahasa ra:bhs_mandailing ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -612,7 +1351,7 @@ ra:rumah_bagas_godang_huta_godang a ra:RumahAdat ;
     ra:referensi "Efriani, Makna Simbolik Rumah Adat Huta Godang Ulu Pungkut (UNIMED): https://digilib.unimed.ac.id/id/eprint/17742/ ; Ukiran Bagas Godang Huta Godang (Serupa UNP): https://ejournal.unp.ac.id/index.php/serupa/" ;
     ra:berasalDariWilayah ra:wil_desa_huta_godang_ulu_pungkut ;
     ra:dimilikiOlehSuku ra:suku_batak_mandailing ;
-    ra:memilikiMarga ra:marga_nasution, ra:marga_lubis ;
+    ra:memilikiMarga ra:marga_nasution, ra:marga_lubis, ra:marga_batubara, ra:marga_matondang, ra:marga_rangkuti, ra:marga_parinduri, ra:marga_daulay, ra:marga_hasibuan, ra:marga_pulungan ;
     ra:menggunakanBahasa ra:bhs_mandailing ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -630,7 +1369,7 @@ ra:rumah_bagas_godang_angkola_sipirok a ra:RumahAdat ;
     ra:referensi "Manifestasi Tangible & Intangible Bagas Godang Kekuriaan Ulayat Angkola (Univ. Malikussaleh): https://rama.unimal.ac.id/id/eprint/14273/ ; Susilowati & Nasoichah: https://core.ac.uk/download/304207208.pdf ; Jurnal LGR UIN Syahada: https://jurnal.uinsyahada.ac.id/" ;
     ra:berasalDariWilayah ra:wil_sipirok_tapsel, ra:wil_muara_tais_tapsel ;
     ra:dimilikiOlehSuku ra:suku_batak_angkola ;
-    ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_hasibuan, ra:marga_ritonga ;
+    ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_hasibuan, ra:marga_ritonga, ra:marga_rambe, ra:marga_daulay, ra:marga_pane, ra:marga_hutasuhut ;
     ra:menggunakanBahasa ra:bhs_angkola ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -648,7 +1387,7 @@ ra:rumah_bagas_godang_padang_lawas a ra:RumahAdat ;
     ra:referensi "Hermansyah Lbs, Horja Godang di Sibuhuan Barumun Padang Lawas (UIN Sunan Kalijaga 2024): https://digilib.uin-suka.ac.id/66437/ ; UU No. 38 Tahun 2007: https://peraturan.go.id/" ;
     ra:berasalDariWilayah ra:wil_sibuhuan_barumun ;
     ra:dimilikiOlehSuku ra:suku_batak_angkola_mandailing ;
-    ra:memilikiMarga ra:marga_hasibuan, ra:marga_harahap, ra:marga_daulay, ra:marga_siregar ;
+    ra:memilikiMarga ra:marga_hasibuan, ra:marga_harahap, ra:marga_daulay, ra:marga_siregar, ra:marga_nasution, ra:marga_lubis, ra:marga_rambe, ra:marga_ritonga ;
     ra:menggunakanBahasa ra:bhs_angkola_mandailing ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -666,7 +1405,7 @@ ra:rumah_bagas_godang_padang_lawas_utara a ra:RumahAdat ;
     ra:referensi "UU No. 37 Tahun 2007 Pembentukan Kab. Padang Lawas Utara: https://peraturan.go.id/ ; Susilowati & Nasoichah: https://core.ac.uk/download/304207208.pdf" ;
     ra:berasalDariWilayah ra:wil_gunung_tua_padang_bolak ;
     ra:dimilikiOlehSuku ra:suku_batak_angkola_mandailing ;
-    ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_rambe, ra:marga_daulay ;
+    ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_hasibuan, ra:marga_rambe, ra:marga_ritonga, ra:marga_daulay, ra:marga_pane ;
     ra:menggunakanBahasa ra:bhs_angkola_mandailing ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -685,7 +1424,7 @@ ra:rumah_adat_pasisi_rajo_sorkam_kanan a ra:RumahAdat ;
     ra:referensi "EGINDO (7 Sept 2025): https://egindo.com/gabema-tapteng-sibolga/ ; Sehat dkk. (Mukadimah 2021): https://core.ac.uk/download/387527467.pdf ; Pratiwi (UNIMED 2020): https://digilib.unimed.ac.id/42756/ ; BRIN: https://karya.brin.go.id/26705/" ;
     ra:berasalDariWilayah ra:wil_sorkam_kanan_tapteng ;
     ra:dimilikiOlehSuku ra:suku_etnis_pasisi ;
-    ra:memilikiMarga ra:marga_tanjung_raja_sorkam ;
+    ra:memilikiMarga ra:marga_tanjung, ra:marga_pohan, ra:marga_pasaribu, ra:marga_limbong, ra:marga_matondang, ra:marga_tarihoran, ra:marga_bondar, ra:marga_marbun ;
     ra:menggunakanBahasa ra:bhs_pesisir ;
     ra:memilikiOrnamen ra:orn_saluk_uki ;
     ra:memilikiTradisi ra:trd_adat_sumando, ra:trd_turun_ka_rai .
@@ -703,6 +1442,7 @@ ra:rumah_adat_pasisi_sibolga a ra:RumahAdat ;
     ra:referensi "Tari Tradisional Rande & Adat Pernikahan Pesisir Sibolga (Gesture UNIMED): https://jurnal.unimed.ac.id/2012/index.php/gesture/article/view/19828/ ; Budaya Baso (Informatio UNPAD): https://journals.unpad.ac.id/informatio/article/view/49248 ; UGM: https://ugm.ac.id/" ;
     ra:berasalDariWilayah ra:wil_kota_sibolga ;
     ra:dimilikiOlehSuku ra:suku_etnis_pasisi_sibolga ;
+    ra:memilikiMarga ra:marga_tanjung, ra:marga_pohan, ra:marga_pasaribu, ra:marga_limbong, ra:marga_sikumbang ;
     ra:menggunakanBahasa ra:bhs_pesisir_sibolga ;
     ra:memilikiOrnamen ra:orn_saluk_uki ;
     ra:memilikiTradisi ra:trd_adat_pernikahan_pesisir_sibolga, ra:trd_budaya_baso .
@@ -720,7 +1460,7 @@ ra:rumah_bagas_godang_h_raja_tagor a ra:RumahAdat ;
     ra:referensi "Gurusinga dkk., Sejarah Berdirinya Bagas Godang H. Raja Tagor Hutaimbaru Padangsidimpuan (Ristekdik 2026): https://jurnal.um-tapsel.ac.id/index.php/Ristekdik/article/download/26205/pdf ; Univ. Malikussaleh: https://rama.unimal.ac.id/14273/" ;
     ra:berasalDariWilayah ra:wil_desa_hutaimbaru_padangsidimpuan ;
     ra:dimilikiOlehSuku ra:suku_batak_angkola ;
-    ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_nasution ;
+    ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_hasibuan, ra:marga_tobing, ra:marga_ritonga, ra:marga_hutasuhut ;
     ra:menggunakanBahasa ra:bhs_angkola ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
@@ -914,7 +1654,7 @@ ra:rumah_kete_desa_dokan a ra:RumahAdat ;
     ra:referensi "Repositori Kemendikdasmen: https://repositori.kemendikdasmen.go.id/24068/ ; BPODT: https://bpodt.kemenpar.go.id/siwaluh-jabu-melawan-waktu/" ;
     ra:berasalDariWilayah ra:wil_desa_dokan_karo ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
-    ra:memilikiMarga ra:marga_sitepu, ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
+    ra:memilikiMarga ra:marga_sitepu ;
     ra:menggunakanBahasa ra:bhs_karo ;
     ra:memilikiOrnamen ra:orn_gerga .
 
@@ -931,6 +1671,7 @@ ra:rumah_adat_pakpak_sidikalang a ra:RumahAdat ;
     ra:referensi "Visit Dairi: https://visit.dairikab.go.id/destination/19 ; Tano Batak: https://www.tanobatak.com/suku/batak-pakpak" ;
     ra:berasalDariWilayah ra:wil_sidikalang_dairi ;
     ra:dimilikiOlehSuku ra:suku_pakpak ;
+    ra:memilikiMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_boangmanalu, ra:marga_bintang, ra:marga_bako, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_kombih, ra:marga_kudadiri, ra:marga_lembeng, ra:marga_lingga, ra:marga_maha, ra:marga_maibang, ra:marga_manik, ra:marga_matanari, ra:marga_meka, ra:marga_munthe, ra:marga_padang, ra:marga_padang_batanghari, ra:marga_pasi, ra:marga_pinayungan, ra:marga_pohan, ra:marga_purba, ra:marga_ramin, ra:marga_sagala, ra:marga_saraan, ra:marga_sambo, ra:marga_siketang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung ;
     ra:menggunakanBahasa ra:bhs_pakpak ;
     ra:memilikiOrnamen ra:orn_perbunga_kupkup, ra:orn_perbunga_kembang, ra:orn_perbunga_pancur .
 
@@ -947,6 +1688,7 @@ ra:rumah_tipologi_pakpak_bharat a ra:RumahAdat ;
     ra:referensi "Tano Batak: https://www.tanobatak.com/suku/batak-pakpak ; Visit Dairi: https://visit.dairikab.go.id/" ;
     ra:berasalDariWilayah ra:wil_kab_pakpak_bharat ;
     ra:dimilikiOlehSuku ra:suku_pakpak ;
+    ra:memilikiMarga ra:marga_berutu, ra:marga_sinamo, ra:marga_padang, ra:marga_bancin, ra:marga_boangmanalu, ra:marga_banurea, ra:marga_manik, ra:marga_sitakar, ra:marga_solin, ra:marga_tinendung, ra:marga_tumangger, ra:marga_saraan, ra:marga_cibro, ra:marga_kudadiri, ra:marga_gajah ;
     ra:menggunakanBahasa ra:bhs_pakpak ;
     ra:memilikiOrnamen ra:orn_perbunga_kupkup, ra:orn_perbunga_kembang, ra:orn_perbunga_pancur .
 
@@ -963,6 +1705,7 @@ ra:rumah_datuk_amar_sridiraja_langkat a ra:RumahAdat ;
     ra:referensi "Jurnal Yupa (UNMUL): https://jurnal.fkip.unmul.ac.id/index.php/yupa/article/view/3499 ; DOAJ: https://doaj.org/article/cfdec9d1a1e64dd0a0a5803ef11b011a" ;
     ra:berasalDariWilayah ra:wil_tanjung_pura_langkat ;
     ra:dimilikiOlehSuku ra:suku_melayu_langkat ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_wan, ra:marga_datuk, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu_langkat ;
     ra:memilikiTradisi ra:trd_tepung_tawar .
 
@@ -979,6 +1722,7 @@ ra:rumah_datuk_padang_tualang_langkat a ra:RumahAdat ;
     ra:referensi "Jurnal RAUT (USK): https://jurnal.usk.ac.id/raut/article/download/25226/15990 ; Jurnal Permukiman PUPR: https://jurnalpermukiman.pu.go.id/index.php/JP/article/view/89" ;
     ra:berasalDariWilayah ra:wil_tanjung_pura_langkat ;
     ra:dimilikiOlehSuku ra:suku_melayu_langkat ;
+    ra:memilikiMarga ra:marga_datuk ;
     ra:menggunakanBahasa ra:bhs_melayu_langkat ;
     ra:memilikiOrnamen ra:orn_lebah_bergantung .
 
@@ -1046,6 +1790,7 @@ ra:rumah_bolon_pulau_sibandang a ra:RumahAdat ;
     ra:referensi "Sinata: https://sinata.id/rumah-bolon-sibandang/ ; Repositori Kemendikdasmen: https://repositori.kemendikdasmen.go.id/7603/" ;
     ra:berasalDariWilayah ra:wil_pulau_sibandang_taput ;
     ra:dimilikiOlehSuku ra:suku_batak_toba ;
+    ra:memilikiMarga ra:marga_rajagukguk, ra:marga_situmorang, ra:marga_parhusip, ra:marga_simare_mare ;
     ra:menggunakanBahasa ra:bhs_batak_toba ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
@@ -1063,6 +1808,7 @@ ra:rumah_bolon_museum_tb_silalahi_center a ra:RumahAdat ;
     ra:referensi "Museum TB Silalahi Center: https://museumtbsilalahicenter.blogspot.com/ ; Wisata Toba: https://wisata.tobakab.go.id/" ;
     ra:berasalDariWilayah ra:wil_balige_toba ;
     ra:dimilikiOlehSuku ra:suku_batak_toba ;
+    ra:memilikiMarga ra:marga_silalahi ;
     ra:menggunakanBahasa ra:bhs_batak_toba ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
@@ -1080,6 +1826,7 @@ ra:rumah_huta_batak_tb_silalahi_center a ra:RumahAdat ;
     ra:referensi "Museum TB Silalahi Center: https://museumtbsilalahicenter.blogspot.com/ ; Digilib Unimed: https://digilib.unimed.ac.id/19951/" ;
     ra:berasalDariWilayah ra:wil_balige_toba ;
     ra:dimilikiOlehSuku ra:suku_batak_toba ;
+    ra:memilikiMarga ra:marga_sitorus, ra:marga_tampubolon, ra:marga_panjaitan ;
     ra:menggunakanBahasa ra:bhs_batak_toba ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
@@ -1097,6 +1844,7 @@ ra:rumah_bolon_jangga_dolok a ra:RumahAdat ;
     ra:referensi "Indonesia Travel: https://www.indonesia.travel/ ; Repositori Kemendikdasmen: https://repositori.kemendikdasmen.go.id/7603/" ;
     ra:berasalDariWilayah ra:wil_desa_jangga_dolok_toba ;
     ra:dimilikiOlehSuku ra:suku_batak_toba ;
+    ra:memilikiMarga ra:marga_manurung ;
     ra:menggunakanBahasa ra:bhs_batak_toba ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
@@ -1132,7 +1880,7 @@ ra:rumah_huta_siallagan_simanindo_tomok_samosir a ra:RumahAdat ;
     ra:referensi "Indonesia Travel: https://www.indonesia.travel/ ; Repository UNPAR: https://repository.unpar.ac.id/handle/123456789/7704" ;
     ra:berasalDariWilayah ra:wil_pulau_samosir ;
     ra:dimilikiOlehSuku ra:suku_batak_toba ;
-    ra:memilikiMarga ra:marga_siallagan, ra:marga_sidauruk, ra:marga_sidabutar, ra:marga_sagala ;
+    ra:memilikiMarga ra:marga_siallagan, ra:marga_sidauruk, ra:marga_sidabutar, ra:marga_manik, ra:marga_sagala ;
     ra:menggunakanBahasa ra:bhs_batak_toba ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor, ra:trd_mangalahat_horbo .
@@ -1173,6 +1921,7 @@ ra:rumah_museum_simalungun_pematangsiantar a ra:RumahAdat ;
     ra:referensi "Museum Kemenbud: https://museum.kemenbud.go.id/ ; Indonesia Travel: https://www.indonesia.travel/" ;
     ra:berasalDariWilayah ra:wil_kota_pematangsiantar ;
     ra:dimilikiOlehSuku ra:suku_batak_simalungun ;
+    ra:memilikiMarga ra:marga_sinaga, ra:marga_saragih, ra:marga_damanik, ra:marga_purba ;
     ra:menggunakanBahasa ra:bhs_simalungun ;
     ra:memilikiOrnamen ra:orn_pinar .
 
