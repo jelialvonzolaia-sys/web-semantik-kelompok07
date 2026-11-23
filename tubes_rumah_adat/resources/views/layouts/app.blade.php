@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,24 +16,28 @@
     <header class="bg-[#192235] text-white">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
 
-            <a href="/" class="text-xl font-bold tracking-wide">
+            {{-- LOGO --}}
+            <a href="{{ route('home') }}" class="text-xl font-bold tracking-wide">
                 RUMAH<span class="text-[#FFA586]">ADAT</span>
             </a>
 
+            {{-- NAVIGATION --}}
             <div class="flex gap-8 text-sm font-medium">
-                <a href="/" class="hover:text-[#FFA586]">
+
+                <a href="{{ route('home') }}" class="transition hover:text-[#FFA586]">
                     Beranda
                 </a>
 
-                <a href="/search" class="hover:text-[#FFA586]">
+                <a href="{{ route('search') }}" class="transition hover:text-[#FFA586]">
                     Jelajahi
                 </a>
+
             </div>
 
         </nav>
     </header>
 
-    {{-- KONTEN HALAMAN --}}
+    {{-- PAGE CONTENT --}}
     <main>
         @yield('content')
     </main>
@@ -40,7 +45,7 @@
     {{-- FOOTER --}}
     <footer class="mt-16 bg-[#192235] px-6 py-8 text-center text-sm text-white/70">
         <p>
-            © {{ date('Y') }} Rumah Adat Sumatera Utara.
+            &copy; {{ date('Y') }} Rumah Adat Sumatera Utara.
             Eksplorasi Warisan Budaya Berbasis Semantic Web.
         </p>
     </footer>
