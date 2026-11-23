@@ -238,6 +238,7 @@ ra:wil_desa_hutaimbaru_padangsidimpuan a ra:Wilayah ;
 # --- Bagian Jeli: Nias, Nias Selatan, Nias Utara, Nias Barat, Gunungsitoli, Medan, Deli Serdang ---
 ra:wil_kab_nias a ra:Wilayah ;
     ra:nama "Kabupaten Nias" ;
+    rdfs:label "Kabupaten Nias" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_nias_selatan a ra:Wilayah ;
@@ -492,14 +493,31 @@ ra:marga_ritonga a ra:Marga ; ra:nama "Ritonga" ; ra:bagianDariSuku ra:suku_bata
 ra:marga_daulay a ra:Marga ; ra:nama "Daulay" ; ra:bagianDariSuku ra:suku_batak_angkola_mandailing .
 ra:marga_rambe a ra:Marga ; ra:nama "Rambe" ; ra:bagianDariSuku ra:suku_batak_angkola_mandailing .
 ra:marga_tanjung_raja_sorkam a ra:Marga ; ra:nama "Tanjung (Raja Sorkam)" ; ra:bagianDariSuku ra:suku_etnis_pasisi .
-ra:marga_duha a ra:Marga ; ra:nama "Duha" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_fau a ra:Marga ; ra:nama "Fau" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_laia a ra:Marga ; ra:nama "Laia" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_telaumbanua a ra:Marga ; ra:nama "Telaumbanua" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_zebua a ra:Marga ; ra:nama "Zebua" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_hia a ra:Marga ; ra:nama "Hia" ; ra:bagianDariSuku ra:suku_nias .
-ra:marga_ho a ra:Marga ; ra:nama "Ho" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_laia a ra:Marga ; ra:nama "Laia" ; rdfs:label "Laia" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_harefa a ra:Marga ; ra:nama "Harefa" ; rdfs:label "Harefa" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_halawa a ra:Marga ; ra:nama "Halawa" ; rdfs:label "Halawa" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_gulo a ra:Marga ; ra:nama "Gulö" ; rdfs:label "Gulö" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_hia a ra:Marga ; ra:nama "Hia" ; rdfs:label "Hia" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_mendrofa a ra:Marga ; ra:nama "Mendröfa" ; rdfs:label "Mendröfa" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_ndruru a ra:Marga ; ra:nama "Ndruru" ; rdfs:label "Ndruru" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_nazara a ra:Marga ; ra:nama "Nazara" ; rdfs:label "Nazara" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_waruwu a ra:Marga ; ra:nama "Waruwu" ; rdfs:label "Waruwu" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_zega a ra:Marga ; ra:nama "Zega" ; rdfs:label "Zega" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_telaumbanua a ra:Marga ; ra:nama "Telaumbanua" ; rdfs:label "Telaumbanua" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_zendrato a ra:Marga ; ra:nama "Zendratö" ; rdfs:label "Zendratö" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_lase a ra:Marga ; ra:nama "Lase" ; rdfs:label "Lase" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_hulu a ra:Marga ; ra:nama "Hulu" ; rdfs:label "Hulu" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_laoli a ra:Marga ; ra:nama "Laoli" ; rdfs:label "Laoli" ; ra:bagianDariSuku ra:suku_nias .
+ra:marga_tengku a ra:Marga ; ra:nama "Tengku" ; rdfs:label "Tengku" ; ra:bagianDariSuku ra:suku_melayu_deli .
+ra:marga_datuk a ra:Marga ; ra:nama "Datuk" ; rdfs:label "Datuk" ; ra:bagianDariSuku ra:suku_melayu_deli .
+ra:marga_wan a ra:Marga ; ra:nama "Wan" ; rdfs:label "Wan" ; ra:bagianDariSuku ra:suku_melayu_deli .
+ra:marga_oku a ra:Marga ; ra:nama "Oku (Orang Kaya)" ; rdfs:label "Oku (Orang Kaya)" ; ra:bagianDariSuku ra:suku_melayu_deli .
 ra:marga_sitepu a ra:Marga ; ra:nama "Sitepu" ; ra:bagianDariSuku ra:suku_batak_karo .
+ra:marga_ginting a ra:Marga ; ra:nama "Ginting" ; rdfs:label "Ginting" ; ra:bagianDariSuku ra:suku_batak_karo .
+ra:marga_sembiring a ra:Marga ; ra:nama "Sembiring" ; rdfs:label "Sembiring" ; ra:bagianDariSuku ra:suku_batak_karo .
+ra:marga_tarigan a ra:Marga ; ra:nama "Tarigan" ; rdfs:label "Tarigan" ; ra:bagianDariSuku ra:suku_batak_karo .
+ra:marga_karo_karo a ra:Marga ; ra:nama "Karo-karo" ; rdfs:label "Karo-karo" ; ra:bagianDariSuku ra:suku_batak_karo .
+ra:marga_perangin_angin a ra:Marga ; ra:nama "Perangin-angin" ; rdfs:label "Perangin-angin" ; ra:bagianDariSuku ra:suku_batak_karo .
 ra:marga_sinambela a ra:Marga ; ra:nama "Sinambela (Dinasti Sisingamangaraja)" ; ra:bagianDariSuku ra:suku_batak_toba .
 ra:marga_siallagan a ra:Marga ; ra:nama "Siallagan" ; ra:bagianDariSuku ra:suku_batak_toba .
 ra:marga_sidauruk a ra:Marga ; ra:nama "Sidauruk" ; ra:bagianDariSuku ra:suku_batak_toba .
@@ -726,7 +744,7 @@ ra:rumah_omo_hada_omo_sebua_nias a ra:RumahAdat ;
     ra:referensi "Museum Pusaka Nias & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
-    ra:memilikiMarga ra:marga_duha, ra:marga_fau, ra:marga_laia, ra:marga_telaumbanua, ra:marga_zebua, ra:marga_hia, ra:marga_ho ;
+    ra:memilikiMarga ra:marga_laia, ra:marga_harefa, ra:marga_halawa, ra:marga_gulo, ra:marga_hia, ra:marga_mendrofa, ra:marga_ndruru, ra:marga_nazara, ra:marga_waruwu, ra:marga_zega, ra:marga_telaumbanua, ra:marga_zendrato, ra:marga_lase, ra:marga_hulu, ra:marga_laoli ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi ;
     ra:memilikiTradisi ra:trd_hombo_batu .
@@ -745,7 +763,7 @@ ra:rumah_omo_hada_nias_selatan a ra:RumahAdat ;
     ra:referensi "Museum Pusaka Nias & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
-    ra:memilikiMarga ra:marga_duha, ra:marga_fau, ra:marga_laia, ra:marga_telaumbanua, ra:marga_zebua ;
+    ra:memilikiMarga ra:marga_laia, ra:marga_halawa, ra:marga_ndruru, ra:marga_gulo, ra:marga_telaumbanua, ra:marga_waruwu, ra:marga_lase ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi ;
     ra:memilikiTradisi ra:trd_hombo_batu .
@@ -764,7 +782,7 @@ ra:rumah_omo_hada_nias_tengah_gomo a ra:RumahAdat ;
     ra:referensi "Hämmerle & Lehner (Gomo Traditional House) & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
-    ra:memilikiMarga ra:marga_hia, ra:marga_ho ;
+    ra:memilikiMarga ra:marga_hia, ra:marga_gulo, ra:marga_halawa, ra:marga_laia, ra:marga_ndruru ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi ;
     ra:memilikiTradisi ra:trd_hombo_batu .
@@ -783,6 +801,7 @@ ra:rumah_omo_hada_nias_utara a ra:RumahAdat ;
     ra:referensi "Viaro & Ziegler (Traditional Architecture of Nias) & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias_utara, ra:wil_kab_nias_barat, ra:wil_kota_gunungsitoli ;
     ra:dimilikiOlehSuku ra:suku_nias ;
+    ra:memilikiMarga ra:marga_harefa, ra:marga_zega, ra:marga_nazara, ra:marga_mendrofa, ra:marga_zendrato, ra:marga_hulu, ra:marga_laoli, ra:marga_telaumbanua, ra:marga_lase, ra:marga_waruwu ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi .
 
@@ -800,6 +819,7 @@ ra:rumah_istana_maimun_medan a ra:RumahAdat ;
     ra:referensi "Kemdikbudristek (Registrasi Nasional Cagar Budaya) & Dispar Kota Medan: https://medan.go.id/istana-maimun" ;
     ra:berasalDariWilayah ra:wil_kota_medan ;
     ra:dimilikiOlehSuku ra:suku_melayu_deli ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu_deli ;
     ra:memilikiOrnamen ra:orn_lebah_bergantung ;
     ra:memilikiTradisi ra:trd_tepung_tawar .
@@ -818,9 +838,28 @@ ra:rumah_adat_melayu_deli a ra:RumahAdat ;
     ra:referensi "BPK Wilayah II Sumut & Portal Warisan Budaya Takbenda Indonesia: https://kebudayaan.kemdikbud.go.id/" ;
     ra:berasalDariWilayah ra:wil_kota_medan, ra:wil_kab_deli_serdang ;
     ra:dimilikiOlehSuku ra:suku_melayu_deli ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu_deli ;
     ra:memilikiOrnamen ra:orn_pucuk_rebung, ra:orn_awan_larat, ra:orn_lebah_bergantung, ra:orn_selembayung ;
     ra:memilikiTradisi ra:trd_tepung_tawar .
+
+# --- G. Rumah Adat Karo Jahe (Deli Serdang) ---
+ra:rumah_siwaluh_jabu_karo_jahe_deli_serdang a ra:RumahAdat ;
+    ra:nama "Rumah Adat Karo Jahe (Deli Serdang)" ;
+    rdfs:label "Rumah Adat Karo Jahe (Deli Serdang)" ;
+    ra:namaAlternatif "Siwaluh Jabu Karo Jahe, Rumah Adat Sibolangit" ;
+    ra:sejarah "Representasi arsitektur tradisional komunitas Batak Karo Jahe yang mendiami wilayah hulu Kabupaten Deli Serdang (seperti Sibolangit, Kutalimbaru, dan Namorambe) serta memiliki pertalian sejarah dengan empat Urung di Kesultanan Deli." ;
+    ra:fungsi "Hunian komunal keluarga besar Karo Jahe dan balai musyawarah adat" ;
+    ra:ciriArsitektur "Rumah panggung kayu berkolong dengan konstruksi tiang kayu keras, tanpa paku, serta pembagian ruang jabu berbasis kekerabatan Rakut Sitelu" ;
+    ra:bentukAtap "Atap ijuk menjulang tinggi dengan bentuk tanduk kerbau pada bagian puncak (ayo)" ;
+    ra:bahanBangunan "Kayu keras hutan, ijuk, bambu, batu umpak, dan ukiran gerga khas Karo" ;
+    ra:maknaFilosofis "Menjaga harmoni kekerabatan Merga Silima dan Rakut Sitelu di wilayah pesisir dan hulu Deli Serdang." ;
+    ra:berasalDariWilayah ra:wil_kab_deli_serdang ;
+    ra:dimilikiOlehSuku ra:suku_batak_karo ;
+    ra:memilikiMarga ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
+    ra:menggunakanBahasa ra:bhs_karo ;
+    ra:memilikiOrnamen ra:orn_gerga ;
+    ra:memilikiTradisi ra:trd_manortor .
 
 
     # =====================================================================
@@ -840,6 +879,7 @@ ra:rumah_siwaluh_jabu_desa_lingga a ra:RumahAdat ;
     ra:referensi "BPODT: https://bpodt.kemenpar.go.id/siwaluh-jabu-melawan-waktu/ ; Destinasi Pariwisata (UNUD): https://ojs.unud.ac.id/index.php/destinasipar/article/view/25431" ;
     ra:berasalDariWilayah ra:wil_desa_lingga_karo ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
+    ra:memilikiMarga ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
     ra:memilikiOrnamen ra:orn_gerga ;
     ra:memilikiTradisi ra:trd_manortor .
@@ -857,6 +897,7 @@ ra:rumah_siwaluh_jabu_desa_dokan a ra:RumahAdat ;
     ra:referensi "BPODT: https://bpodt.kemenpar.go.id/siwaluh-jabu-melawan-waktu/ ; Repositori Kemendikdasmen: https://repositori.kemendikdasmen.go.id/24068/" ;
     ra:berasalDariWilayah ra:wil_desa_dokan_karo ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
+    ra:memilikiMarga ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
     ra:memilikiOrnamen ra:orn_gerga .
 
@@ -873,7 +914,7 @@ ra:rumah_kete_desa_dokan a ra:RumahAdat ;
     ra:referensi "Repositori Kemendikdasmen: https://repositori.kemendikdasmen.go.id/24068/ ; BPODT: https://bpodt.kemenpar.go.id/siwaluh-jabu-melawan-waktu/" ;
     ra:berasalDariWilayah ra:wil_desa_dokan_karo ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
-    ra:memilikiMarga ra:marga_sitepu ;
+    ra:memilikiMarga ra:marga_sitepu, ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
     ra:memilikiOrnamen ra:orn_gerga .
 
