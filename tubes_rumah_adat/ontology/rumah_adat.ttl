@@ -55,6 +55,12 @@ ra:berkerabatDenganMarga a owl:ObjectProperty, owl:SymmetricProperty ;
     rdfs:domain ra:Marga ;
     rdfs:range ra:Marga .
 
+ra:berkerabatDenganSuku a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:label "berkerabat dengan suku" ;
+    rdfs:comment "Relasi kedekatan rumpun bahasa, sejarah, dan adat antar-suku di Sumatera Utara." ;
+    rdfs:domain ra:Suku ;
+    rdfs:range ra:Suku .
+
 ra:dimilikiOlehSuku a owl:ObjectProperty ;
     rdfs:label "dimiliki oleh suku" ;
     rdfs:comment "Suku pemilik rumah adat." ;
@@ -97,14 +103,14 @@ ra:bagianDariSuku a owl:ObjectProperty ;
     rdfs:domain ra:Marga ;
     rdfs:range ra:Suku .
 
-ra:bagianDariWilayah a owl:ObjectProperty ;
+ra:bagianDariWilayah a owl:ObjectProperty, owl:TransitiveProperty ;
     rdfs:label "bagian dari wilayah" ;
     rdfs:comment "Relasi transitif Desa/Kecamatan ke Kabupaten/Kota ke Provinsi." ;
     rdfs:domain ra:Wilayah ;
     rdfs:range ra:Wilayah .
 
 # =====================================================================
-# 3. DATATYPE PROPERTIES (Atribut Teks & Link)
+# 3. DATATYPE PROPERTIES (Atribut Teks & Rujukan)
 # =====================================================================
 
 ra:nama a owl:DatatypeProperty ;
@@ -155,49 +161,48 @@ ra:maknaFilosofis a owl:DatatypeProperty ;
     rdfs:domain ra:RumahAdat ;
     rdfs:range xsd:string .
 
-ra:linkFoto a owl:DatatypeProperty ;
-    rdfs:label "link foto" ;
-    rdfs:comment "Tautan URL gambar rumah adat (opsional)." ;
-    rdfs:domain ra:RumahAdat ;
-    rdfs:range xsd:anyURI .
-
 ra:referensi a owl:DatatypeProperty ;
     rdfs:label "referensi" ;
     rdfs:comment "Catatan/tautan rujukan singkat (opsional)." ;
     rdfs:domain ra:RumahAdat ;
     rdfs:range xsd:string .
 
-    
-    # =====================================================================
+# =====================================================================
 # 4A. MASTER WILAYAH (ra:Wilayah)
 # =====================================================================
 
 ra:wil_sumatera_utara a ra:Wilayah ;
-    ra:nama "Sumatera Utara" .
+    ra:nama "Sumatera Utara" ;
+    rdfs:label "Sumatera Utara" .
 
-# --- Bagian Chyntia: Mandailing Natal, Tapsel, Palas, Paluta, Tapteng, Sibolga, Padangsidimpuan ---
 ra:wil_kab_mandailing_natal a ra:Wilayah ;
     ra:nama "Kabupaten Mandailing Natal" ;
+    rdfs:label "Kabupaten Mandailing Natal" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_desa_panyabungan_tonga a ra:Wilayah ;
     ra:nama "Desa Panyabungan Tonga" ;
+    rdfs:label "Desa Panyabungan Tonga" ;
     ra:bagianDariWilayah ra:wil_kab_mandailing_natal .
 
 ra:wil_desa_pidoli_dolok a ra:Wilayah ;
     ra:nama "Desa Pidoli Dolok" ;
+    rdfs:label "Desa Pidoli Dolok" ;
     ra:bagianDariWilayah ra:wil_kab_mandailing_natal .
 
 ra:wil_desa_huta_godang_ulu_pungkut a ra:Wilayah ;
     ra:nama "Desa Huta Godang, Kecamatan Ulu Pungkut" ;
+    rdfs:label "Desa Huta Godang, Kecamatan Ulu Pungkut" ;
     ra:bagianDariWilayah ra:wil_kab_mandailing_natal .
 
 ra:wil_kab_tapanuli_selatan a ra:Wilayah ;
     ra:nama "Kabupaten Tapanuli Selatan" ;
+    rdfs:label "Kabupaten Tapanuli Selatan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_sipirok_tapsel a ra:Wilayah ;
     ra:nama "Sipirok, Kabupaten Tapanuli Selatan" ;
+    rdfs:label "Sipirok, Kabupaten Tapanuli Selatan" ;
     ra:bagianDariWilayah ra:wil_kab_tapanuli_selatan .
 
 ra:wil_muara_tais_tapsel a ra:Wilayah ;
@@ -212,41 +217,49 @@ ra:wil_bunga_bondar_tapsel a ra:Wilayah ;
 
 ra:wil_kab_padang_lawas a ra:Wilayah ;
     ra:nama "Kabupaten Padang Lawas" ;
+    rdfs:label "Kabupaten Padang Lawas" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_sibuhuan_barumun a ra:Wilayah ;
     ra:nama "Sibuhuan, Kecamatan Barumun" ;
+    rdfs:label "Sibuhuan, Kecamatan Barumun" ;
     ra:bagianDariWilayah ra:wil_kab_padang_lawas .
 
 ra:wil_kab_padang_lawas_utara a ra:Wilayah ;
     ra:nama "Kabupaten Padang Lawas Utara" ;
+    rdfs:label "Kabupaten Padang Lawas Utara" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_gunung_tua_padang_bolak a ra:Wilayah ;
     ra:nama "Gunung Tua, Kecamatan Padang Bolak" ;
+    rdfs:label "Gunung Tua, Kecamatan Padang Bolak" ;
     ra:bagianDariWilayah ra:wil_kab_padang_lawas_utara .
 
 ra:wil_kab_tapanuli_tengah a ra:Wilayah ;
     ra:nama "Kabupaten Tapanuli Tengah" ;
+    rdfs:label "Kabupaten Tapanuli Tengah" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_sorkam_kanan_tapteng a ra:Wilayah ;
     ra:nama "Sorkam Kanan, Kecamatan Sorkam Barat" ;
+    rdfs:label "Sorkam Kanan, Kecamatan Sorkam Barat" ;
     ra:bagianDariWilayah ra:wil_kab_tapanuli_tengah .
 
 ra:wil_kota_sibolga a ra:Wilayah ;
     ra:nama "Kota Sibolga" ;
+    rdfs:label "Kota Sibolga" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kota_padangsidimpuan a ra:Wilayah ;
     ra:nama "Kota Padangsidimpuan" ;
+    rdfs:label "Kota Padangsidimpuan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_desa_hutaimbaru_padangsidimpuan a ra:Wilayah ;
     ra:nama "Desa Hutaimbaru, Kota Padangsidimpuan" ;
+    rdfs:label "Desa Hutaimbaru, Kota Padangsidimpuan" ;
     ra:bagianDariWilayah ra:wil_kota_padangsidimpuan .
 
-# --- Bagian Jeli: Nias, Nias Selatan, Nias Utara, Nias Barat, Gunungsitoli, Medan, Deli Serdang ---
 ra:wil_kab_nias a ra:Wilayah ;
     ra:nama "Kabupaten Nias" ;
     rdfs:label "Kabupaten Nias" ;
@@ -254,100 +267,122 @@ ra:wil_kab_nias a ra:Wilayah ;
 
 ra:wil_kab_nias_selatan a ra:Wilayah ;
     ra:nama "Kabupaten Nias Selatan" ;
+    rdfs:label "Kabupaten Nias Selatan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_nias_utara a ra:Wilayah ;
     ra:nama "Kabupaten Nias Utara" ;
+    rdfs:label "Kabupaten Nias Utara" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_nias_barat a ra:Wilayah ;
     ra:nama "Kabupaten Nias Barat" ;
+    rdfs:label "Kabupaten Nias Barat" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kota_gunungsitoli a ra:Wilayah ;
     ra:nama "Kota Gunungsitoli" ;
+    rdfs:label "Kota Gunungsitoli" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kota_medan a ra:Wilayah ;
     ra:nama "Kota Medan" ;
+    rdfs:label "Kota Medan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_deli_serdang a ra:Wilayah ;
     ra:nama "Kabupaten Deli Serdang" ;
+    rdfs:label "Kabupaten Deli Serdang" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
-# --- Bagian Vascha: Karo, Dairi, Pakpak Bharat, Langkat, Binjai ---
 ra:wil_kab_karo a ra:Wilayah ;
     ra:nama "Kabupaten Karo" ;
+    rdfs:label "Kabupaten Karo" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_desa_lingga_karo a ra:Wilayah ;
     ra:nama "Desa Lingga, Kecamatan Simpang Empat" ;
+    rdfs:label "Desa Lingga, Kecamatan Simpang Empat" ;
     ra:bagianDariWilayah ra:wil_kab_karo .
 
 ra:wil_desa_dokan_karo a ra:Wilayah ;
     ra:nama "Desa Dokan, Kecamatan Merek" ;
+    rdfs:label "Desa Dokan, Kecamatan Merek" ;
     ra:bagianDariWilayah ra:wil_kab_karo .
 
 ra:wil_kab_dairi a ra:Wilayah ;
     ra:nama "Kabupaten Dairi" ;
+    rdfs:label "Kabupaten Dairi" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_sidikalang_dairi a ra:Wilayah ;
     ra:nama "Sidikalang, Kabupaten Dairi" ;
+    rdfs:label "Sidikalang, Kabupaten Dairi" ;
     ra:bagianDariWilayah ra:wil_kab_dairi .
 
 ra:wil_kab_pakpak_bharat a ra:Wilayah ;
     ra:nama "Kabupaten Pakpak Bharat" ;
+    rdfs:label "Kabupaten Pakpak Bharat" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_langkat a ra:Wilayah ;
     ra:nama "Kabupaten Langkat" ;
+    rdfs:label "Kabupaten Langkat" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_tanjung_pura_langkat a ra:Wilayah ;
     ra:nama "Kecamatan Tanjung Pura, Kabupaten Langkat" ;
+    rdfs:label "Kecamatan Tanjung Pura, Kabupaten Langkat" ;
     ra:bagianDariWilayah ra:wil_kab_langkat .
 
 ra:wil_stabat_pantai_gemi_langkat a ra:Wilayah ;
     ra:nama "Kecamatan Stabat (Pantai Gemi), Kabupaten Langkat" ;
+    rdfs:label "Kecamatan Stabat (Pantai Gemi), Kabupaten Langkat" ;
     ra:bagianDariWilayah ra:wil_kab_langkat .
 
 ra:wil_kota_binjai a ra:Wilayah ;
     ra:nama "Kota Binjai" ;
+    rdfs:label "Kota Binjai" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
-# --- Bagian Jona: Tapanuli Utara, Toba, Humbang Hasundutan, Samosir ---
 ra:wil_kab_tapanuli_utara a ra:Wilayah ;
     ra:nama "Kabupaten Tapanuli Utara" ;
+    rdfs:label "Kabupaten Tapanuli Utara" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_pulau_sibandang_taput a ra:Wilayah ;
     ra:nama "Pulau Sibandang, Kecamatan Muara" ;
+    rdfs:label "Pulau Sibandang, Kecamatan Muara" ;
     ra:bagianDariWilayah ra:wil_kab_tapanuli_utara .
 
 ra:wil_kab_toba a ra:Wilayah ;
     ra:nama "Kabupaten Toba" ;
+    rdfs:label "Kabupaten Toba" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_balige_toba a ra:Wilayah ;
     ra:nama "Balige, Kabupaten Toba" ;
+    rdfs:label "Balige, Kabupaten Toba" ;
     ra:bagianDariWilayah ra:wil_kab_toba .
 
 ra:wil_desa_jangga_dolok_toba a ra:Wilayah ;
     ra:nama "Desa Jangga Dolok, Kecamatan Lumban Julu" ;
+    rdfs:label "Desa Jangga Dolok, Kecamatan Lumban Julu" ;
     ra:bagianDariWilayah ra:wil_kab_toba .
 
 ra:wil_kab_humbang_hasundutan a ra:Wilayah ;
     ra:nama "Kabupaten Humbang Hasundutan" ;
+    rdfs:label "Kabupaten Humbang Hasundutan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_bakkara_humbahas a ra:Wilayah ;
     ra:nama "Bakkara, Kecamatan Baktiraja" ;
+    rdfs:label "Bakkara, Kecamatan Baktiraja" ;
     ra:bagianDariWilayah ra:wil_kab_humbang_hasundutan .
 
 ra:wil_kab_samosir a ra:Wilayah ;
     ra:nama "Kabupaten Samosir" ;
+    rdfs:label "Kabupaten Samosir" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_pulau_samosir a ra:Wilayah ;
@@ -375,78 +410,88 @@ ra:wil_desa_hutaginjang_samosir a ra:Wilayah ;
     rdfs:label "Desa Hutaginjang, Kecamatan Sianjur Mula-mula" ;
     ra:bagianDariWilayah ra:wil_kab_samosir .
 
-# --- Bagian Patricia: Simalungun, Pematangsiantar, Asahan, Batu Bara, Tanjungbalai, Serdang Bedagai, Tebing Tinggi, Labuhanbatu/Labura/Labusel ---
 ra:wil_kab_simalungun a ra:Wilayah ;
     ra:nama "Kabupaten Simalungun" ;
+    rdfs:label "Kabupaten Simalungun" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_nagori_pamatang_purba_simalungun a ra:Wilayah ;
     ra:nama "Nagori Pamatang Purba, Kecamatan Purba" ;
+    rdfs:label "Nagori Pamatang Purba, Kecamatan Purba" ;
     ra:bagianDariWilayah ra:wil_kab_simalungun .
 
 ra:wil_kota_pematangsiantar a ra:Wilayah ;
     ra:nama "Kota Pematangsiantar" ;
+    rdfs:label "Kota Pematangsiantar" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_asahan a ra:Wilayah ;
     ra:nama "Kabupaten Asahan" ;
+    rdfs:label "Kabupaten Asahan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_batu_bara a ra:Wilayah ;
     ra:nama "Kabupaten Batu Bara" ;
+    rdfs:label "Kabupaten Batu Bara" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_desa_lima_laras_batubara a ra:Wilayah ;
     ra:nama "Desa Lima Laras, Kecamatan Tanjung Tiram" ;
+    rdfs:label "Desa Lima Laras, Kecamatan Tanjung Tiram" ;
     ra:bagianDariWilayah ra:wil_kab_batu_bara .
 
 ra:wil_kota_tanjungbalai a ra:Wilayah ;
     ra:nama "Kota Tanjungbalai" ;
+    rdfs:label "Kota Tanjungbalai" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_serdang_bedagai a ra:Wilayah ;
     ra:nama "Kabupaten Serdang Bedagai" ;
+    rdfs:label "Kabupaten Serdang Bedagai" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_perbaungan_serdang_bedagai a ra:Wilayah ;
     ra:nama "Kecamatan Perbaungan, Kabupaten Serdang Bedagai" ;
+    rdfs:label "Kecamatan Perbaungan, Kabupaten Serdang Bedagai" ;
     ra:bagianDariWilayah ra:wil_kab_serdang_bedagai .
 
 ra:wil_kota_tebing_tinggi a ra:Wilayah ;
     ra:nama "Kota Tebing Tinggi" ;
+    rdfs:label "Kota Tebing Tinggi" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_labuhanbatu a ra:Wilayah ;
     ra:nama "Kabupaten Labuhanbatu" ;
+    rdfs:label "Kabupaten Labuhanbatu" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_labuhanbatu_utara a ra:Wilayah ;
     ra:nama "Kabupaten Labuhanbatu Utara" ;
+    rdfs:label "Kabupaten Labuhanbatu Utara" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
 ra:wil_kab_labuhanbatu_selatan a ra:Wilayah ;
     ra:nama "Kabupaten Labuhanbatu Selatan" ;
+    rdfs:label "Kabupaten Labuhanbatu Selatan" ;
     ra:bagianDariWilayah ra:wil_sumatera_utara .
 
-
-
-    # =====================================================================
+# =====================================================================
 # 4B. MASTER BAHASA DAERAH (ra:BahasaDaerah)
 # =====================================================================
 
-ra:bhs_mandailing a ra:BahasaDaerah ; ra:nama "Bahasa Mandailing" .
-ra:bhs_angkola a ra:BahasaDaerah ; ra:nama "Bahasa Angkola" .
-ra:bhs_angkola_mandailing a ra:BahasaDaerah ; ra:nama "Bahasa Batak Angkola-Mandailing" .
-ra:bhs_pesisir a ra:BahasaDaerah ; ra:nama "Bahasa Pesisir" .
-ra:bhs_pesisir_sibolga a ra:BahasaDaerah ; ra:nama "Bahasa Pesisir Sibolga" .
-ra:bhs_nias a ra:BahasaDaerah ; ra:nama "Bahasa Nias" .
-ra:bhs_melayu_deli a ra:BahasaDaerah ; ra:nama "Bahasa Melayu Deli" .
-ra:bhs_karo a ra:BahasaDaerah ; ra:nama "Bahasa Karo" .
-ra:bhs_pakpak a ra:BahasaDaerah ; ra:nama "Bahasa Pakpak" .
-ra:bhs_melayu_langkat a ra:BahasaDaerah ; ra:nama "Bahasa Melayu Langkat" .
-ra:bhs_melayu a ra:BahasaDaerah ; ra:nama "Bahasa Melayu" .
-ra:bhs_batak_toba a ra:BahasaDaerah ; ra:nama "Bahasa Batak Toba" .
-ra:bhs_simalungun a ra:BahasaDaerah ; ra:nama "Bahasa Simalungun" .
+ra:bhs_mandailing a ra:BahasaDaerah ; ra:nama "Bahasa Mandailing" ; rdfs:label "Bahasa Mandailing" .
+ra:bhs_angkola a ra:BahasaDaerah ; ra:nama "Bahasa Angkola" ; rdfs:label "Bahasa Angkola" .
+ra:bhs_angkola_mandailing a ra:BahasaDaerah ; ra:nama "Bahasa Batak Angkola-Mandailing" ; rdfs:label "Bahasa Batak Angkola-Mandailing" .
+ra:bhs_pesisir a ra:BahasaDaerah ; ra:nama "Bahasa Pesisir" ; rdfs:label "Bahasa Pesisir" .
+ra:bhs_pesisir_sibolga a ra:BahasaDaerah ; ra:nama "Bahasa Pesisir Sibolga" ; rdfs:label "Bahasa Pesisir Sibolga" .
+ra:bhs_nias a ra:BahasaDaerah ; ra:nama "Bahasa Nias" ; rdfs:label "Bahasa Nias" .
+ra:bhs_melayu_deli a ra:BahasaDaerah ; ra:nama "Bahasa Melayu Deli" ; rdfs:label "Bahasa Melayu Deli" .
+ra:bhs_karo a ra:BahasaDaerah ; ra:nama "Bahasa Karo" ; rdfs:label "Bahasa Karo" .
+ra:bhs_pakpak a ra:BahasaDaerah ; ra:nama "Bahasa Pakpak" ; rdfs:label "Bahasa Pakpak" .
+ra:bhs_melayu_langkat a ra:BahasaDaerah ; ra:nama "Bahasa Melayu Langkat" ; rdfs:label "Bahasa Melayu Langkat" .
+ra:bhs_melayu a ra:BahasaDaerah ; ra:nama "Bahasa Melayu" ; rdfs:label "Bahasa Melayu" .
+ra:bhs_batak_toba a ra:BahasaDaerah ; ra:nama "Bahasa Batak Toba" ; rdfs:label "Bahasa Batak Toba" .
+ra:bhs_simalungun a ra:BahasaDaerah ; ra:nama "Bahasa Simalungun" ; rdfs:label "Bahasa Simalungun" .
 
 # =====================================================================
 # 4C. MASTER SUKU (ra:Suku)
@@ -454,63 +499,92 @@ ra:bhs_simalungun a ra:BahasaDaerah ; ra:nama "Bahasa Simalungun" .
 
 ra:suku_batak_mandailing a ra:Suku ;
     ra:nama "Suku Batak Mandailing" ;
-    ra:menuturkanBahasa ra:bhs_mandailing .
+    rdfs:label "Suku Batak Mandailing" ;
+    ra:menuturkanBahasa ra:bhs_mandailing ;
+    ra:berkerabatDenganSuku ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing .
 
 ra:suku_batak_angkola a ra:Suku ;
     ra:nama "Suku Batak Angkola" ;
-    ra:menuturkanBahasa ra:bhs_angkola .
+    rdfs:label "Suku Batak Angkola" ;
+    ra:menuturkanBahasa ra:bhs_angkola ;
+    ra:berkerabatDenganSuku ra:suku_batak_mandailing, ra:suku_batak_angkola_mandailing, ra:suku_batak_toba .
 
 ra:suku_batak_angkola_mandailing a ra:Suku ;
     ra:nama "Suku Batak Angkola-Mandailing" ;
-    ra:menuturkanBahasa ra:bhs_angkola_mandailing .
+    rdfs:label "Suku Batak Angkola-Mandailing" ;
+    ra:menuturkanBahasa ra:bhs_angkola_mandailing ;
+    ra:berkerabatDenganSuku ra:suku_batak_mandailing, ra:suku_batak_angkola .
 
 ra:suku_etnis_pasisi a ra:Suku ;
     ra:nama "Etnis Pasisi" ;
-    ra:menuturkanBahasa ra:bhs_pesisir .
+    rdfs:label "Etnis Pasisi" ;
+    ra:menuturkanBahasa ra:bhs_pesisir ;
+    ra:berkerabatDenganSuku ra:suku_etnis_pasisi_sibolga, ra:suku_batak_toba .
 
 ra:suku_etnis_pasisi_sibolga a ra:Suku ;
     ra:nama "Etnis Pesisir Sibolga" ;
-    ra:menuturkanBahasa ra:bhs_pesisir_sibolga .
+    rdfs:label "Etnis Pesisir Sibolga" ;
+    ra:menuturkanBahasa ra:bhs_pesisir_sibolga ;
+    ra:berkerabatDenganSuku ra:suku_etnis_pasisi, ra:suku_melayu .
 
 ra:suku_nias a ra:Suku ;
     ra:nama "Suku Nias" ;
+    rdfs:label "Suku Nias" ;
     ra:menuturkanBahasa ra:bhs_nias .
 
 ra:suku_melayu_deli a ra:Suku ;
     ra:nama "Suku Melayu Deli" ;
-    ra:menuturkanBahasa ra:bhs_melayu_deli .
+    rdfs:label "Suku Melayu Deli" ;
+    ra:menuturkanBahasa ra:bhs_melayu_deli ;
+    ra:berkerabatDenganSuku ra:suku_melayu_langkat, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_melayu .
 
 ra:suku_batak_karo a ra:Suku ;
     ra:nama "Suku Batak Karo" ;
-    ra:menuturkanBahasa ra:bhs_karo .
+    rdfs:label "Suku Batak Karo" ;
+    ra:menuturkanBahasa ra:bhs_karo ;
+    ra:berkerabatDenganSuku ra:suku_batak_toba, ra:suku_batak_simalungun, ra:suku_pakpak .
 
 ra:suku_pakpak a ra:Suku ;
     ra:nama "Suku Pakpak" ;
-    ra:menuturkanBahasa ra:bhs_pakpak .
+    rdfs:label "Suku Pakpak" ;
+    ra:menuturkanBahasa ra:bhs_pakpak ;
+    ra:berkerabatDenganSuku ra:suku_batak_toba, ra:suku_batak_karo .
 
 ra:suku_melayu_langkat a ra:Suku ;
     ra:nama "Suku Melayu Langkat" ;
-    ra:menuturkanBahasa ra:bhs_melayu_langkat .
+    rdfs:label "Suku Melayu Langkat" ;
+    ra:menuturkanBahasa ra:bhs_melayu_langkat ;
+    ra:berkerabatDenganSuku ra:suku_melayu_deli, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_melayu .
 
 ra:suku_batak_toba a ra:Suku ;
     ra:nama "Suku Batak Toba" ;
-    ra:menuturkanBahasa ra:bhs_batak_toba .
+    rdfs:label "Suku Batak Toba" ;
+    ra:menuturkanBahasa ra:bhs_batak_toba ;
+    ra:berkerabatDenganSuku ra:suku_batak_angkola, ra:suku_batak_simalungun, ra:suku_batak_karo, ra:suku_pakpak, ra:suku_etnis_pasisi .
 
 ra:suku_batak_simalungun a ra:Suku ;
     ra:nama "Suku Batak Simalungun" ;
-    ra:menuturkanBahasa ra:bhs_simalungun .
+    rdfs:label "Suku Batak Simalungun" ;
+    ra:menuturkanBahasa ra:bhs_simalungun ;
+    ra:berkerabatDenganSuku ra:suku_batak_toba, ra:suku_batak_karo .
 
 ra:suku_melayu_pesisir_batu_bara a ra:Suku ;
     ra:nama "Suku Melayu Pesisir Batu Bara" ;
-    ra:menuturkanBahasa ra:bhs_melayu .
+    rdfs:label "Suku Melayu Pesisir Batu Bara" ;
+    ra:menuturkanBahasa ra:bhs_melayu ;
+    ra:berkerabatDenganSuku ra:suku_melayu_deli, ra:suku_melayu_langkat, ra:suku_melayu_serdang, ra:suku_melayu .
 
 ra:suku_melayu_serdang a ra:Suku ;
     ra:nama "Suku Melayu Serdang" ;
-    ra:menuturkanBahasa ra:bhs_melayu .
+    rdfs:label "Suku Melayu Serdang" ;
+    ra:menuturkanBahasa ra:bhs_melayu ;
+    ra:berkerabatDenganSuku ra:suku_melayu_deli, ra:suku_melayu_langkat, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu .
 
 ra:suku_melayu a ra:Suku ;
     ra:nama "Suku Melayu" ;
-    ra:menuturkanBahasa ra:bhs_melayu .
+    rdfs:label "Suku Melayu" ;
+    ra:menuturkanBahasa ra:bhs_melayu ;
+    ra:berkerabatDenganSuku ra:suku_melayu_deli, ra:suku_melayu_langkat, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_etnis_pasisi_sibolga .
 
 # =====================================================================
 # 4D. MASTER MARGA (ra:Marga)
@@ -967,42 +1041,42 @@ ra:marga_damanik a ra:Marga ;
 ra:marga_tengku a ra:Marga ;
     ra:nama "Tengku" ;
     rdfs:label "Tengku" ;
-    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
-    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_melayu ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan, ra:wil_kota_binjai, ra:wil_kab_batu_bara, ra:wil_kab_serdang_bedagai, ra:wil_kab_asahan, ra:wil_kota_tanjungbalai, ra:wil_kota_tebing_tinggi, ra:wil_kab_labuhanbatu, ra:wil_kab_labuhanbatu_utara, ra:wil_kab_labuhanbatu_selatan ;
     ra:berkerabatDenganMarga ra:marga_datuk, ra:marga_oku, ra:marga_wan .
 
 ra:marga_wan a ra:Marga ;
     ra:nama "Wan" ;
     rdfs:label "Wan" ;
-    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
-    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_melayu ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan, ra:wil_kota_binjai, ra:wil_kab_batu_bara, ra:wil_kab_serdang_bedagai, ra:wil_kab_asahan, ra:wil_kota_tanjungbalai, ra:wil_kota_tebing_tinggi, ra:wil_kab_labuhanbatu, ra:wil_kab_labuhanbatu_utara, ra:wil_kab_labuhanbatu_selatan ;
     ra:berkerabatDenganMarga ra:marga_datuk, ra:marga_oku, ra:marga_tengku .
 
 ra:marga_datuk a ra:Marga ;
     ra:nama "Datuk" ;
     rdfs:label "Datuk" ;
-    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
-    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_melayu ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan, ra:wil_kota_binjai, ra:wil_kab_batu_bara, ra:wil_kab_serdang_bedagai, ra:wil_kab_asahan, ra:wil_kota_tanjungbalai, ra:wil_kota_tebing_tinggi, ra:wil_kab_labuhanbatu, ra:wil_kab_labuhanbatu_utara, ra:wil_kab_labuhanbatu_selatan ;
     ra:berkerabatDenganMarga ra:marga_oku, ra:marga_tengku, ra:marga_wan .
 
 ra:marga_oku a ra:Marga ;
     ra:nama "Oku (Orang Kaya)" ;
     rdfs:label "Oku (Orang Kaya)" ;
-    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli ;
-    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan ;
+    ra:bagianDariSuku ra:suku_melayu_langkat, ra:suku_melayu_deli, ra:suku_melayu_pesisir_batu_bara, ra:suku_melayu_serdang, ra:suku_melayu ;
+    ra:berasalDariWilayah ra:wil_kab_langkat, ra:wil_tanjung_pura_langkat, ra:wil_kota_medan, ra:wil_kota_binjai, ra:wil_kab_batu_bara, ra:wil_kab_serdang_bedagai, ra:wil_kab_asahan, ra:wil_kota_tanjungbalai, ra:wil_kota_tebing_tinggi, ra:wil_kab_labuhanbatu, ra:wil_kab_labuhanbatu_utara, ra:wil_kab_labuhanbatu_selatan ;
     ra:berkerabatDenganMarga ra:marga_datuk, ra:marga_tengku, ra:marga_wan .
 
 ra:marga_nasution a ra:Marga ;
     ra:nama "Nasution" ;
     rdfs:label "Nasution" ;
-    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola ;
+    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
     ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_desa_panyabungan_tonga, ra:wil_desa_pidoli_dolok, ra:wil_desa_huta_godang_ulu_pungkut, ra:wil_kab_padang_lawas ;
     ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_hasibuan, ra:marga_lubis, ra:marga_matondang, ra:marga_parinduri, ra:marga_pulungan, ra:marga_rangkuti .
 
 ra:marga_lubis a ra:Marga ;
     ra:nama "Lubis" ;
     rdfs:label "Lubis" ;
-    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola ;
+    ra:bagianDariSuku ra:suku_batak_mandailing, ra:suku_batak_angkola, ra:suku_batak_angkola_mandailing ;
     ra:berasalDariWilayah ra:wil_kab_mandailing_natal, ra:wil_desa_panyabungan_tonga, ra:wil_desa_pidoli_dolok, ra:wil_desa_huta_godang_ulu_pungkut, ra:wil_kab_padang_lawas ;
     ra:berkerabatDenganMarga ra:marga_batubara, ra:marga_daulay, ra:marga_hasibuan, ra:marga_matondang, ra:marga_nasution, ra:marga_parinduri, ra:marga_pulungan, ra:marga_rangkuti .
 
@@ -1268,44 +1342,49 @@ ra:marga_laoli a ra:Marga ;
 # 4E. MASTER ORNAMEN (ra:Ornamen)
 # =====================================================================
 
-ra:orn_bolang a ra:Ornamen ; ra:nama "Bolang" .
-ra:orn_saluk_uki a ra:Ornamen ; ra:nama "Saluk Uki" .
-ra:orn_ewe_sikholi a ra:Ornamen ; ra:nama "Ewe / Sikhöli" .
-ra:orn_lebah_bergantung a ra:Ornamen ; ra:nama "Lebah Bergantung" .
-ra:orn_pucuk_rebung a ra:Ornamen ; ra:nama "Pucuk Rebung" .
-ra:orn_awan_larat a ra:Ornamen ; ra:nama "Awan Larat" .
-ra:orn_gerga a ra:Ornamen ; ra:nama "Gerga" .
-ra:orn_perbunga_kupkup a ra:Ornamen ; ra:nama "Perbunga Kupkup" .
-ra:orn_perbunga_kembang a ra:Ornamen ; ra:nama "Perbunga Kembang" .
-ra:orn_perbunga_pancur a ra:Ornamen ; ra:nama "Perbunga Pancur" .
-ra:orn_gorga a ra:Ornamen ; ra:nama "Gorga" .
-ra:orn_pinar a ra:Ornamen ; ra:nama "Pinar" .
-ra:orn_selembayung a ra:Ornamen ; ra:nama "Selembayung" .
+ra:orn_bolang a ra:Ornamen ; ra:nama "Bolang" ; rdfs:label "Bolang" .
+ra:orn_saluk_uki a ra:Ornamen ; ra:nama "Saluk Uki" ; rdfs:label "Saluk Uki" .
+ra:orn_ewe_sikholi a ra:Ornamen ; ra:nama "Ewe / Sikhöli" ; rdfs:label "Ewe / Sikhöli" .
+ra:orn_lebah_bergantung a ra:Ornamen ; ra:nama "Lebah Bergantung" ; rdfs:label "Lebah Bergantung" .
+ra:orn_pucuk_rebung a ra:Ornamen ; ra:nama "Pucuk Rebung" ; rdfs:label "Pucuk Rebung" .
+ra:orn_awan_larat a ra:Ornamen ; ra:nama "Awan Larat" ; rdfs:label "Awan Larat" .
+ra:orn_gerga a ra:Ornamen ; ra:nama "Gerga" ; rdfs:label "Gerga" .
+ra:orn_perbunga_kupkup a ra:Ornamen ; ra:nama "Perbunga Kupkup" ; rdfs:label "Perbunga Kupkup" .
+ra:orn_perbunga_kembang a ra:Ornamen ; ra:nama "Perbunga Kembang" ; rdfs:label "Perbunga Kembang" .
+ra:orn_perbunga_pancur a ra:Ornamen ; ra:nama "Perbunga Pancur" ; rdfs:label "Perbunga Pancur" .
+ra:orn_gorga a ra:Ornamen ; ra:nama "Gorga" ; rdfs:label "Gorga" .
+ra:orn_pinar a ra:Ornamen ; ra:nama "Pinar" ; rdfs:label "Pinar" .
+ra:orn_selembayung a ra:Ornamen ; ra:nama "Selembayung" ; rdfs:label "Selembayung" .
 
 # =====================================================================
 # 4F. MASTER TRADISI (ra:Tradisi)
 # =====================================================================
 
-ra:trd_horja_godang a ra:Tradisi ; ra:nama "Horja Godang" .
-ra:trd_mangupa a ra:Tradisi ; ra:nama "Mangupa" .
-ra:trd_sidang_adat_dalihan_na_tolu a ra:Tradisi ; ra:nama "Sidang Adat & Musyawarah Dalihan Na Tolu" .
-ra:trd_adat_sumando a ra:Tradisi ; ra:nama "Adat Sumando" .
-ra:trd_turun_ka_rai a ra:Tradisi ; ra:nama "Turun Ka Rai" .
-ra:trd_adat_pernikahan_pesisir_sibolga a ra:Tradisi ; ra:nama "Adat Pernikahan Pesisir Sibolga" .
-ra:trd_budaya_baso a ra:Tradisi ; ra:nama "Budaya Baso" .
-ra:trd_hombo_batu a ra:Tradisi ; ra:nama "Hombo Batu" .
-ra:trd_tepung_tawar a ra:Tradisi ; ra:nama "Tepung Tawar" .
-ra:trd_manortor a ra:Tradisi ; ra:nama "Manortor" .
-ra:trd_mangalahat_horbo a ra:Tradisi ; ra:nama "Mangalahat Horbo" .
-
+ra:trd_horja_godang a ra:Tradisi ; ra:nama "Horja Godang" ; rdfs:label "Horja Godang" .
+ra:trd_mangupa a ra:Tradisi ; ra:nama "Mangupa" ; rdfs:label "Mangupa" .
+ra:trd_sidang_adat_dalihan_na_tolu a ra:Tradisi ; ra:nama "Sidang Adat & Musyawarah Dalihan Na Tolu" ; rdfs:label "Sidang Adat & Musyawarah Dalihan Na Tolu" .
+ra:trd_adat_sumando a ra:Tradisi ; ra:nama "Adat Sumando" ; rdfs:label "Adat Sumando" .
+ra:trd_turun_ka_rai a ra:Tradisi ; ra:nama "Turun Ka Rai" ; rdfs:label "Turun Ka Rai" .
+ra:trd_adat_pernikahan_pesisir_sibolga a ra:Tradisi ; ra:nama "Adat Pernikahan Pesisir Sibolga" ; rdfs:label "Adat Pernikahan Pesisir Sibolga" .
+ra:trd_budaya_baso a ra:Tradisi ; ra:nama "Budaya Baso" ; rdfs:label "Budaya Baso" .
+ra:trd_hombo_batu a ra:Tradisi ; ra:nama "Hombo Batu" ; rdfs:label "Hombo Batu" .
+ra:trd_tepung_tawar a ra:Tradisi ; ra:nama "Tepung Tawar" ; rdfs:label "Tepung Tawar" .
+ra:trd_manortor a ra:Tradisi ; ra:nama "Manortor" ; rdfs:label "Manortor" .
+ra:trd_mangalahat_horbo a ra:Tradisi ; ra:nama "Mangalahat Horbo" ; rdfs:label "Mangalahat Horbo" .
+ra:trd_merdang_merdem a ra:Tradisi ; ra:nama "Merdang Merdem (Kerja Tahun Karo)" ; rdfs:label "Merdang Merdem (Kerja Tahun Karo)" .
+ra:trd_merkottas a ra:Tradisi ; ra:nama "Merkottas (Kerja Adat Pakpak)" ; rdfs:label "Merkottas (Kerja Adat Pakpak)" .
+ra:trd_jamu_laut a ra:Tradisi ; ra:nama "Jamu Laut (Syukuran Pesisir Melayu)" ; rdfs:label "Jamu Laut (Syukuran Pesisir Melayu)" .
+ra:trd_rondang_bintang a ra:Tradisi ; ra:nama "Rondang Bintang" ; rdfs:label "Rondang Bintang" .
+ra:trd_owasa a ra:Tradisi ; ra:nama "Owasa / Famatö (Pesta Adat Nias)" ; rdfs:label "Owasa / Famatö (Pesta Adat Nias)" .
+ra:trd_maena a ra:Tradisi ; ra:nama "Maena" ; rdfs:label "Maena" .
 
 # =====================================================================
-# 5A. RUMAH ADAT — BAGIAN CHYNTIA
+# 5. DATA RUMAH ADAT (ra:RumahAdat)
 # =====================================================================
 
-# --- A. Kabupaten Mandailing Natal ---
 ra:rumah_bagas_godang_panyabungan_tonga a ra:RumahAdat ;
     ra:nama "Bagas Godang Panyabungan Tonga" ;
+    rdfs:label "Bagas Godang Panyabungan Tonga" ;
     ra:namaAlternatif "Bagas Godang, Sopo Godang, Sopo Eme, Hopuk, Alaman Bolak" ;
     ra:sejarah "Kediaman raja, pusat pemerintahan adat, dan tempat musyawarah atau perkara di Mandailing Natal; Alaman Bolak berfungsi sebagai lapangan upacara agung dan tanah suaka. Islamisasi mengubah ornamen zoomorf menjadi flora atau geometris." ;
     ra:fungsi "Kediaman raja, pusat pemerintahan adat, tempat musyawarah/perkara, serta ruang upacara dan sidang adat di Sopo Godang" ;
@@ -1313,7 +1392,6 @@ ra:rumah_bagas_godang_panyabungan_tonga a ra:RumahAdat ;
     ra:bentukAtap "Atap pelana tipe sarotole dengan tutup ari (oloan ni angin) dan atap ijuk" ;
     ra:bahanBangunan "Kayu keras, ijuk, dan batu umpak; ornamen bolang merah-hitam-putih (bona bulu, mataniari, bintang, nihorbo, siadop-adop)" ;
     ra:maknaFilosofis "Sopo Godang tanpa dinding melambangkan demokrasi dan keterbukaan; warna merah-hitam-putih melambangkan Dalihan Na Tolu." ;
-    ra:linkFoto "https://commons.wikimedia.org/wiki/File:Bagas_Godang_Panyabungan_Tonga_(Batak_Mandailing_House)_(04).jpg"^^xsd:anyURI ;
     ra:referensi "Kajian Arsitektur Bagas Godang Panyabungan Tonga & Pidoli Dolok (Univ. Malikussaleh): https://rama.unimal.ac.id/id/eprint/14451/ ; Efriani (UNIMED): https://digilib.unimed.ac.id/id/eprint/17742/ ; Saragi (UNIMED): https://media.neliti.com/ ; Serupa UNP: https://ejournal.unp.ac.id/index.php/serupa/" ;
     ra:berasalDariWilayah ra:wil_desa_panyabungan_tonga ;
     ra:dimilikiOlehSuku ra:suku_batak_mandailing ;
@@ -1324,6 +1402,7 @@ ra:rumah_bagas_godang_panyabungan_tonga a ra:RumahAdat ;
 
 ra:rumah_bagas_godang_pidoli_dolok a ra:RumahAdat ;
     ra:nama "Bagas Godang Pidoli Dolok" ;
+    rdfs:label "Bagas Godang Pidoli Dolok" ;
     ra:namaAlternatif "Bagas Godang, Sopo Godang, Alaman Bolak" ;
     ra:sejarah "Bagian dari tradisi Bagas Godang di Kecamatan Panyabungan, Kabupaten Mandailing Natal, sebagai pusat pemerintahan adat dan musyawarah." ;
     ra:fungsi "Kediaman raja, pusat pemerintahan adat, dan tempat musyawarah/perkara" ;
@@ -1341,6 +1420,7 @@ ra:rumah_bagas_godang_pidoli_dolok a ra:RumahAdat ;
 
 ra:rumah_bagas_godang_huta_godang a ra:RumahAdat ;
     ra:nama "Bagas Godang Huta Godang Ulu Pungkut" ;
+    rdfs:label "Bagas Godang Huta Godang Ulu Pungkut" ;
     ra:namaAlternatif "Bagas Godang Huta Godang" ;
     ra:sejarah "Bagas Godang di Desa Huta Godang, Kecamatan Ulu Pungkut, Mandailing Natal, dengan kajian makna simbolik dan ukiran tradisional." ;
     ra:fungsi "Kediaman raja, pusat pemerintahan adat, dan ruang upacara/sidang adat" ;
@@ -1356,9 +1436,9 @@ ra:rumah_bagas_godang_huta_godang a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
 
-# --- B. Kabupaten Tapanuli Selatan ---
 ra:rumah_bagas_godang_angkola_sipirok a ra:RumahAdat ;
     ra:nama "Bagas Godang Angkola (Sipirok & Muara Tais)" ;
+    rdfs:label "Bagas Godang Angkola (Sipirok & Muara Tais)" ;
     ra:namaAlternatif "Bagas Godang Kekuriaan, Bagas Godang Raja Luhat, Sopo Godang, Sopo Jago, Sopo Eme, Alaman Bolak" ;
     ra:sejarah "Pusat kekuriaan atau luhat (pemerintahan adat Angkola sebelum 1945), kediaman raja, tempat pembinaan naposo nauli bulung, serta tanah suaka perlindungan." ;
     ra:fungsi "Pusat pemerintahan adat kekuriaan/luhat, kediaman raja, sidang adat, serta upacara marhorja/horja godang" ;
@@ -1367,16 +1447,16 @@ ra:rumah_bagas_godang_angkola_sipirok a ra:RumahAdat ;
     ra:bahanBangunan "Kayu hutan/gunung, lantai meranti/kapur 20-30 cm, batu umpak, dan ornamen bolang merah-hitam-putih" ;
     ra:maknaFilosofis "Silopso melambangkan hukum adat; batu sidang di Alaman Bolak menjadi tempat pemutusan perkara adat Dalihan Na Tolu." ;
     ra:referensi "Manifestasi Tangible & Intangible Bagas Godang Kekuriaan Ulayat Angkola (Univ. Malikussaleh): https://rama.unimal.ac.id/id/eprint/14273/ ; Susilowati & Nasoichah: https://core.ac.uk/download/304207208.pdf ; Jurnal LGR UIN Syahada: https://jurnal.uinsyahada.ac.id/" ;
-    ra:berasalDariWilayah ra:wil_sipirok_tapsel, ra:wil_muara_tais_tapsel ;
+    ra:berasalDariWilayah ra:wil_sipirok_tapsel, ra:wil_muara_tais_tapsel, ra:wil_bunga_bondar_tapsel ;
     ra:dimilikiOlehSuku ra:suku_batak_angkola ;
     ra:memilikiMarga ra:marga_harahap, ra:marga_siregar, ra:marga_hasibuan, ra:marga_ritonga, ra:marga_rambe, ra:marga_daulay, ra:marga_pane, ra:marga_hutasuhut ;
     ra:menggunakanBahasa ra:bhs_angkola ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
 
-# --- C. Kabupaten Padang Lawas ---
 ra:rumah_bagas_godang_padang_lawas a ra:RumahAdat ;
     ra:nama "Bagas Godang Padang Lawas" ;
+    rdfs:label "Bagas Godang Padang Lawas" ;
     ra:namaAlternatif "Bagas Godang (Tradisi Angkola-Mandailing Padang Lawas), Sopo Godang, Sopo Eme, Alaman Bolak" ;
     ra:sejarah "Mengikuti kajian tradisi Angkola-Mandailing di wilayah Padang Lawas (pemekaran dari Tapanuli Selatan tahun 2007); perlu verifikasi lapangan lanjutan (Candi Sipamutung merupakan situs arkeologi, bukan rumah adat)." ;
     ra:fungsi "Kediaman raja huta, pusat musyawarah adat, dan pelaksanaan ritual/upacara adat" ;
@@ -1392,9 +1472,9 @@ ra:rumah_bagas_godang_padang_lawas a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
 
-# --- D. Kabupaten Padang Lawas Utara ---
 ra:rumah_bagas_godang_padang_lawas_utara a ra:RumahAdat ;
     ra:nama "Bagas Godang Padang Lawas Utara" ;
+    rdfs:label "Bagas Godang Padang Lawas Utara" ;
     ra:namaAlternatif "Bagas Godang (Tradisi Angkola-Mandailing Padang Bolak), Sopo Godang, Sopo Eme, Alaman Bolak" ;
     ra:sejarah "Mengikuti kajian tradisi Angkola-Mandailing di Padang Bolak (pemekaran Tapanuli Selatan tahun 2007); perlu verifikasi lapangan lanjutan (Candi Bahal Portibi merupakan situs arkeologi)." ;
     ra:fungsi "Kediaman raja huta, pusat musyawarah adat, dan pelaksanaan upacara adat" ;
@@ -1410,9 +1490,9 @@ ra:rumah_bagas_godang_padang_lawas_utara a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
 
-# --- E. Kabupaten Tapanuli Tengah ---
 ra:rumah_adat_pasisi_rajo_sorkam_kanan a ra:RumahAdat ;
     ra:nama "Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)" ;
+    rdfs:label "Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)" ;
     ra:namaAlternatif "Rumah Adat Pesisir, Rumah Adat Batak Pesisir / Pasisi" ;
     ra:sejarah "Kediaman Raja Sorkam Pesisir yang masih difungsikan keturunannya; diajukan perlindungan WBTB/OPK pada Agustus 2025 (status data terbatas)." ;
     ra:fungsi "Kediaman adat Raja Sorkam Pesisir dan ruang kegiatan adat/keluarga" ;
@@ -1420,7 +1500,6 @@ ra:rumah_adat_pasisi_rajo_sorkam_kanan a ra:RumahAdat ;
     ra:bentukAtap "Arsitektur panggung pesisir barat Tapanuli" ;
     ra:bahanBangunan "Kayu keras pesisir, papan kayu, dan ragam hias khas Pasisi" ;
     ra:maknaFilosofis "Kearifan adaptasi masyarakat bahari pesisir barat Tapanuli" ;
-    ra:linkFoto "https://egindo.com/gabema-tapteng-sibolga-mendorong-pelindungan-rumah-adat-pasisi-upaya-menjaga-keberlanjutan/"^^xsd:anyURI ;
     ra:referensi "EGINDO (7 Sept 2025): https://egindo.com/gabema-tapteng-sibolga/ ; Sehat dkk. (Mukadimah 2021): https://core.ac.uk/download/387527467.pdf ; Pratiwi (UNIMED 2020): https://digilib.unimed.ac.id/42756/ ; BRIN: https://karya.brin.go.id/26705/" ;
     ra:berasalDariWilayah ra:wil_sorkam_kanan_tapteng ;
     ra:dimilikiOlehSuku ra:suku_etnis_pasisi ;
@@ -1429,9 +1508,9 @@ ra:rumah_adat_pasisi_rajo_sorkam_kanan a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_saluk_uki ;
     ra:memilikiTradisi ra:trd_adat_sumando, ra:trd_turun_ka_rai .
 
-# --- F. Kota Sibolga ---
 ra:rumah_adat_pasisi_sibolga a ra:RumahAdat ;
     ra:nama "Rumah Adat Pasisi (Pesisir Sibolga)" ;
+    rdfs:label "Rumah Adat Pasisi (Pesisir Sibolga)" ;
     ra:namaAlternatif "Rumah Panggung Vernakular Pesisir Sibolga" ;
     ra:sejarah "Terkait sejarah Sibolga sebagai kota pelabuhan historis keresidenan Tapanuli; rumah panggung atas air Pasar Belakang merupakan vernakular nelayan, bukan rumah adat resmi (status data terbatas)." ;
     ra:fungsi "Hunian bahari dan ruang adat etnis Pesisir Sibolga" ;
@@ -1447,9 +1526,9 @@ ra:rumah_adat_pasisi_sibolga a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_saluk_uki ;
     ra:memilikiTradisi ra:trd_adat_pernikahan_pesisir_sibolga, ra:trd_budaya_baso .
 
-# --- G. Kota Padangsidimpuan ---
 ra:rumah_bagas_godang_h_raja_tagor a ra:RumahAdat ;
     ra:nama "Bagas Godang H. Raja Tagor" ;
+    rdfs:label "Bagas Godang H. Raja Tagor" ;
     ra:namaAlternatif "Bagas Godang Hutaimbaru, Sopo Godang, Alaman Bolak" ;
     ra:sejarah "Peninggalan budaya Angkola pimpinan H. Raja Tagor di Desa Hutaimbaru, Kota Padangsidimpuan." ;
     ra:fungsi "Kediaman pemimpin adat, balai musyawarah perkara, dan sarana edukasi kebudayaan" ;
@@ -1465,14 +1544,9 @@ ra:rumah_bagas_godang_h_raja_tagor a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_bolang ;
     ra:memilikiTradisi ra:trd_horja_godang, ra:trd_mangupa, ra:trd_sidang_adat_dalihan_na_tolu .
 
-
-    # =====================================================================
-# 5B. RUMAH ADAT — BAGIAN JELI
-# =====================================================================
-
-# --- A. Omo Hada & Omo Sebua (Umum Nias) ---
 ra:rumah_omo_hada_omo_sebua_nias a ra:RumahAdat ;
     ra:nama "Omo Hada & Omo Sebua (Umum Nias)" ;
+    rdfs:label "Omo Hada & Omo Sebua (Umum Nias)" ;
     ra:namaAlternatif "Omo Sebua, Omo Zebua, Omo Nifolasara" ;
     ra:sejarah "Berakar dari tradisi lisan Nias sekitar 700 tahun lalu setelah berakhirnya masa kehidupan gua (Tögi Ndrawa), ketika imigran Ono Niha bermukim di Gomo lalu menyebar ke Nias Selatan, Tengah, dan Utara." ;
     ra:fungsi "Hunian keluarga, kediaman raja/bangsawan desa (Omo Sebua), dan benteng pertahanan" ;
@@ -1480,18 +1554,17 @@ ra:rumah_omo_hada_omo_sebua_nias a ra:RumahAdat ;
     ra:bentukAtap "Atap menjulang tinggi berbentuk pelana atau oval dengan jendela atap" ;
     ra:bahanBangunan "Kayu keras, ijuk atau daun rumbia, batu alam umpak, serta hiasan emas" ;
     ra:maknaFilosofis "Konsep owo (perahu) - omo (rumah) - gomo (tanah asal) yang melambangkan 'perahu darat' perlindungan keluarga." ;
-    ra:linkFoto "https://museum-nias.org/arsitektur-nias/"^^xsd:anyURI ;
     ra:referensi "Museum Pusaka Nias & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias, ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
     ra:memilikiMarga ra:marga_laia, ra:marga_harefa, ra:marga_halawa, ra:marga_gulo, ra:marga_hia, ra:marga_mendrofa, ra:marga_ndruru, ra:marga_nazara, ra:marga_waruwu, ra:marga_zega, ra:marga_telaumbanua, ra:marga_zendrato, ra:marga_lase, ra:marga_hulu, ra:marga_laoli ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi ;
-    ra:memilikiTradisi ra:trd_hombo_batu .
+    ra:memilikiTradisi ra:trd_hombo_batu, ra:trd_owasa, ra:trd_maena .
 
-# --- B. Omo Hada Nias Selatan ---
 ra:rumah_omo_hada_nias_selatan a ra:RumahAdat ;
     ra:nama "Omo Hada Nias Selatan" ;
+    rdfs:label "Omo Hada Nias Selatan" ;
     ra:namaAlternatif "Omo Nifolasara, Omo Niha (Gaya Selatan)" ;
     ra:sejarah "Perkembangan arsitektur Gomo yang dibawa ke Nias Selatan sekitar 500 tahun lalu." ;
     ra:fungsi "Hunian rakyat dengan ruang publik depan dan area privat atau dapur di belakang" ;
@@ -1499,18 +1572,17 @@ ra:rumah_omo_hada_nias_selatan a ra:RumahAdat ;
     ra:bentukAtap "Atap menjulang curam berbentuk pelana memanjang dengan jendela atap lawa-lawa" ;
     ra:bahanBangunan "Kayu keras, papan kayu, atap rumbia atau sagu, dan batu alam" ;
     ra:maknaFilosofis "Keperkasaan, solidaritas komunitas berderet, dan identitas maritim (lasara/perahu)." ;
-    ra:linkFoto "https://museum-nias.org/arsitektur-nias/"^^xsd:anyURI ;
     ra:referensi "Museum Pusaka Nias & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
     ra:memilikiMarga ra:marga_laia, ra:marga_halawa, ra:marga_ndruru, ra:marga_gulo, ra:marga_telaumbanua, ra:marga_waruwu, ra:marga_lase ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi ;
-    ra:memilikiTradisi ra:trd_hombo_batu .
+    ra:memilikiTradisi ra:trd_hombo_batu, ra:trd_owasa, ra:trd_maena .
 
-# --- C. Omo Hada Nias Tengah (Gomo) ---
 ra:rumah_omo_hada_nias_tengah_gomo a ra:RumahAdat ;
     ra:nama "Omo Hada Nias Tengah (Gomo)" ;
+    rdfs:label "Omo Hada Nias Tengah (Gomo)" ;
     ra:namaAlternatif "Omo Hada Gaya Gomo, Omo Hada Gaya Lahusa" ;
     ra:sejarah "Berasal langsung dari pusat peradaban awal Ono Niha di Desa Sifalagö Gomo sekitar 700 tahun lalu." ;
     ra:fungsi "Hunian keluarga pedalaman dan kediaman bangsawan lokal" ;
@@ -1518,18 +1590,17 @@ ra:rumah_omo_hada_nias_tengah_gomo a ra:RumahAdat ;
     ra:bentukAtap "Atap pelana memanjang curam beratap rumbia atau ijuk" ;
     ra:bahanBangunan "Kayu keras, balok hulu utuh, papan kayu, daun rumbia, dan batu umpak" ;
     ra:maknaFilosofis "Keterikatan tanah asal Gomo, keramahan salam, dan keharmonisan lingkungan." ;
-    ra:linkFoto "https://museum-nias.org/arsitektur-nias/"^^xsd:anyURI ;
     ra:referensi "Hämmerle & Lehner (Gomo Traditional House) & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias_selatan ;
     ra:dimilikiOlehSuku ra:suku_nias ;
     ra:memilikiMarga ra:marga_hia, ra:marga_gulo, ra:marga_halawa, ra:marga_laia, ra:marga_ndruru ;
     ra:menggunakanBahasa ra:bhs_nias ;
     ra:memilikiOrnamen ra:orn_ewe_sikholi ;
-    ra:memilikiTradisi ra:trd_hombo_batu .
+    ra:memilikiTradisi ra:trd_hombo_batu, ra:trd_owasa, ra:trd_maena .
 
-# --- D. Omo Hada Nias Utara ---
 ra:rumah_omo_hada_nias_utara a ra:RumahAdat ;
     ra:nama "Omo Hada Nias Utara" ;
+    rdfs:label "Omo Hada Nias Utara" ;
     ra:namaAlternatif "Omo Hada Gaya Utara, Rumah Adat Lonjong" ;
     ra:sejarah "Evolusi arsitektur Gomo ke arah utara yang membentuk denah lonjong (oval) vernakular langka." ;
     ra:fungsi "Hunian berdiri bebas dengan bangku panjang penampung tamu dan ruang musyawarah depan" ;
@@ -1537,17 +1608,17 @@ ra:rumah_omo_hada_nias_utara a ra:RumahAdat ;
     ra:bentukAtap "Atap melengkung mengikuti denah lonjong yang menjulang tinggi" ;
     ra:bahanBangunan "Kayu keras, ijuk atau rumbia, dan batu alam pemberat di kolong" ;
     ra:maknaFilosofis "Kemandirian keluarga, keterbukaan menerima tamu, dan fleksibilitas struktur tahan gempa." ;
-    ra:linkFoto "https://museum-nias.org/arsitektur-nias/"^^xsd:anyURI ;
     ra:referensi "Viaro & Ziegler (Traditional Architecture of Nias) & Timomor (2025): https://museum-nias.org/arsitektur-nias/" ;
     ra:berasalDariWilayah ra:wil_kab_nias_utara, ra:wil_kab_nias_barat, ra:wil_kota_gunungsitoli ;
     ra:dimilikiOlehSuku ra:suku_nias ;
     ra:memilikiMarga ra:marga_harefa, ra:marga_zega, ra:marga_nazara, ra:marga_mendrofa, ra:marga_zendrato, ra:marga_hulu, ra:marga_laoli, ra:marga_telaumbanua, ra:marga_lase, ra:marga_waruwu ;
     ra:menggunakanBahasa ra:bhs_nias ;
-    ra:memilikiOrnamen ra:orn_ewe_sikholi .
+    ra:memilikiOrnamen ra:orn_ewe_sikholi ;
+    ra:memilikiTradisi ra:trd_hombo_batu, ra:trd_owasa, ra:trd_maena .
 
-# --- E. Istana Maimun (Melayu Deli) ---
 ra:rumah_istana_maimun_medan a ra:RumahAdat ;
     ra:nama "Istana Maimun" ;
+    rdfs:label "Istana Maimun" ;
     ra:namaAlternatif "Istana Maimoon, Istana Kesultanan Deli" ;
     ra:sejarah "Dibangun oleh Sultan Ma'moen Al Rasyid Perkasa Alamyah pada tahun 1888-1891 dengan arsitek Theodoor van Erp; dahulu pusat pemerintahan Kesultanan Deli dan kini menjadi cagar budaya, museum, serta lokasi upacara adat." ;
     ra:fungsi "Dahulu pusat pemerintahan Kesultanan Deli; kini menjadi cagar budaya, museum, dan lokasi upacara adat" ;
@@ -1555,7 +1626,6 @@ ra:rumah_istana_maimun_medan a ra:RumahAdat ;
     ra:bentukAtap "Atap limas Melayu dipadu kubah bawang khas arsitektur Mughal" ;
     ra:bahanBangunan "Bata, semen, marmer Italia, kayu jati, dan kaca patri Eropa" ;
     ra:maknaFilosofis "Kejayaan, kemakmuran, dan keterbukaan Kesultanan Deli terhadap budaya dunia." ;
-    ra:linkFoto "https://medan.go.id/istana-maimun"^^xsd:anyURI ;
     ra:referensi "Kemdikbudristek (Registrasi Nasional Cagar Budaya) & Dispar Kota Medan: https://medan.go.id/istana-maimun" ;
     ra:berasalDariWilayah ra:wil_kota_medan ;
     ra:dimilikiOlehSuku ra:suku_melayu_deli ;
@@ -1564,9 +1634,9 @@ ra:rumah_istana_maimun_medan a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_lebah_bergantung ;
     ra:memilikiTradisi ra:trd_tepung_tawar .
 
-# --- F. Rumah Adat Melayu Deli ---
 ra:rumah_adat_melayu_deli a ra:RumahAdat ;
     ra:nama "Rumah Adat Melayu Deli" ;
+    rdfs:label "Rumah Adat Melayu Deli" ;
     ra:namaAlternatif "Rumah Belah Bubung, Rumah Lipat Pandan, Rumah Panggung Melayu" ;
     ra:sejarah "Berkembang sejak abad ke-17 (1632 M) di pesisir timur Sumatera Utara." ;
     ra:fungsi "Hunian masyarakat Melayu Deli, balai musyawarah, dan tempat upacara keagamaan atau adat" ;
@@ -1574,7 +1644,6 @@ ra:rumah_adat_melayu_deli a ra:RumahAdat ;
     ra:bentukAtap "Atap pelana memanjang (belah bubung atau lipat pandan) dengan selembayung di puncak" ;
     ra:bahanBangunan "Kayu keras (meranti atau damar laut), papan kayu, dan atap nipah, rumbia, atau seng" ;
     ra:maknaFilosofis "Kesopanan, pemisahan ruang publik dan privat, serta motif pucuk rebung yang melambangkan kebermanfaatan hidup." ;
-    ra:linkFoto "https://kebudayaan.kemdikbud.go.id/"^^xsd:anyURI ;
     ra:referensi "BPK Wilayah II Sumut & Portal Warisan Budaya Takbenda Indonesia: https://kebudayaan.kemdikbud.go.id/" ;
     ra:berasalDariWilayah ra:wil_kota_medan, ra:wil_kab_deli_serdang ;
     ra:dimilikiOlehSuku ra:suku_melayu_deli ;
@@ -1583,7 +1652,6 @@ ra:rumah_adat_melayu_deli a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_pucuk_rebung, ra:orn_awan_larat, ra:orn_lebah_bergantung, ra:orn_selembayung ;
     ra:memilikiTradisi ra:trd_tepung_tawar .
 
-# --- G. Rumah Adat Karo Jahe (Deli Serdang) ---
 ra:rumah_siwaluh_jabu_karo_jahe_deli_serdang a ra:RumahAdat ;
     ra:nama "Rumah Adat Karo Jahe (Deli Serdang)" ;
     rdfs:label "Rumah Adat Karo Jahe (Deli Serdang)" ;
@@ -1594,21 +1662,17 @@ ra:rumah_siwaluh_jabu_karo_jahe_deli_serdang a ra:RumahAdat ;
     ra:bentukAtap "Atap ijuk menjulang tinggi dengan bentuk tanduk kerbau pada bagian puncak (ayo)" ;
     ra:bahanBangunan "Kayu keras hutan, ijuk, bambu, batu umpak, dan ukiran gerga khas Karo" ;
     ra:maknaFilosofis "Menjaga harmoni kekerabatan Merga Silima dan Rakut Sitelu di wilayah pesisir dan hulu Deli Serdang." ;
+    ra:referensi "Kemendikbudristek & Kajian Sejarah Empat Urung Karo Jahe Kesultanan Deli" ;
     ra:berasalDariWilayah ra:wil_kab_deli_serdang ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
     ra:memilikiMarga ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
     ra:memilikiOrnamen ra:orn_gerga ;
-    ra:memilikiTradisi ra:trd_manortor .
+    ra:memilikiTradisi ra:trd_merdang_merdem, ra:trd_manortor .
 
-
-    # =====================================================================
-# 5C. RUMAH ADAT — BAGIAN VASCHA
-# =====================================================================
-
-# --- A. Karo — Rumah Siwaluh Jabu Desa Lingga (K1) ---
 ra:rumah_siwaluh_jabu_desa_lingga a ra:RumahAdat ;
     ra:nama "Rumah Siwaluh Jabu Desa Lingga" ;
+    rdfs:label "Rumah Siwaluh Jabu Desa Lingga" ;
     ra:namaAlternatif "Siwaluh Jabu Desa Lingga, Siwaluh Jabu, Rumah Mbelang Ayo" ;
     ra:sejarah "Rumah panggung komunal untuk 8 keluarga (sistem jabu), dengan Rumah Mbelang Ayo dibangun sekitar tahun 1862 menurut laporan BPODT." ;
     ra:fungsi "Tempat tinggal komunal hingga 8 keluarga dan pusat kekerabatan adat Karo" ;
@@ -1622,11 +1686,11 @@ ra:rumah_siwaluh_jabu_desa_lingga a ra:RumahAdat ;
     ra:memilikiMarga ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
     ra:memilikiOrnamen ra:orn_gerga ;
-    ra:memilikiTradisi ra:trd_manortor .
+    ra:memilikiTradisi ra:trd_merdang_merdem, ra:trd_manortor .
 
-# --- B. Karo — Rumah Siwaluh Jabu Desa Dokan (K2) ---
 ra:rumah_siwaluh_jabu_desa_dokan a ra:RumahAdat ;
     ra:nama "Rumah Siwaluh Jabu Desa Dokan" ;
+    rdfs:label "Rumah Siwaluh Jabu Desa Dokan" ;
     ra:namaAlternatif "Siwaluh Jabu Desa Dokan, Rumah Mbelin, Rumah Sendi, Rumah Tengah, Rumah Mbaru" ;
     ra:sejarah "Bagian dari kompleks 5 rumah tradisional di Desa Dokan (4 Siwaluh Jabu dan 1 Siempat Jabu)." ;
     ra:fungsi "Tempat tinggal komunal beberapa keluarga dan pusat aktivitas sosial adat Karo" ;
@@ -1639,11 +1703,12 @@ ra:rumah_siwaluh_jabu_desa_dokan a ra:RumahAdat ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
     ra:memilikiMarga ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
-    ra:memilikiOrnamen ra:orn_gerga .
+    ra:memilikiOrnamen ra:orn_gerga ;
+    ra:memilikiTradisi ra:trd_merdang_merdem, ra:trd_manortor .
 
-# --- C. Karo — Rumah Kete Desa Dokan (K3) ---
 ra:rumah_kete_desa_dokan a ra:RumahAdat ;
     ra:nama "Rumah Kete Desa Dokan" ;
+    rdfs:label "Rumah Kete Desa Dokan" ;
     ra:namaAlternatif "Rumah Kete, Rumah Ketek" ;
     ra:sejarah "Memiliki ukuran sekitar separuh dari Siwaluh Jabu sebagaimana didokumentasikan dalam WBTb 2013 di Desa Dokan." ;
     ra:fungsi "Hunian keluarga berkapasitas lebih kecil yang menyerupai rumah mecu" ;
@@ -1654,13 +1719,14 @@ ra:rumah_kete_desa_dokan a ra:RumahAdat ;
     ra:referensi "Repositori Kemendikdasmen: https://repositori.kemendikdasmen.go.id/24068/ ; BPODT: https://bpodt.kemenpar.go.id/siwaluh-jabu-melawan-waktu/" ;
     ra:berasalDariWilayah ra:wil_desa_dokan_karo ;
     ra:dimilikiOlehSuku ra:suku_batak_karo ;
-    ra:memilikiMarga ra:marga_sitepu ;
+    ra:memilikiMarga ra:marga_sitepu, ra:marga_ginting, ra:marga_sembiring, ra:marga_tarigan, ra:marga_karo_karo, ra:marga_perangin_angin ;
     ra:menggunakanBahasa ra:bhs_karo ;
-    ra:memilikiOrnamen ra:orn_gerga .
+    ra:memilikiOrnamen ra:orn_gerga ;
+    ra:memilikiTradisi ra:trd_merdang_merdem, ra:trd_manortor .
 
-# --- D. Dairi — Rumah Adat Pakpak Sidikalang (D1) ---
 ra:rumah_adat_pakpak_sidikalang a ra:RumahAdat ;
     ra:nama "Rumah Adat Pakpak Sidikalang" ;
+    rdfs:label "Rumah Adat Pakpak Sidikalang" ;
     ra:namaAlternatif "Rumah Adat Pakpak, Jerro" ;
     ra:sejarah "Destinasi budaya resmi Kabupaten Dairi yang merepresentasikan rumah tradisional suku Pakpak." ;
     ra:fungsi "Museum atau balai adat daerah serta ruang musyawarah adat Pakpak" ;
@@ -1673,11 +1739,12 @@ ra:rumah_adat_pakpak_sidikalang a ra:RumahAdat ;
     ra:dimilikiOlehSuku ra:suku_pakpak ;
     ra:memilikiMarga ra:marga_bancin, ra:marga_banurea, ra:marga_berutu, ra:marga_boangmanalu, ra:marga_bintang, ra:marga_bako, ra:marga_capah, ra:marga_cibro, ra:marga_gajah, ra:marga_gajahmanik, ra:marga_galo, ra:marga_kaloko, ra:marga_kesogihen, ra:marga_kombih, ra:marga_kudadiri, ra:marga_lembeng, ra:marga_lingga, ra:marga_maha, ra:marga_maibang, ra:marga_manik, ra:marga_matanari, ra:marga_meka, ra:marga_munthe, ra:marga_padang, ra:marga_padang_batanghari, ra:marga_pasi, ra:marga_pinayungan, ra:marga_pohan, ra:marga_purba, ra:marga_ramin, ra:marga_sagala, ra:marga_saraan, ra:marga_sambo, ra:marga_siketang, ra:marga_sinamo, ra:marga_sitakar, ra:marga_solin, ra:marga_tendang, ra:marga_tinambunan, ra:marga_tinendung, ra:marga_tumangger, ra:marga_turuten, ra:marga_ujung ;
     ra:menggunakanBahasa ra:bhs_pakpak ;
-    ra:memilikiOrnamen ra:orn_perbunga_kupkup, ra:orn_perbunga_kembang, ra:orn_perbunga_pancur .
+    ra:memilikiOrnamen ra:orn_perbunga_kupkup, ra:orn_perbunga_kembang, ra:orn_perbunga_pancur ;
+    ra:memilikiTradisi ra:trd_merkottas .
 
-# --- E. Pakpak Bharat — Tipologi Rumah Tradisional Pakpak (P1) ---
 ra:rumah_tipologi_pakpak_bharat a ra:RumahAdat ;
     ra:nama "Tipologi Rumah Tradisional Pakpak" ;
+    rdfs:label "Tipologi Rumah Tradisional Pakpak" ;
     ra:namaAlternatif "Jerro, Rumah Adat Pakpak Suak Simsim" ;
     ra:sejarah "Tradisi rumah adat suak Simsim di wilayah Kabupaten Pakpak Bharat." ;
     ra:fungsi "Konsep dasar hunian dan balai adat masyarakat Pakpak" ;
@@ -1690,11 +1757,12 @@ ra:rumah_tipologi_pakpak_bharat a ra:RumahAdat ;
     ra:dimilikiOlehSuku ra:suku_pakpak ;
     ra:memilikiMarga ra:marga_berutu, ra:marga_sinamo, ra:marga_padang, ra:marga_bancin, ra:marga_boangmanalu, ra:marga_banurea, ra:marga_manik, ra:marga_sitakar, ra:marga_solin, ra:marga_tinendung, ra:marga_tumangger, ra:marga_saraan, ra:marga_cibro, ra:marga_kudadiri, ra:marga_gajah ;
     ra:menggunakanBahasa ra:bhs_pakpak ;
-    ra:memilikiOrnamen ra:orn_perbunga_kupkup, ra:orn_perbunga_kembang, ra:orn_perbunga_pancur .
+    ra:memilikiOrnamen ra:orn_perbunga_kupkup, ra:orn_perbunga_kembang, ra:orn_perbunga_pancur ;
+    ra:memilikiTradisi ra:trd_merkottas .
 
-# --- F. Langkat — Rumah Datuk Amar Sridiraja (L1) ---
 ra:rumah_datuk_amar_sridiraja_langkat a ra:RumahAdat ;
     ra:nama "Rumah Datuk Amar Sridiraja" ;
+    rdfs:label "Rumah Datuk Amar Sridiraja" ;
     ra:namaAlternatif "Rumah Tradisional Melayu Datuk Amar Sridiraja" ;
     ra:sejarah "Dibangun pada tahun 1827 (studi Aisyah & Siregar, 2024) di Tanjung Pura, Langkat, dan masih dilestarikan hingga kini." ;
     ra:fungsi "Hunian bangsawan Melayu Langkat dan cagar budaya" ;
@@ -1707,11 +1775,12 @@ ra:rumah_datuk_amar_sridiraja_langkat a ra:RumahAdat ;
     ra:dimilikiOlehSuku ra:suku_melayu_langkat ;
     ra:memilikiMarga ra:marga_tengku, ra:marga_wan, ra:marga_datuk, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu_langkat ;
-    ra:memilikiTradisi ra:trd_tepung_tawar .
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_pucuk_rebung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar, ra:trd_jamu_laut .
 
-# --- G. Langkat — Rumah Datuk Padang Tualang (L2) ---
 ra:rumah_datuk_padang_tualang_langkat a ra:RumahAdat ;
     ra:nama "Rumah Datuk Padang Tualang" ;
+    rdfs:label "Rumah Datuk Padang Tualang" ;
     ra:namaAlternatif "Rumah Tradisional Melayu Datuk Padang Tualang" ;
     ra:sejarah "Rumah tradisional bangsawan Melayu di Tanjung Pura yang diteliti dalam studi arsitektur RAUT (2022)." ;
     ra:fungsi "Hunian bersejarah dan objek riset kebudayaan" ;
@@ -1722,13 +1791,14 @@ ra:rumah_datuk_padang_tualang_langkat a ra:RumahAdat ;
     ra:referensi "Jurnal RAUT (USK): https://jurnal.usk.ac.id/raut/article/download/25226/15990 ; Jurnal Permukiman PUPR: https://jurnalpermukiman.pu.go.id/index.php/JP/article/view/89" ;
     ra:berasalDariWilayah ra:wil_tanjung_pura_langkat ;
     ra:dimilikiOlehSuku ra:suku_melayu_langkat ;
-    ra:memilikiMarga ra:marga_datuk ;
+    ra:memilikiMarga ra:marga_datuk, ra:marga_tengku, ra:marga_wan, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu_langkat ;
-    ra:memilikiOrnamen ra:orn_lebah_bergantung .
+    ra:memilikiOrnamen ra:orn_lebah_bergantung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar .
 
-# --- H. Langkat — Rumah Panggung Melayu Tanjung Pura (L3) ---
 ra:rumah_panggung_melayu_tanjung_pura a ra:RumahAdat ;
     ra:nama "Rumah Panggung Melayu Tanjung Pura" ;
+    rdfs:label "Rumah Panggung Melayu Tanjung Pura" ;
     ra:namaAlternatif "Rumah Rakyat Melayu Langkat" ;
     ra:sejarah "Kelompok rumah panggung tradisional rakyat Melayu di Tanjung Pura berdasarkan inventarisasi Unimed 2018." ;
     ra:fungsi "Hunian rakyat pesisir sungai" ;
@@ -1739,12 +1809,14 @@ ra:rumah_panggung_melayu_tanjung_pura a ra:RumahAdat ;
     ra:referensi "Jurnal Unimed: https://jurnal.unimed.ac.id/2012/index.php/ph/article/view/11743 ; Jurnal Permukiman PUPR: https://jurnalpermukiman.pu.go.id/index.php/JP/article/view/89" ;
     ra:berasalDariWilayah ra:wil_tanjung_pura_langkat ;
     ra:dimilikiOlehSuku ra:suku_melayu_langkat ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu_langkat ;
-    ra:memilikiTradisi ra:trd_tepung_tawar .
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_awan_larat ;
+    ra:memilikiTradisi ra:trd_tepung_tawar, ra:trd_jamu_laut .
 
-# --- I. Langkat — Rumah Melayu Stabat / Pantai Gemi (L4) ---
 ra:rumah_melayu_stabat_pantai_gemi a ra:RumahAdat ;
     ra:nama "Rumah Melayu Stabat / Pantai Gemi" ;
+    rdfs:label "Rumah Melayu Stabat / Pantai Gemi" ;
     ra:namaAlternatif "Rumah Rakyat Melayu Stabat" ;
     ra:sejarah "Rumah vernakular rakyat Melayu yang masih bertahan di Stabat berdasarkan studi PUPR 2013." ;
     ra:fungsi "Hunian masyarakat setempat" ;
@@ -1755,31 +1827,32 @@ ra:rumah_melayu_stabat_pantai_gemi a ra:RumahAdat ;
     ra:referensi "Jurnal Permukiman PUPR: https://jurnalpermukiman.pu.go.id/index.php/JP/article/view/89" ;
     ra:berasalDariWilayah ra:wil_stabat_pantai_gemi_langkat ;
     ra:dimilikiOlehSuku ra:suku_melayu_langkat ;
-    ra:menggunakanBahasa ra:bhs_melayu_langkat .
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu_langkat ;
+    ra:memilikiOrnamen ra:orn_pucuk_rebung, ra:orn_lebah_bergantung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar .
 
-# --- J. Kota Binjai — Status Inventarisasi (B1) ---
-ra:rumah_status_inventarisasi_kota_binjai a ra:RumahAdat ;
-    ra:nama "Status Inventarisasi Rumah Adat Kota Binjai" ;
-    ra:namaAlternatif "Inventarisasi Kota Binjai (Belum Terverifikasi Fisik Spesifik)" ;
-    ra:sejarah "Belum ditemukan nama atau lokasi bangunan rumah adat spesifik yang terverifikasi di Kota Binjai dalam rujukan literatur; tidak dibuatkan data rekaan untuk menghindari bias." ;
-    ra:fungsi "Memerlukan verifikasi riset lapangan lebih lanjut bersama Dinas Kebudayaan Kota Binjai" ;
-    ra:ciriArsitektur "Belum terverifikasi fisik spesifik pada rujukan literatur" ;
-    ra:bentukAtap "Belum terverifikasi fisik spesifik pada rujukan literatur" ;
-    ra:bahanBangunan "Belum terverifikasi fisik spesifik pada rujukan literatur" ;
-    ra:maknaFilosofis "Memerlukan pendataan lapangan lanjutan bersama dinas kebudayaan setempat." ;
-    ra:referensi "Jurnal Permukiman PUPR: https://jurnalpermukiman.pu.go.id/ ; Jurnal Unimed: https://jurnal.unimed.ac.id/" ;
+ra:rumah_balai_adat_budaya_melayu_binjai a ra:RumahAdat ;
+    ra:nama "Balai Adat Budaya Melayu Binjai" ;
+    rdfs:label "Balai Adat Budaya Melayu Binjai" ;
+    ra:namaAlternatif "Gedung MABMI Kota Binjai" ;
+    ra:sejarah "Dibangun oleh Pengurus Daerah Majelis Adat Budaya Melayu Indonesia (MABMI) Kota Binjai di Jalan Jambi, Kelurahan Rambung Barat, Kecamatan Binjai Selatan dengan anggaran sekitar Rp450 juta menggunakan material kayu sistem bongkar pasang yang didatangkan dari Tomohon, dan diresmikan oleh Wali Kota Binjai H.M. Idaham pada 4 Juli 2013." ;
+    ra:fungsi "Sarana pengembangan seni budaya Melayu, tempat musyawarah pengetua adat dan pengurus MABMI, serta pusat pelestarian dan edukasi sejarah budaya Melayu di Kota Binjai." ;
+    ra:ciriArsitektur "Bangunan rumah panggung kayu bergaya arsitektur tradisional Melayu dengan struktur konstruksi bongkar pasang (knock-down) serta dilengkapi tangga depan dan ornamen khas Melayu." ;
+    ra:bentukAtap "Atap limas / perisai khas bangunan tradisional Melayu" ;
+    ra:bahanBangunan "Konstruksi kayu penuh (sistem bongkar pasang) dengan penutup atap modern" ;
+    ra:maknaFilosofis "Representasi marwah, identitas, dan pusat musyawarah mufakat masyarakat adat Melayu di Kota Binjai." ;
+    ra:referensi "Dokumentasi Pemko Binjai & Berita Peresmian Balai Adat Budaya Melayu Binjai (ANTARA News Sumut, 2013)" ;
     ra:berasalDariWilayah ra:wil_kota_binjai ;
     ra:dimilikiOlehSuku ra:suku_melayu ;
-    ra:menggunakanBahasa ra:bhs_melayu .
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_selembayung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar .
 
-
-    # =====================================================================
-# 5D. RUMAH ADAT — BAGIAN JONA
-# =====================================================================
-
-# --- A. Tapanuli Utara — Rumah Bolon Pulau Sibandang (TAP-01) ---
 ra:rumah_bolon_pulau_sibandang a ra:RumahAdat ;
     ra:nama "Rumah Bolon Pulau Sibandang" ;
+    rdfs:label "Rumah Bolon Pulau Sibandang" ;
     ra:namaAlternatif "Rumah Bolon Sibandang" ;
     ra:sejarah "Rumah tradisional bersejarah di Pulau Sibandang, Kecamatan Muara, Kabupaten Tapanuli Utara, yang diperkirakan berasal dari abad ke-18." ;
     ra:fungsi "Hunian historis dan penanda warisan keluarga atau huta" ;
@@ -1795,9 +1868,9 @@ ra:rumah_bolon_pulau_sibandang a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
 
-# --- B. Toba — Rumah Bolon Museum TB Silalahi Center (TOB-01) ---
 ra:rumah_bolon_museum_tb_silalahi_center a ra:RumahAdat ;
     ra:nama "Rumah Bolon Kompleks TB Silalahi Center" ;
+    rdfs:label "Rumah Bolon Kompleks TB Silalahi Center" ;
     ra:namaAlternatif "Rumah Bolon Museum TB Silalahi" ;
     ra:sejarah "Bangunan rumah adat skala besar di pusat pelestarian budaya Batak di Balige, Kabupaten Toba." ;
     ra:fungsi "Sarana edukasi, museum etnografi, dan pelestarian arsitektur Batak" ;
@@ -1813,9 +1886,9 @@ ra:rumah_bolon_museum_tb_silalahi_center a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
 
-# --- C. Toba — Huta Batak TB Silalahi Center (TOB-02) ---
 ra:rumah_huta_batak_tb_silalahi_center a ra:RumahAdat ;
     ra:nama "Huta Batak TB Silalahi Center" ;
+    rdfs:label "Huta Batak TB Silalahi Center" ;
     ra:namaAlternatif "Kompleks Kumpulan Rumah Adat Huta Batak" ;
     ra:sejarah "Kelompok rumah tradisional tua yang direkonstruksi atau dipindahkan ke museum di Balige, Kabupaten Toba." ;
     ra:fungsi "Koleksi etnografi pemukiman tradisional Huta Batak, demonstrasi budaya, dan interpretasi warisan" ;
@@ -1831,9 +1904,9 @@ ra:rumah_huta_batak_tb_silalahi_center a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
 
-# --- D. Toba — Rumah Bolon Jangga Dolok (TOB-03) ---
 ra:rumah_bolon_jangga_dolok a ra:RumahAdat ;
     ra:nama "Rumah Bolon Jangga Dolok" ;
+    rdfs:label "Rumah Bolon Jangga Dolok" ;
     ra:namaAlternatif "Rumah Adat Jangga Dolok" ;
     ra:sejarah "Desa adat tradisional di Kecamatan Lumban Julu, Kabupaten Toba, dengan rumah adat yang diperkirakan berusia sekitar 250 tahun." ;
     ra:fungsi "Warisan permukiman adat dan destinasi budaya" ;
@@ -1849,9 +1922,9 @@ ra:rumah_bolon_jangga_dolok a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
 
-# --- E. Humbang Hasundutan — Kompleks Istana Sisingamangaraja (HUM-01 s/d HUM-04) ---
 ra:rumah_kompleks_istana_sisingamangaraja_bakkara a ra:RumahAdat ;
     ra:nama "Kompleks Istana Sisingamangaraja (Bakkara)" ;
+    rdfs:label "Kompleks Istana Sisingamangaraja (Bakkara)" ;
     ra:namaAlternatif "Ruma Bolon (HUM-01), Ruma Parsaktian (HUM-02), Sopo Bolon (HUM-03), Sopo Godang (HUM-04)" ;
     ra:sejarah "Kompleks istana peninggalan Pahlawan Nasional Raja Sisingamangaraja XII di lembah Bakkara, Desa Simamora, Kecamatan Baktiraja, Humbang Hasundutan." ;
     ra:fungsi "Cagar budaya, sejarah perjuangan, situs sakral adat, tempat musyawarah dan tamu (Ruma Bolon), kediaman raja (Ruma Parsaktian), lumbung hasil panen (Sopo Bolon), serta balai seni dan kegiatan masyarakat (Sopo Godang)" ;
@@ -1867,9 +1940,9 @@ ra:rumah_kompleks_istana_sisingamangaraja_bakkara a ra:RumahAdat ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor .
 
-# --- F. Samosir — Huta Siallagan, Simanindo & Tomok (SAM-01 s/d SAM-05) ---
 ra:rumah_huta_siallagan_simanindo_tomok_samosir a ra:RumahAdat ;
     ra:nama "Kompleks Rumah Adat Samosir (Huta Siallagan, Simanindo, Tomok & Hutaginjang)" ;
+    rdfs:label "Kompleks Rumah Adat Samosir (Huta Siallagan, Simanindo, Tomok & Hutaginjang)" ;
     ra:namaAlternatif "Ruma Bolon & Sopo Huta Siallagan (SAM-01 & SAM-02), Museum Huta Bolon Simanindo (SAM-03), Rumah Adat Kawasan Tomok (SAM-04), Permukiman Desa Hutaginjang (SAM-05)" ;
     ra:sejarah "Pusat kebudayaan tua Batak Toba di Pulau Samosir yang mencakup Ambarita, Simanindo, Tomok, dan Sianjur Mula-mula." ;
     ra:fungsi "Hunian raja adat, tempat sidang hukum adat Batu Parsidangan, lumbung atau balai, dan museum budaya" ;
@@ -1878,21 +1951,16 @@ ra:rumah_huta_siallagan_simanindo_tomok_samosir a ra:RumahAdat ;
     ra:bahanBangunan "Kayu keras antik, ijuk, batu benteng huta, dan ornamen Gorga Singa-singa, Gorga Ulu Paung, serta Ipon-ipon" ;
     ra:maknaFilosofis "Kosmologi Banua Ginjang, Banua Tonga, Banua Toru serta penegakan hukum adat." ;
     ra:referensi "Indonesia Travel: https://www.indonesia.travel/ ; Repository UNPAR: https://repository.unpar.ac.id/handle/123456789/7704" ;
-    ra:berasalDariWilayah ra:wil_pulau_samosir ;
+    ra:berasalDariWilayah ra:wil_pulau_samosir, ra:wil_huta_siallagan_samosir, ra:wil_simanindo_samosir, ra:wil_tomok_samosir, ra:wil_desa_hutaginjang_samosir ;
     ra:dimilikiOlehSuku ra:suku_batak_toba ;
     ra:memilikiMarga ra:marga_siallagan, ra:marga_sidauruk, ra:marga_sidabutar, ra:marga_manik, ra:marga_sagala ;
     ra:menggunakanBahasa ra:bhs_batak_toba ;
     ra:memilikiOrnamen ra:orn_gorga ;
     ra:memilikiTradisi ra:trd_manortor, ra:trd_mangalahat_horbo .
 
-
-    # =====================================================================
-# 5E. RUMAH ADAT — BAGIAN PATRICIA
-# =====================================================================
-
-# --- A. Simalungun — Kompleks Rumah Bolon Pamatang Purba (SIM-01 s/d SIM-06) ---
 ra:rumah_bolon_pamatang_purba_simalungun a ra:RumahAdat ;
     ra:nama "Kompleks Rumah Bolon Pamatang Purba" ;
+    rdfs:label "Kompleks Rumah Bolon Pamatang Purba" ;
     ra:namaAlternatif "Rumah Bolon Purba (SIM-01), Balei Bolon (SIM-02), Balei Buttu (SIM-03), Jabu Jungga (SIM-04), Pattangan Raja & Permaisuri (SIM-05), Jambur & Rumah Losung (SIM-06)" ;
     ra:sejarah "Kompleks Istana Kerajaan Purba yang didirikan oleh Raja Purba di Nagori Pamatang Purba, Kecamatan Purba, Kabupaten Simalungun; dahulu pusat pemerintahan kerajaan Simalungun dan kini menjadi situs cagar budaya nasional." ;
     ra:fungsi "Pusat pemerintahan kerajaan Simalungun, cagar budaya nasional, istana raja, balai musyawarah dan pengadilan, pos pengawal, hunian panglima perang, tempat istirahat dan menenun, serta penginapan tamu dan penumbukan padi" ;
@@ -1906,11 +1974,11 @@ ra:rumah_bolon_pamatang_purba_simalungun a ra:RumahAdat ;
     ra:memilikiMarga ra:marga_purba ;
     ra:menggunakanBahasa ra:bhs_simalungun ;
     ra:memilikiOrnamen ra:orn_pinar ;
-    ra:memilikiTradisi ra:trd_manortor .
+    ra:memilikiTradisi ra:trd_manortor, ra:trd_rondang_bintang .
 
-# --- B. Pematangsiantar — Museum Simalungun (PMS-01) ---
 ra:rumah_museum_simalungun_pematangsiantar a ra:RumahAdat ;
     ra:nama "Museum Simalungun" ;
+    rdfs:label "Museum Simalungun" ;
     ra:namaAlternatif "Rumah Pusaka Simalungun" ;
     ra:sejarah "Didirikan atas musyawarah raja-raja Simalungun (April-Desember 1939) dan diresmikan secara adat pada 30 April 1940 di Kota Pematangsiantar." ;
     ra:fungsi "Museum pemeliharaan artefak, pameran budaya, dan pelestarian identitas Simalungun" ;
@@ -1923,11 +1991,12 @@ ra:rumah_museum_simalungun_pematangsiantar a ra:RumahAdat ;
     ra:dimilikiOlehSuku ra:suku_batak_simalungun ;
     ra:memilikiMarga ra:marga_sinaga, ra:marga_saragih, ra:marga_damanik, ra:marga_purba ;
     ra:menggunakanBahasa ra:bhs_simalungun ;
-    ra:memilikiOrnamen ra:orn_pinar .
+    ra:memilikiOrnamen ra:orn_pinar ;
+    ra:memilikiTradisi ra:trd_rondang_bintang, ra:trd_manortor .
 
-# --- C. Batu Bara — Istana Niat Lima Laras (BTB-01) ---
 ra:rumah_istana_niat_lima_laras_batubara a ra:RumahAdat ;
     ra:nama "Istana Niat Lima Laras" ;
+    rdfs:label "Istana Niat Lima Laras" ;
     ra:namaAlternatif "Istana Datuk Muhammad Yuda" ;
     ra:sejarah "Dibangun pada tahun 1907-1912 oleh Datuk Muhammad Yuda sebagai pemenuhan nazar di Desa Lima Laras, Kecamatan Tanjung Tiram, Kabupaten Batu Bara." ;
     ra:fungsi "Istana kediaman dan pusat kedatuan Melayu Lima Laras" ;
@@ -1938,13 +2007,14 @@ ra:rumah_istana_niat_lima_laras_batubara a ra:RumahAdat ;
     ra:referensi "Disporabudpar Batu Bara: https://disporabudpar.batubarakab.go.id/ ; Jurnal Community UTU: https://jurnal.utu.ac.id/jcommunity/article/download/6651/3769" ;
     ra:berasalDariWilayah ra:wil_desa_lima_laras_batubara ;
     ra:dimilikiOlehSuku ra:suku_melayu_pesisir_batu_bara ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu ;
     ra:memilikiOrnamen ra:orn_pucuk_rebung, ra:orn_awan_larat ;
-    ra:memilikiTradisi ra:trd_tepung_tawar .
+    ra:memilikiTradisi ra:trd_tepung_tawar, ra:trd_jamu_laut .
 
-# --- D. Serdang Bedagai — Replika Istana Darul Arif (SDB-01) ---
 ra:rumah_replika_istana_darul_arif_serdang_bedagai a ra:RumahAdat ;
     ra:nama "Replika Istana Darul Arif" ;
+    rdfs:label "Replika Istana Darul Arif" ;
     ra:namaAlternatif "Istana Sultan Serdang" ;
     ra:sejarah "Replika dari istana bersejarah Kesultanan Serdang di Kota Galuh (berdiri tahun 1889 masa Sultan Sulaiman Syariful Alamsyah) yang berada di Kecamatan Perbaungan, Kabupaten Serdang Bedagai." ;
     ra:fungsi "Penanda sejarah dan pusat kegiatan budaya Melayu Serdang" ;
@@ -1955,21 +2025,115 @@ ra:rumah_replika_istana_darul_arif_serdang_bedagai a ra:RumahAdat ;
     ra:referensi "Simponi Sumut: https://simponisumut.sumutprov.go.id/ ; Portal Resmi Pemkab Serdang Bedagai" ;
     ra:berasalDariWilayah ra:wil_perbaungan_serdang_bedagai ;
     ra:dimilikiOlehSuku ra:suku_melayu_serdang ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
     ra:menggunakanBahasa ra:bhs_melayu ;
     ra:memilikiOrnamen ra:orn_selembayung, ra:orn_lebah_bergantung ;
     ra:memilikiTradisi ra:trd_tepung_tawar .
 
-# --- E. Wilayah Belum Teridentifikasi Bangunan Fisik Spesifik (Bagian Patricia) ---
-ra:rumah_status_inventarisasi_wilayah_patricia a ra:RumahAdat ;
-    ra:nama "Status Inventarisasi Wilayah Belum Teridentifikasi Fisik Spesifik (Asahan, Tanjungbalai, Tebing Tinggi, Labuhanbatu)" ;
-    ra:namaAlternatif "Inventarisasi Cagar Budaya Daerah Wilayah Timur/Selatan (Belum Teridentifikasi Fisik Spesifik)" ;
-    ra:sejarah "Mencakup Kabupaten Asahan, Kota Tanjungbalai, Kota Tebing Tinggi, serta Kabupaten Labuhanbatu, Labuhanbatu Utara, dan Labuhanbatu Selatan yang belum teridentifikasi bangunan fisik rumah adat spesifik tanpa rujukan primer; tidak dibuatkan data rekaan untuk menghindari bias." ;
-    ra:fungsi "Memerlukan pembaruan inventarisasi cagar budaya dan survei lapangan bersama dinas kebudayaan setempat" ;
-    ra:ciriArsitektur "Belum teridentifikasi bangunan fisik spesifik pada rujukan primer" ;
-    ra:bentukAtap "Belum teridentifikasi bangunan fisik spesifik pada rujukan primer" ;
-    ra:bahanBangunan "Belum teridentifikasi bangunan fisik spesifik pada rujukan primer" ;
-    ra:maknaFilosofis "Memerlukan pendataan dan survei lapangan lanjutan bersama dinas kebudayaan daerah." ;
-    ra:referensi "Dokumen Inventarisasi Rumah Adat Sumatera Utara (Bagian Patricia)" ;
-    ra:berasalDariWilayah ra:wil_kab_asahan, ra:wil_kota_tanjungbalai, ra:wil_kota_tebing_tinggi, ra:wil_kab_labuhanbatu, ra:wil_kab_labuhanbatu_utara, ra:wil_kab_labuhanbatu_selatan ;
+ra:rumah_balai_adat_melayu_asahan a ra:RumahAdat ;
+    ra:nama "Balai Adat Melayu Asahan" ;
+    rdfs:label "Balai Adat Melayu Asahan" ;
+    ra:namaAlternatif "Rumah Besar Melayu Asahan, Balai Melayu Kisaran" ;
+    ra:sejarah "Representasi arsitektur panggung Melayu pesisir timur yang berakar dari tradisi Kesultanan Asahan di kawasan aliran Sungai Asahan." ;
+    ra:fungsi "Balai musyawarah adat Melayu Asahan, upacara perkawinan, dan pelestarian seni budaya daerah" ;
+    ra:ciriArsitektur "Rumah panggung kayu berkolong dengan tangga depan simetris, serambi luas, serta pembagian ruang balai utama dan ruang dalam" ;
+    ra:bentukAtap "Atap limas bumbungan bertingkat dengan selembayung dan hiasan lebah bergantung pada lisplank" ;
+    ra:bahanBangunan "Kayu meranti dan ulin, papan kayu berukir, serta atap genteng atau sirap" ;
+    ra:maknaFilosofis "Keterbukaan musyawarah mufakat masyarakat Melayu Asahan dan keseimbangan hidup pesisir." ;
+    ra:referensi "Inventarisasi Budaya Melayu Pesisir Timur Sumatera Utara (Pemkab Asahan & BPK Wilayah II)" ;
+    ra:berasalDariWilayah ra:wil_kab_asahan ;
     ra:dimilikiOlehSuku ra:suku_melayu ;
-    ra:menggunakanBahasa ra:bhs_melayu .
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_pucuk_rebung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar, ra:trd_jamu_laut .
+
+ra:rumah_istana_kesultanan_asahan_tanjungbalai a ra:RumahAdat ;
+    ra:nama "Rumah Adat & Istana Kesultanan Asahan Tanjungbalai" ;
+    rdfs:label "Rumah Adat & Istana Kesultanan Asahan Tanjungbalai" ;
+    ra:namaAlternatif "Istana Raja Asahan, Rumah Panggung Melayu Muara Sungai Asahan" ;
+    ra:sejarah "Pusat sejarah Kesultanan Asahan di Kota Tanjungbalai yang berkembang di pertemuan Sungai Asahan dan Sungai Silau sebagai bandar maritim Melayu." ;
+    ra:fungsi "Kediaman bangsawan kesultanan, pusat pemerintahan adat, dan upacara penyambutan tamu agung" ;
+    ra:ciriArsitektur "Bangunan panggung kayu megah menghadap sungai dengan beranda luas, kisi-kisi angin berukir, dan warna kuning-hijau khas Melayu" ;
+    ra:bentukAtap "Atap limas Melayu bersusun dengan puncak selembayung" ;
+    ra:bahanBangunan "Kayu keras pesisir, papan berukir awan larat, serta ornamen lebah bergantung" ;
+    ra:maknaFilosofis "Kejayaan maritim Kesultanan Asahan dan keagungan adat bersendikan syarak." ;
+    ra:referensi "Arsip Sejarah Kesultanan Asahan & Disparpora Kota Tanjungbalai" ;
+    ra:berasalDariWilayah ra:wil_kota_tanjungbalai ;
+    ra:dimilikiOlehSuku ra:suku_melayu ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_selembayung, ra:orn_awan_larat ;
+    ra:memilikiTradisi ra:trd_tepung_tawar, ra:trd_jamu_laut .
+
+ra:rumah_balai_adat_melayu_tebing_tinggi a ra:RumahAdat ;
+    ra:nama "Balai Adat Melayu Padang (Tebing Tinggi)" ;
+    rdfs:label "Balai Adat Melayu Padang (Tebing Tinggi)" ;
+    ra:namaAlternatif "Rumah Adat Kerajaan Padang, Gedung Adat Melayu Tebing Tinggi" ;
+    ra:sejarah "Mewarisi tradisi Kerajaan Padang yang berpusat di Bandar Sakti / Tebing Tinggi sebagai salah satu kerajaan Melayu penting di Sumatera Timur." ;
+    ra:fungsi "Pusat kegiatan adat Melayu Padang, musyawarah tokoh adat, dan pertunjukan kesenian tradisional" ;
+    ra:ciriArsitektur "Rumah panggung bertiang kayu dengan anjungan depan, tangga berjenjang ganjil, dan ukiran tepi atap" ;
+    ra:bentukAtap "Atap belah bubung dan limas bertingkat khas Melayu Sumatera Timur" ;
+    ra:bahanBangunan "Kayu keras, papan dinding bercat kuning-hijau, serta ukiran pucuk rebung dan lebah bergantung" ;
+    ra:maknaFilosofis "Keharmonisan masyarakat multikultural yang berpijak pada akar sejarah Melayu Kerajaan Padang." ;
+    ra:referensi "Catatan Sejarah Kerajaan Padang & Dinas Pendidikan dan Kebudayaan Kota Tebing Tinggi" ;
+    ra:berasalDariWilayah ra:wil_kota_tebing_tinggi ;
+    ra:dimilikiOlehSuku ra:suku_melayu ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_pucuk_rebung, ra:orn_selembayung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar .
+
+ra:rumah_istana_kesultanan_bilah_labuhanbatu a ra:RumahAdat ;
+    ra:nama "Rumah Adat Kesultanan Bilah (Negeri Lama)" ;
+    rdfs:label "Rumah Adat Kesultanan Bilah (Negeri Lama)" ;
+    ra:namaAlternatif "Istana Sultan Bilah, Rumah Panggung Melayu Rantauprapat" ;
+    ra:sejarah "Warisan arsitektur Kesultanan Bilah di kawasan Negeri Lama dan Rantauprapat, Kabupaten Labuhanbatu, yang menguasai jalur perdagangan Sungai Bilah." ;
+    ra:fungsi "Kediaman sultan dan pembesar adat Bilah serta tempat musyawarah masyarakat Melayu pesisir Labuhanbatu" ;
+    ra:ciriArsitektur "Rumah panggung tinggi bertiang kayu ulin untuk menghadapi pasang surut Sungai Bilah dengan serambi terbuka" ;
+    ra:bentukAtap "Atap limas memanjang khas Melayu pesisir dengan selembayung" ;
+    ra:bahanBangunan "Kayu ulin dan meranti, dinding papan, serta ragam hias pucuk rebung dan awan larat" ;
+    ra:maknaFilosofis "Ketangguhan masyarakat pesisir sungai dan penghormatan terhadap tata krama adat Melayu Bilah." ;
+    ra:referensi "Dokumentasi Budaya Labuhanbatu & Sejarah Kesultanan Bilah di Sungai Bilah" ;
+    ra:berasalDariWilayah ra:wil_kab_labuhanbatu ;
+    ra:dimilikiOlehSuku ra:suku_melayu ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_pucuk_rebung, ra:orn_awan_larat, ra:orn_selembayung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar, ra:trd_jamu_laut .
+
+ra:rumah_balai_adat_kualuh_labura a ra:RumahAdat ;
+    ra:nama "Balai Adat Kesultanan Kualuh (Labuhanbatu Utara)" ;
+    rdfs:label "Balai Adat Kesultanan Kualuh (Labuhanbatu Utara)" ;
+    ra:namaAlternatif "Rumah Adat Melayu Kualuh, Balai Adat Tanjung Pasir" ;
+    ra:sejarah "Berakar dari sejarah Kesultanan Kualuh di Tanjung Pasir / Kualuh Leidong, Kabupaten Labuhanbatu Utara, yang berdiri sejak abad ke-19." ;
+    ra:fungsi "Pusat musyawarah adat, pelestarian silsilah Kesultanan Kualuh, dan kegiatan seni budaya Melayu" ;
+    ra:ciriArsitektur "Bangunan panggung kayu dengan serambi penerimaan tamu dan ruangan balai sidang adat yang lapang" ;
+    ra:bentukAtap "Atap pelana belah bubung berhias lebah bergantung" ;
+    ra:bahanBangunan "Kayu keras lokal, papan berukir motif flora Melayu, serta atap sirap atau seng" ;
+    ra:maknaFilosofis "Persatuan masyarakat Kualuh dan keluhuran budi pekerti Melayu pesisir." ;
+    ra:referensi "Sejarah Kesultanan Kualuh & Inventarisasi Kebudayaan Kabupaten Labuhanbatu Utara" ;
+    ra:berasalDariWilayah ra:wil_kab_labuhanbatu_utara ;
+    ra:dimilikiOlehSuku ra:suku_melayu ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_lebah_bergantung, ra:orn_pucuk_rebung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar .
+
+ra:rumah_istana_kotapinang_labusel a ra:RumahAdat ;
+    ra:nama "Rumah Adat & Istana Kesultanan Kotapinang" ;
+    rdfs:label "Rumah Adat & Istana Kesultanan Kotapinang" ;
+    ra:namaAlternatif "Istana Yang Dipertuan Besar Kotapinang, Balai Adat Kotapinang" ;
+    ra:sejarah "Warisan sejarah Kesultanan Kotapinang (Pinang Awan) di tepian Sungai Barumun, Kabupaten Labuhanbatu Selatan, yang berakar sejak abad ke-17." ;
+    ra:fungsi "Kediaman kesultanan, pusat pemerintahan adat tradisional, dan ruang musyawarah mufakat masyarakat Kotapinang" ;
+    ra:ciriArsitektur "Rumah panggung kayu bergaya Melayu klasik berpadu pengaruh pedalaman Sungai Barumun dengan beranda depan luas" ;
+    ra:bentukAtap "Atap limas Melayu bersusun dengan ujung selembayung dan ukiran lebah bergantung" ;
+    ra:bahanBangunan "Kayu meranti, kayu besi, papan berukir awan larat, dan tiang penyangga di atas umpak batu" ;
+    ra:maknaFilosofis "Kesetiaan pada adat istiadat Pinang Awan serta keharmonisan budaya pesisir dan hulu Sungai Barumun." ;
+    ra:referensi "Sejarah Kesultanan Kotapinang & Dokumentasi Budaya Kabupaten Labuhanbatu Selatan" ;
+    ra:berasalDariWilayah ra:wil_kab_labuhanbatu_selatan ;
+    ra:dimilikiOlehSuku ra:suku_melayu ;
+    ra:memilikiMarga ra:marga_tengku, ra:marga_datuk, ra:marga_wan, ra:marga_oku ;
+    ra:menggunakanBahasa ra:bhs_melayu ;
+    ra:memilikiOrnamen ra:orn_awan_larat, ra:orn_selembayung, ra:orn_lebah_bergantung ;
+    ra:memilikiTradisi ra:trd_tepung_tawar .
