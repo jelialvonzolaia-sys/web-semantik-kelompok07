@@ -1,0 +1,20 @@
+PREFIX ra: <http://example.org/ontology/rumah-adat#>
+
+SELECT ?tipe (COUNT(DISTINCT ?entitas) AS ?jumlah)
+WHERE {
+  { ?entitas a ra:RumahAdat . BIND("RumahAdat" AS ?tipe) }
+  UNION
+  { ?entitas a ra:Suku . BIND("Suku" AS ?tipe) }
+  UNION
+  { ?entitas a ra:Marga . BIND("Marga" AS ?tipe) }
+  UNION
+  { ?entitas a ra:Wilayah . BIND("Wilayah" AS ?tipe) }
+  UNION
+  { ?entitas a ra:Tradisi . BIND("Tradisi" AS ?tipe) }
+  UNION
+  { ?entitas a ra:Ornamen . BIND("Ornamen" AS ?tipe) }
+  UNION
+  { ?entitas a ra:BahasaDaerah . BIND("BahasaDaerah" AS ?tipe) }
+}
+GROUP BY ?tipe
+ORDER BY ?tipe

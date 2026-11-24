@@ -1,0 +1,69 @@
+PREFIX ra: <http://example.org/ontology/rumah-adat#>
+
+SELECT
+  ?nama
+  ?namaAlternatif
+  ?sejarah
+  ?fungsi
+  ?ciriArsitektur
+  ?bentukAtap
+  ?bahanBangunan
+  ?maknaFilosofis
+  ?referensi
+  (GROUP_CONCAT(DISTINCT ?sukuLabel; SEPARATOR=", ")    AS ?suku)
+  (GROUP_CONCAT(DISTINCT ?wilayahLabel; SEPARATOR=", ") AS ?wilayah)
+  (GROUP_CONCAT(DISTINCT ?bahasaLabel; SEPARATOR=", ")  AS ?bahasa)
+  (GROUP_CONCAT(DISTINCT ?margaLabel; SEPARATOR=", ")   AS ?marga)
+  (GROUP_CONCAT(DISTINCT ?tradisiLabel; SEPARATOR=", ") AS ?tradisi)
+  (GROUP_CONCAT(DISTINCT ?ornamenLabel; SEPARATOR=", ") AS ?ornamen)
+WHERE {
+  # Ganti URI rumah adat di bawah ini sesuai kebutuhan uji coba
+  BIND(ra:rumah_bagas_godang_panyabungan_tonga AS ?rumah)
+
+  ?rumah a ra:RumahAdat ;
+         ra:nama ?nama .
+
+  OPTIONAL { ?rumah ra:namaAlternatif ?namaAlternatif . }
+  OPTIONAL { ?rumah ra:sejarah ?sejarah . }
+  OPTIONAL { ?rumah ra:fungsi ?fungsi . }
+  OPTIONAL { ?rumah ra:ciriArsitektur ?ciriArsitektur . }
+  OPTIONAL { ?rumah ra:bentukAtap ?bentukAtap . }
+  OPTIONAL { ?rumah ra:bahanBangunan ?bahanBangunan . }
+  OPTIONAL { ?rumah ra:maknaFilosofis ?maknaFilosofis . }
+  OPTIONAL { ?rumah ra:referensi ?referensi . }
+
+  OPTIONAL {
+    ?rumah ra:dimilikiOlehSuku ?s .
+    ?s ra:nama ?sukuLabel .
+  }
+  OPTIONAL {
+    ?rumah ra:berasalDariWilayah ?w .
+    ?w ra:nama ?wilayahLabel .
+  }
+  OPTIONAL {
+    ?rumah ra:menggunakanBahasa ?b .
+    ?b ra:nama ?bahasaLabel .
+  }
+  OPTIONAL {
+    ?rumah ra:memilikiMarga ?m .
+    ?m ra:nama ?margaLabel .
+  }
+  OPTIONAL {
+    ?rumah ra:memilikiTradisi ?t .
+    ?t ra:nama ?tradisiLabel .
+  }
+  OPTIONAL {
+    ?rumah ra:memilikiOrnamen ?o .
+    ?o ra:nama ?ornamenLabel .
+  }
+}
+GROUP BY
+  ?nama
+  ?namaAlternatif
+  ?sejarah
+  ?fungsi
+  ?ciriArsitektur
+  ?bentukAtap
+  ?bahanBangunan
+  ?maknaFilosofis
+  ?referensi

@@ -1,0 +1,91 @@
+PREFIX ra: <http://example.org/ontology/rumah-adat#>
+
+SELECT DISTINCT
+  ?rumah
+  ?namaRumah
+  ?namaSuku
+  ?namaWilayah
+  ?matchPath
+  ?relevanceScore
+WHERE {
+  # Ubah "laia" sesuai kata kunci pencarian saat uji coba di Fuseki
+  BIND("laia" AS ?ql)
+
+  ?rumah a ra:RumahAdat ;
+         ra:nama ?namaRumah .
+
+  OPTIONAL {
+    ?rumah ra:dimilikiOlehSuku ?suku .
+    ?suku ra:nama ?namaSuku .
+  }
+  OPTIONAL {
+    ?rumah ra:berasalDariWilayah ?wil .
+    ?wil ra:nama ?namaWilayah .
+  }
+
+  {
+    ?rumah ra:memilikiMarga ?marga .
+    ?marga ra:nama ?namaMarga .
+    FILTER(CONTAINS(LCASE(STR(?namaMarga)), ?ql))
+    BIND(CONCAT("Marga langsung: ", STR(?namaMarga)) AS ?matchPath)
+    BIND(95 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:memilikiMarga ?margaAsal .
+    ?margaAsal ra:berkerabatDenganMarga ?margaKerabat .
+    ?margaKerabat ra:nama ?namaMargaKerabat .
+    ?margaAsal ra:nama ?namaMargaAsal .
+    FILTER(CONTAINS(LCASE(STR(?namaMargaKerabat)), ?ql))
+    BIND(CONCAT("Marga berkerabat: ", STR(?namaMargaKerabat), " (kerabat ", STR(?namaMargaAsal), ")") AS ?matchPath)
+    BIND(80 AS ?relevanceScore)
+  }
+  UNION
+  {
+    FILTER(CONTAINS(LCASE(STR(?namaRumah)), ?ql))
+    BIND(CONCAT("Nama rumah adat: ", STR(?namaRumah)) AS ?matchPath)
+    BIND(100 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:dimilikiOlehSuku ?s .
+    ?s ra:nama ?namaS .
+    FILTER(CONTAINS(LCASE(STR(?namaS)), ?ql))
+    BIND(CONCAT("Suku: ", STR(?namaS)) AS ?matchPath)
+    BIND(85 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:berasalDariWilayah ?w .
+    ?w (ra:bagianDariWilayah)* ?wInduk .
+    ?wInduk ra:nama ?namaW .
+    FILTER(CONTAINS(LCASE(STR(?namaW)), ?ql))
+    BIND(CONCAT("Wilayah: ", STR(?namaW)) AS ?matchPath)
+    BIND(70 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:menggunakanBahasa ?bhs .
+    ?bhs ra:nama ?namaBhs .
+    FILTER(CONTAINS(LCASE(STR(?namaBhs)), ?ql))
+    BIND(CONCAT("Bahasa: ", STR(?namaBhs)) AS ?matchPath)
+    BIND(65 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:memilikiTradisi ?trd .
+    ?trd ra:nama ?namaTrd .
+    FILTER(CONTAINS(LCASE(STR(?namaTrd)), ?ql))
+    BIND(CONCAT("Tradisi: ", STR(?namaTrd)) AS ?matchPath)
+    BIND(65 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:memilikiOrnamen ?orn .
+    ?orn ra:nama ?namaOrn .
+    FILTER(CONTAINS(LCASE(STR(?namaOrn)), ?ql))
+    BIND(CONCAT("Ornamen: ", STR(?namaOrn)) AS ?matchPath)
+    BIND(65 AS ?relevanceScore)
+  }
+}
+ORDER BY DESC(?relevanceScore) ASC(?namaRumah)

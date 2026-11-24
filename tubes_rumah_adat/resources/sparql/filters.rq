@@ -1,0 +1,35 @@
+PREFIX ra: <http://example.org/ontology/rumah-adat#>
+
+SELECT DISTINCT ?kategori ?uri ?label
+WHERE {
+  {
+    ?uri a ra:Suku ; ra:nama ?label .
+    BIND("suku" AS ?kategori)
+  }
+  UNION
+  {
+    ?uri a ra:Wilayah ; ra:nama ?label .
+    BIND("wilayah" AS ?kategori)
+  }
+  UNION
+  {
+    ?uri a ra:Tradisi ; ra:nama ?label .
+    BIND("tradisi" AS ?kategori)
+  }
+  UNION
+  {
+    ?uri a ra:Ornamen ; ra:nama ?label .
+    BIND("ornamen" AS ?kategori)
+  }
+  UNION
+  {
+    ?uri a ra:BahasaDaerah ; ra:nama ?label .
+    BIND("bahasa" AS ?kategori)
+  }
+  UNION
+  {
+    ?uri a ra:Marga ; ra:nama ?label .
+    BIND("marga" AS ?kategori)
+  }
+}
+ORDER BY ?kategori ASC(?label)
