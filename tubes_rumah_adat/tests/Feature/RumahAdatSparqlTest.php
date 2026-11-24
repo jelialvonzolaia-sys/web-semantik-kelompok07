@@ -2,12 +2,20 @@
 
 namespace Tests\Feature;
 
+use App\Services\SparqlService;
 use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class RumahAdatSparqlTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Cache::forget('ontology_dictionary');
+    }
+
     public function test_fuseki_configuration_matches_expected_defaults(): void
     {
         $this->assertSame('http://localhost:3030', config('services.fuseki.base_url'));
@@ -75,6 +83,18 @@ class RumahAdatSparqlTest extends TestCase
             $sparql = (string) ($request['query'] ?? '');
             $capturedQueries[] = $sparql;
 
+            if (str_contains($sparql, '?label ?altLabel')) {
+                return Http::response([
+                    'results' => [
+                        'bindings' => [
+                            ['label' => ['value' => 'Laia']],
+                            ['label' => ['value' => 'Suku Nias']],
+                            ['label' => ['value' => 'Ginting']],
+                        ],
+                    ],
+                ], 200);
+            }
+
             if (str_contains($sparql, '?kategori ?uri ?label')) {
                 return Http::response([
                     'results' => [
@@ -131,8 +151,131 @@ class RumahAdatSparqlTest extends TestCase
         $response->assertSee('Skor 95');
         $response->assertSee('Bahasa Nias');
         $response->assertSee('Menampilkan 1 rumah adat');
-        $this->assertNotEmpty($capturedQueries);
-        $this->assertStringContainsString('BIND(LCASE("Laia") AS ?ql)', $capturedQueries[0]);
+        $response->assertDontSee('dikoreksi dari');
+
+        $searchSparql = collect($capturedQueries)->first(
+            static fn (string $query): bool => str_contains($query, 'BIND(LCASE(')
+        );
+        $this->assertNotNull($searchSparql);
+        $this->assertStringContainsString('BIND(LCASE("Laia") AS ?ql)', $searchSparql);
+    }
+
+    public function test_resolve_typo_keyword_caches_dictionary_and_normalizes_typos_and_diacritics(): void
+    {
+        $dictionaryRequests = 0;
+
+        Http::fake(function () use (&$dictionaryRequests) {
+            $dictionaryRequests++;
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        ['label' => ['value' => 'Bahasa Nias (Li Niha)']],
+                        ['label' => ['value' => 'Suku Nias']],
+                        ['label' => ['value' => 'Ginting']],
+                        ['label' => ['value' => 'Gulö']],
+                        ['label' => ['value' => 'Mendröfa']],
+                        ['label' => ['value' => 'Mandailing']],
+                        ['label' => ['value' => 'Maena']],
+                        ['label' => ['value' => 'Kerja']],
+                        ['label' => ['value' => 'Omo Hada & Omo Sebua (Umum Nias)']],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $service = app(SparqlService::class);
+
+        $nisa = $service->resolveTypoKeyword('nisa');
+        $this->assertTrue($nisa['is_corrected']);
+        $this->assertSame('Nias', $nisa['corrected']);
+
+        $ginitng = $service->resolveTypoKeyword('ginitng');
+        $this->assertTrue($ginitng['is_corrected']);
+        $this->assertSame('Ginting', $ginitng['corrected']);
+
+        $mandalng = $service->resolveTypoKeyword('mandalng');
+        $this->assertTrue($mandalng['is_corrected']);
+        $this->assertSame('Mandailing', $mandalng['corrected']);
+
+        $gulo = $service->resolveTypoKeyword('gulo');
+        $this->assertTrue($gulo['is_corrected']);
+        $this->assertSame('Gulö', $gulo['corrected']);
+
+        $omoPunct = $service->resolveTypoKeyword('  Ömo!! ');
+        $this->assertTrue($omoPunct['is_corrected']);
+        $this->assertSame('Omo', $omoPunct['corrected']);
+
+        $exactPunct = $service->resolveTypoKeyword('  Maena!! ');
+        $this->assertFalse($exactPunct['is_corrected']);
+        $this->assertSame('Maena', $exactPunct['corrected']);
+
+        $tooFarShort = $service->resolveTypoKeyword('nxxx');
+        $this->assertFalse($tooFarShort['is_corrected']);
+        $this->assertSame('nxxx', $tooFarShort['corrected']);
+
+        $unrelatedSixLetter = $service->resolveTypoKeyword('kerbau');
+        $this->assertFalse($unrelatedSixLetter['is_corrected']);
+        $this->assertSame('kerbau', $unrelatedSixLetter['corrected']);
+
+        $this->assertSame(1, $dictionaryRequests);
+        $this->assertTrue(Cache::has('ontology_dictionary'));
+    }
+
+    public function test_search_displays_typo_correction_banner_and_uses_corrected_keyword(): void
+    {
+        $capturedQueries = [];
+
+        Http::fake(function (ClientRequest $request) use (&$capturedQueries) {
+            $sparql = (string) ($request['query'] ?? '');
+            $capturedQueries[] = $sparql;
+
+            if (str_contains($sparql, '?label ?altLabel')) {
+                return Http::response([
+                    'results' => [
+                        'bindings' => [
+                            ['label' => ['value' => 'Suku Nias']],
+                            ['label' => ['value' => 'Ginting']],
+                            ['label' => ['value' => 'Omo Hada Nias Selatan']],
+                        ],
+                    ],
+                ], 200);
+            }
+
+            if (str_contains($sparql, '?kategori ?uri ?label')) {
+                return Http::response(['results' => ['bindings' => []]], 200);
+            }
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        [
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_omo_hada_nias_selatan'],
+                            'namaRumah' => ['value' => 'Omo Hada Nias Selatan'],
+                            'namaSuku' => ['value' => 'Suku Nias'],
+                            'namaWilayah' => ['value' => 'Kabupaten Nias Selatan'],
+                            'matchPath' => ['value' => 'Suku: Suku Nias'],
+                            'relevanceScore' => ['value' => '85'],
+                        ],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $response = $this->get('/search?q=nisa');
+
+        $response->assertStatus(200);
+        $response->assertSee('Omo Hada Nias Selatan');
+        $response->assertSee('Menampilkan hasil untuk', false);
+        $response->assertSee('"Nias"', false);
+        $response->assertSee('(dikoreksi dari', false);
+        $response->assertSee('"nisa"', false);
+
+        $searchSparql = collect($capturedQueries)->first(
+            static fn (string $query): bool => str_contains($query, 'BIND(LCASE(')
+        );
+        $this->assertNotNull($searchSparql);
+        $this->assertStringContainsString('BIND(LCASE("Nias") AS ?ql)', $searchSparql);
     }
 
     public function test_detail_renders_ontology_fields_and_preserves_comma_in_wilayah(): void

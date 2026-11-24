@@ -319,6 +319,12 @@
 
             </div>
 
+            @if (! empty($is_corrected))
+                <div class="mb-6 rounded-2xl border border-[#FFA586]/60 bg-[#FFF4ED] px-5 py-3.5 text-sm text-[#561A2E]">
+                    Menampilkan hasil untuk <strong class="font-bold">"{{ $corrected }}"</strong> (dikoreksi dari <span class="italic">"{{ $original }}"</span>).
+                </div>
+            @endif
+
             @if (! ($fusekiAvailable ?? true))
                 <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
                     {{ $fusekiError ?? 'Server Apache Jena Fuseki belum dapat dihubungi.' }}

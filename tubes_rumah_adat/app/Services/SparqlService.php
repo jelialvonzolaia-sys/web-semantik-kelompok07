@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -14,6 +15,9 @@ class SparqlService
 
     private ?string $lastError = null;
 
+    /** @var array{original: string, corrected: string, is_corrected: bool}|null */
+    private ?array $lastTypoResolution = null;
+
     public function isFusekiAvailable(): bool
     {
         return $this->fusekiAvailable;
@@ -22,6 +26,14 @@ class SparqlService
     public function getLastError(): ?string
     {
         return $this->lastError;
+    }
+
+    /**
+     * @return array{original: string, corrected: string, is_corrected: bool}|null
+     */
+    public function getLastTypoResolution(): ?array
+    {
+        return $this->lastTypoResolution;
     }
 
     /**
@@ -196,6 +208,102 @@ SPARQL;
     }
 
     /**
+     * Resolusi kata kunci typo terhadap kamus label ontologi ter-cache (Cache::remember 3600 detik).
+     *
+     * @return array{original: string, corrected: string, is_corrected: bool}
+     */
+    public function resolveTypoKeyword(string $keyword): array
+    {
+        $trimmed = trim($keyword);
+
+        if ($trimmed === '') {
+            return [
+                'original' => $keyword,
+                'corrected' => '',
+                'is_corrected' => false,
+            ];
+        }
+
+        $cleanedInput = $this->stripExtraPunctuation($trimmed);
+        $normalizedQuery = $this->normalizeFuzzyText($trimmed);
+
+        if ($normalizedQuery === '') {
+            return [
+                'original' => $keyword,
+                'corrected' => $cleanedInput,
+                'is_corrected' => false,
+            ];
+        }
+
+        $dictionary = Cache::remember('ontology_dictionary', 3600, function (): array {
+            return $this->fetchOntologyDictionary();
+        });
+
+        if ($dictionary === [] && ! $this->fusekiAvailable) {
+            Cache::forget('ontology_dictionary');
+        }
+
+        if ($dictionary === []) {
+            return [
+                'original' => $keyword,
+                'corrected' => $cleanedInput,
+                'is_corrected' => false,
+            ];
+        }
+
+        $index = $this->buildDictionaryIndex($dictionary);
+        $rawLower = mb_strtolower($cleanedInput, 'UTF-8');
+
+        if ($this->matchesExactPreserveDiacritics($rawLower, $index)) {
+            return [
+                'original' => $keyword,
+                'corrected' => $cleanedInput,
+                'is_corrected' => false,
+            ];
+        }
+
+        $diacriticMatch = $this->findNormalizedExactMatch($normalizedQuery, $index);
+
+        if ($diacriticMatch !== null) {
+            $isChanged = mb_strtolower($diacriticMatch, 'UTF-8') !== $rawLower;
+
+            return [
+                'original' => $keyword,
+                'corrected' => $diacriticMatch,
+                'is_corrected' => $isChanged,
+            ];
+        }
+
+        $wholeMatch = $this->findBestFuzzyMatch($normalizedQuery, $index['phrases'] + $index['tokens']);
+
+        if ($wholeMatch !== null) {
+            return [
+                'original' => $keyword,
+                'corrected' => $wholeMatch,
+                'is_corrected' => true,
+            ];
+        }
+
+        if (str_contains($normalizedQuery, ' ')) {
+            $multiWordMatch = $this->resolveMultiWordTokens($cleanedInput, $index);
+
+            if ($multiWordMatch !== null) {
+                return [
+                    'original' => $keyword,
+                    'corrected' => $multiWordMatch,
+                    'is_corrected' => true,
+                ];
+            }
+        }
+
+        return [
+            'original' => $keyword,
+            'corrected' => $cleanedInput,
+            'is_corrected' => false,
+        ];
+    }
+
+    /**
      * Jalankan pencarian multi-hop + filter kategori, lalu kelompokkan per Rumah Adat.
      *
      * @param  array<string, array<int, string>|string>  $filters
@@ -218,7 +326,9 @@ SPARQL;
      */
     public function search(string $keyword = '', array $filters = []): array
     {
-        $cleanKeyword = $this->sanitizeInput($keyword);
+        $typoResolution = $this->resolveTypoKeyword($keyword);
+        $this->lastTypoResolution = $typoResolution;
+        $cleanKeyword = $this->sanitizeInput($typoResolution['corrected']);
         $filterClauses = $this->buildFilterClauses($filters);
 
         if ($cleanKeyword !== '') {
@@ -491,6 +601,397 @@ SPARQL;
             ['\\\\', '\\"', ' ', ' '],
             $value
         );
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function fetchOntologyDictionary(): array
+    {
+        $sparql = <<<'SPARQL'
+PREFIX ra: <http://example.org/ontology/rumah-adat#>
+
+SELECT DISTINCT ?label ?altLabel
+WHERE {
+  ?entitas a ?kelas ;
+           ra:nama ?label .
+  FILTER(?kelas IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:Wilayah, ra:BahasaDaerah, ra:Tradisi, ra:Ornamen))
+  OPTIONAL { ?entitas ra:namaAlternatif ?altLabel . }
+}
+ORDER BY ASC(?label)
+SPARQL;
+
+        $bindings = $this->query($sparql);
+        $entries = [];
+
+        foreach ($bindings as $row) {
+            $label = $this->bindingValue($row, 'label');
+
+            if ($label !== '') {
+                $entries[$label] = true;
+            }
+
+            $altRaw = $this->bindingValue($row, 'altLabel');
+
+            if ($altRaw !== '') {
+                foreach (explode(',', $altRaw) as $altPart) {
+                    $cleanAlt = trim($altPart);
+
+                    if ($cleanAlt !== '') {
+                        $entries[$cleanAlt] = true;
+                    }
+                }
+            }
+        }
+
+        return array_keys($entries);
+    }
+
+    /**
+     * @param  array<int, string>  $dictionary
+     * @return array{
+     *     rawPhrases: array<int, string>,
+     *     rawTokens: array<string, bool>,
+     *     phrases: array<string, string>,
+     *     tokens: array<string, string>
+     * }
+     */
+    private function buildDictionaryIndex(array $dictionary): array
+    {
+        $rawPhrases = [];
+        $rawTokens = [];
+        $phrases = [];
+        $tokens = [];
+
+        foreach ($dictionary as $label) {
+            $trimmed = trim($label);
+
+            if ($trimmed === '') {
+                continue;
+            }
+
+            $rawLower = mb_strtolower($this->stripExtraPunctuation($trimmed), 'UTF-8');
+
+            if ($rawLower !== '') {
+                $rawPhrases[] = $rawLower;
+            }
+
+            $normFull = $this->normalizeFuzzyText($trimmed);
+
+            if ($normFull !== '' && ! isset($phrases[$normFull])) {
+                $phrases[$normFull] = $trimmed;
+            }
+
+            $segments = preg_split('/[&\/(),]+/u', $trimmed) ?: [];
+
+            foreach ($segments as $segment) {
+                $cleanSeg = trim($segment);
+                $normSeg = $this->normalizeFuzzyText($cleanSeg);
+
+                if ($normSeg !== '' && ! isset($phrases[$normSeg])) {
+                    $phrases[$normSeg] = $cleanSeg;
+                }
+
+                $rawSeg = mb_strtolower($this->stripExtraPunctuation($cleanSeg), 'UTF-8');
+
+                if ($rawSeg !== '') {
+                    $rawPhrases[] = $rawSeg;
+                }
+            }
+
+            $rawWords = preg_split('/[^\p{L}\p{N}]+/u', $trimmed) ?: [];
+
+            foreach ($rawWords as $word) {
+                if (mb_strlen($word, 'UTF-8') < 3) {
+                    continue;
+                }
+
+                $rawWordLower = mb_strtolower($word, 'UTF-8');
+                $rawTokens[$rawWordLower] = true;
+
+                $normWord = $this->normalizeFuzzyText($word);
+
+                if (strlen($normWord) >= 3 && ! isset($tokens[$normWord])) {
+                    $tokens[$normWord] = $word;
+                }
+            }
+        }
+
+        return [
+            'rawPhrases' => array_values(array_unique($rawPhrases)),
+            'rawTokens' => $rawTokens,
+            'phrases' => $phrases,
+            'tokens' => $tokens,
+        ];
+    }
+
+    /**
+     * @param  array{
+     *     rawPhrases: array<int, string>,
+     *     rawTokens: array<string, bool>,
+     *     phrases: array<string, string>,
+     *     tokens: array<string, string>
+     * }  $index
+     */
+    private function matchesExactPreserveDiacritics(string $rawLower, array $index): bool
+    {
+        if (isset($index['rawTokens'][$rawLower])) {
+            return true;
+        }
+
+        if (mb_strlen($rawLower, 'UTF-8') < 3) {
+            return false;
+        }
+
+        foreach ($index['rawPhrases'] as $phrase) {
+            if ($phrase === $rawLower || str_contains($phrase, $rawLower)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  array{
+     *     rawPhrases: array<int, string>,
+     *     rawTokens: array<string, bool>,
+     *     phrases: array<string, string>,
+     *     tokens: array<string, string>
+     * }  $index
+     */
+    private function findNormalizedExactMatch(string $normalizedQuery, array $index): ?string
+    {
+        if (isset($index['phrases'][$normalizedQuery])) {
+            return $index['phrases'][$normalizedQuery];
+        }
+
+        if (isset($index['tokens'][$normalizedQuery])) {
+            return $index['tokens'][$normalizedQuery];
+        }
+
+        if (strlen($normalizedQuery) >= 4) {
+            foreach ($index['phrases'] as $normPhrase => $canonicalPhrase) {
+                if (str_contains($normPhrase, $normalizedQuery)) {
+                    $rawWords = preg_split('/\s+/u', $canonicalPhrase) ?: [];
+                    $matchedWords = [];
+
+                    foreach ($rawWords as $word) {
+                        $normWord = $this->normalizeFuzzyText($word);
+
+                        if (
+                            $normWord !== ''
+                            && preg_match('/\b'.preg_quote($normWord, '/').'\b/', $normalizedQuery) === 1
+                        ) {
+                            $matchedWords[] = $word;
+                        }
+                    }
+
+                    if ($matchedWords !== []) {
+                        return implode(' ', $matchedWords);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, string>  $candidates
+     */
+    private function findBestFuzzyMatch(string $normalizedQuery, array $candidates): ?string
+    {
+        $queryLength = strlen($normalizedQuery);
+
+        if ($queryLength < 4) {
+            return null;
+        }
+
+        $maxDistance = $queryLength <= 5 ? 1 : 2;
+        $bestScore = null;
+        $bestCandidate = null;
+
+        foreach ($candidates as $normCand => $canonicalCand) {
+            $candLength = strlen((string) $normCand);
+
+            if ($candLength < 3 || abs($queryLength - $candLength) > $maxDistance) {
+                continue;
+            }
+
+            $distance = $this->calculateEditDistance($normalizedQuery, (string) $normCand);
+
+            if ($distance === 0 || $distance > $maxDistance) {
+                continue;
+            }
+
+            if ($distance === 2 && $candLength < 6) {
+                continue;
+            }
+
+            $score = [
+                $distance,
+                $this->hasSameCharacters($normalizedQuery, (string) $normCand) ? 0 : 1,
+                abs($queryLength - $candLength),
+                $normalizedQuery[0] === ((string) $normCand)[0] ? 0 : 1,
+                levenshtein($normalizedQuery, (string) $normCand),
+            ];
+
+            if ($bestScore === null || $score < $bestScore) {
+                $bestScore = $score;
+                $bestCandidate = $canonicalCand;
+            }
+        }
+
+        return $bestCandidate;
+    }
+
+    /**
+     * @param  array{
+     *     rawPhrases: array<int, string>,
+     *     rawTokens: array<string, bool>,
+     *     phrases: array<string, string>,
+     *     tokens: array<string, string>
+     * }  $index
+     */
+    private function resolveMultiWordTokens(string $cleanedInput, array $index): ?string
+    {
+        $words = preg_split('/\s+/u', $cleanedInput) ?: [];
+        $resolvedWords = [];
+        $anyCorrected = false;
+
+        foreach ($words as $word) {
+            $rawLower = mb_strtolower($word, 'UTF-8');
+            $normWord = $this->normalizeFuzzyText($word);
+
+            if ($normWord === '' || isset($index['rawTokens'][$rawLower])) {
+                $resolvedWords[] = $word;
+
+                continue;
+            }
+
+            if (isset($index['tokens'][$normWord])) {
+                $canonical = $index['tokens'][$normWord];
+                if (mb_strtolower($canonical, 'UTF-8') !== $rawLower) {
+                    $anyCorrected = true;
+                }
+                $resolvedWords[] = $canonical;
+
+                continue;
+            }
+
+            $fuzzy = $this->findBestFuzzyMatch($normWord, $index['tokens']);
+
+            if ($fuzzy !== null) {
+                $anyCorrected = true;
+                $resolvedWords[] = $fuzzy;
+            } else {
+                $resolvedWords[] = $word;
+            }
+        }
+
+        if (! $anyCorrected) {
+            return null;
+        }
+
+        return implode(' ', $resolvedWords);
+    }
+
+    private function stripExtraPunctuation(string $text): string
+    {
+        $withoutPunct = preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', $text) ?? $text;
+
+        return trim((string) preg_replace('/\s+/u', ' ', $withoutPunct));
+    }
+
+    private function normalizeFuzzyText(string $text): string
+    {
+        $diacriticMap = [
+            'ö' => 'o', 'Ö' => 'o',
+            'ä' => 'a', 'Ä' => 'a',
+            'ü' => 'u', 'Ü' => 'u',
+            'é' => 'e', 'è' => 'e', 'ê' => 'e', 'ë' => 'e',
+            'É' => 'e', 'È' => 'e', 'Ê' => 'e', 'Ë' => 'e',
+            'á' => 'a', 'à' => 'a', 'â' => 'a', 'ã' => 'a',
+            'Á' => 'a', 'À' => 'a', 'Â' => 'a', 'Ã' => 'a',
+            'í' => 'i', 'ì' => 'i', 'î' => 'i', 'ï' => 'i',
+            'Í' => 'i', 'Ì' => 'i', 'Î' => 'i', 'Ï' => 'i',
+            'ó' => 'o', 'ò' => 'o', 'ô' => 'o', 'õ' => 'o',
+            'Ó' => 'o', 'Ò' => 'o', 'Ô' => 'o', 'Õ' => 'o',
+            'ú' => 'u', 'ù' => 'u', 'û' => 'u',
+            'Ú' => 'u', 'Ù' => 'u', 'Û' => 'u',
+            'ñ' => 'n', 'Ñ' => 'n',
+            'ç' => 'c', 'Ç' => 'c',
+        ];
+
+        $ascii = strtr($text, $diacriticMap);
+        $lower = mb_strtolower($ascii, 'UTF-8');
+        $clean = preg_replace('/[^a-z0-9\s]+/', ' ', $lower) ?? $lower;
+
+        return trim((string) preg_replace('/\s+/', ' ', $clean));
+    }
+
+    private function calculateEditDistance(string $source, string $target): int
+    {
+        $levDistance = levenshtein($source, $target);
+
+        if ($levDistance <= 1) {
+            return $levDistance;
+        }
+
+        $lenA = strlen($source);
+        $lenB = strlen($target);
+
+        if ($lenA === 0 || $lenB === 0 || abs($lenA - $lenB) > 2) {
+            return $levDistance;
+        }
+
+        $dp = [];
+
+        for ($i = 0; $i <= $lenA; $i++) {
+            $dp[$i][0] = $i;
+        }
+
+        for ($j = 0; $j <= $lenB; $j++) {
+            $dp[0][$j] = $j;
+        }
+
+        for ($i = 1; $i <= $lenA; $i++) {
+            for ($j = 1; $j <= $lenB; $j++) {
+                $cost = $source[$i - 1] === $target[$j - 1] ? 0 : 1;
+
+                $dp[$i][$j] = min(
+                    $dp[$i - 1][$j] + 1,
+                    $dp[$i][$j - 1] + 1,
+                    $dp[$i - 1][$j - 1] + $cost
+                );
+
+                if (
+                    $i > 1
+                    && $j > 1
+                    && $source[$i - 1] === $target[$j - 2]
+                    && $source[$i - 2] === $target[$j - 1]
+                ) {
+                    $dp[$i][$j] = min($dp[$i][$j], $dp[$i - 2][$j - 2] + 1);
+                }
+            }
+        }
+
+        return min($levDistance, $dp[$lenA][$lenB]);
+    }
+
+    private function hasSameCharacters(string $first, string $second): bool
+    {
+        if (strlen($first) !== strlen($second)) {
+            return false;
+        }
+
+        $charsA = str_split($first);
+        $charsB = str_split($second);
+        sort($charsA);
+        sort($charsB);
+
+        return $charsA === $charsB;
     }
 
     /**

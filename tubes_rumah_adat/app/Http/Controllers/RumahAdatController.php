@@ -42,6 +42,11 @@ class RumahAdatController extends Controller
         ];
 
         $houses = $this->sparql->search($keyword, $filters);
+        $typoResolution = $this->sparql->getLastTypoResolution() ?? [
+            'original' => $keyword,
+            'corrected' => $keyword,
+            'is_corrected' => false,
+        ];
         $searchAvailable = $this->sparql->isFusekiAvailable();
         $searchError = $this->sparql->getLastError();
 
@@ -53,6 +58,10 @@ class RumahAdatController extends Controller
             'houses' => $houses,
             'filterOptions' => $filterOptions,
             'keyword' => $keyword,
+            'original' => $typoResolution['original'],
+            'corrected' => $typoResolution['corrected'],
+            'is_corrected' => $typoResolution['is_corrected'],
+            'typoResolution' => $typoResolution,
             'activeFilters' => $filters,
             'fusekiAvailable' => $fusekiAvailable,
             'fusekiError' => $fusekiError,
