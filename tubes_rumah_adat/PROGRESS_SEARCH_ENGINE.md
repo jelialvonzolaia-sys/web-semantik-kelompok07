@@ -1,24 +1,24 @@
 # Analisis Progress Fitur Search Engine — Rumah Adat Sumatera Utara
 
-> **Tanggal Audit:** 23 November 2026  
+> **Tanggal Audit:** 24 November 2026  
 > **Lokasi Proyek:** `tubes_rumah_adat/` (Repository `web-semantik-kelompok07`)  
-> **Branch / Commit Terakhir:** `main` (`1f8bc44` — *perbaiki turtle*)
+> **Branch / Commit Terakhir:** `main` (`63c0ad1` — *Merge pull request #52 from jelialvonzolaia-sys/feat/detail-page-enhancement*)
 
 ---
 
 ## 1. Ringkasan Eksekutif
 
-Berdasarkan pemeriksaan langsung terhadap struktur proyek `tubes_rumah_adat/` hingga commit `1f8bc44`, pengembangan **Search Engine Rumah Adat Sumatera Utara berbasis Semantic Web** telah menyelesaikan **lapisan fondasi aplikasi Laravel, UI awal beranda, serta seluruh lapisan Ontologi & Dataset RDF (`ontology/rumah_adat.ttl`)**.
+Berdasarkan pemeriksaan langsung terhadap codebase `tubes_rumah_adat/` hingga commit `63c0ad1`, progres proyek sudah melangkah jauh ke fase **Prototype End-to-End Frontend + Controller (masih berbasis 3 data dummy) & Ontologi RDF Final (`3.168 triples`)**:
 
-Secara ringkas:
-- **Yang sudah selesai:**
-  1. Fondasi proyek **Laravel 13 + Tailwind CSS v4 + Vite** dan migrasi database bawaan SQLite.
-  2. Antarmuka halaman **Beranda (`/`)**, layout utama, *search bar* (`GET /search?q=...`), dan 3 *quick search chips*.
-  3. **Ontologi & Knowledge Graph RDF lengkap (`ontology/rumah_adat.ttl`)** berisi **3.168 triples**, **7 kelas inti**, **11 ObjectProperty** (termasuk `owl:TransitiveProperty` dan `owl:SymmetricProperty`), **9 DatatypeProperty**, serta **267 entitas** yang seluruhnya valid sintaks (`0` error di `dataset/cek_ttl.py`).
-- **Yang belum dikerjakan:**
-  1. Setup **Apache Jena Fuseki** dan kumpulan file **query SPARQL (`.rq`)** (pencarian *multi-hop*, filter kategori, *match path* alasan keterkaitan, detail, statistik, dan graf).
-  2. **Integrasi Backend Laravel** (konfigurasi endpoint Fuseki, `SparqlService`, Controller, serta route `/search`, `/rumah-adat/{slug}`, `/graph`, `/api/graph`). Saat ini mengakses `/search` masih menghasilkan **404 Not Found**.
-  3. **Halaman UI Hasil Pencarian, Detail, & Knowledge Graph** (statistik dinamis & *quick explore* wilayah di Beranda, badge alasan keterkaitan di `/search`, panel relasi semantik di `/detail`, visualisasi `Vis.js`/`Cytoscape.js` di `/graph`, foto lokal rumah adat, serta pengujian QA/Feature Test).
+- **Yang sudah selesai / berjalan sekarang:**
+  1. **Fondasi Aplikasi:** Laravel `13.43.0` + Tailwind CSS v4 + Vite 8 + validator Python `rdflib` (`dataset/cek_ttl.py`).
+  2. **Ontologi & Dataset RDF (`ontology/rumah_adat.ttl`):** Sudah final (`3.168 triples`, `42 RumahAdat`, `15 Suku`, `107 Marga`, `13 BahasaDaerah`, `61 Wilayah`, `17 Tradisi`, `13 Ornamen`, `owl:TransitiveProperty`, `owl:SymmetricProperty`, 100% `rdfs:label` & `ra:nama`, `0` error).
+  3. **Routing & Controller Awal (`routes/web.php` & `RumahAdatController.php`):** Alur `Beranda (/)` → `Hasil Pencarian (/search)` → `Detail (/detail/{slug})` sudah **berjalan tanpa 404** menggunakan `RumahAdatController` (`index` & `show`), lengkap dengan filter `q`, `suku[]`, dan `wilayah[]` pada **3 data demonstrasi statis**.
+  4. **Antarmuka UI Utama (`home.blade.php`, `search.blade.php`, `detail.blade.php`):** Seluruh halaman utama sudah dibangun dengan tema *Modern Cultural Heritage* (hero search bar, statistik dataset, quick explore wilayah, sidebar filter pencarian, kartu hasil, empty state, profil detail, serta prototype diagram 3 node).
+- **Yang belum dikerjakan (Jembatan Semantik & Visualisasi Dinamis):**
+  1. **Apache Jena Fuseki & Query SPARQL (`.rq`):** Belum ada instance/dokumentasi Fuseki maupun file query `.rq` di repository.
+  2. **Integrasi Backend Laravel ↔ Fuseki:** `RumahAdatController` masih memakai 3 data dummy hardcoded (`getHouses()`), belum terhubung ke Fuseki/SPARQL, belum ada `SparqlService`, belum ada `FUSEKI_URL`/`FUSEKI_DATASET` di `.env.example` dan `config/services.php`, serta belum ada route `/graph` dan `/api/graph`.
+  3. **Penyambungan UI ke Data Ontologi Asli + Fitur Semantik:** Belum ada *badge alasan keterkaitan (match path)* dinamis di `search.blade.php`, atribut lengkap ontologi (`sejarah`, `fungsi`, `ciriArsitektur`, `bentukAtap`, `bahanBangunan`, `maknaFilosofis`, `referensi`, marga, bahasa, ornamen, tradisi) di `detail.blade.php`, foto koleksi rumah adat di `public/images/rumah-adat/`, halaman Knowledge Graph interaktif (`Vis.js`/`Cytoscape.js`), serta pengujian QA/Feature Test.
 
 ---
 
@@ -26,112 +26,85 @@ Secara ringkas:
 
 | Tahap | Nama Tahapan | Status | Kondisi Saat Ini di Codebase |
 | :--- | :--- | :---: | :--- |
-| **Tahap 1** | Setup Proyek & Toolchain | **Selesai** | Laravel `13.43.0` (`^13.17`), PHP `8.4.12`, Vite `^8.0.0`, Tailwind CSS `^4.0.0`, SQLite + 3 migrasi bawaan, serta Python `3.13.0` + `rdflib 7.6.0` (`dataset/cek_ttl.py`) sudah siap. |
-| **Tahap 2** | UI Entry Point (Beranda & Search Form) | **Selesai (Parsial di Scope UI)** | Layout `resources/views/layouts/app.blade.php` dan `resources/views/pages/home.blade.php` sudah memiliki *search bar* (`name="q"`), tautan `/search`, 3 *quick keywords* (`Batak Toba`, `Karo`, `Simalungun`), dan 3 kartu info. Statistik dinamis & *quick explore* wilayah belum ditambahkan. |
-| **Tahap 3** | Perancangan Ontologi & Dataset RDF/OWL | **Selesai** | `ontology/rumah_adat.ttl` sudah final & tervalidasi (`3.168 triples`, `42 RumahAdat`, `15 Suku`, `107 Marga`, `13 BahasaDaerah`, `61 Wilayah`, `17 Tradisi`, `13 Ornamen`, `0` error domain/range/sintaks). |
-| **Tahap 4** | Setup Triplestore Fuseki & Query SPARQL (`.rq`) | **Belum Dimulai** | Belum ada file `.rq` maupun konfigurasi Fuseki di repo. **Siap langsung dikerjakan** menggunakan `ontology/rumah_adat.ttl`. |
-| **Tahap 5** | Backend Laravel Integration (Service, Controller, Route) | **Belum Dimulai** | `routes/web.php` baru punya `/`. `app/Http/Controllers/` baru berisi `Controller.php`, belum ada `app/Services/` atau konfigurasi Fuseki di `.env.example` & `config/services.php`. |
-| **Tahap 6** | UI Hasil, Detail, Knowledge Graph, Aset, & QA/Tests | **Belum Dimulai** | Belum ada `search.blade.php`, `detail.blade.php`, `graph.blade.php`, script di `resources/js/app.js`, foto koleksi rumah adat di `public/images/rumah-adat/`, serta automated test/QA checklist. |
+| **Tahap 1** | Setup Proyek & Toolchain | **Selesai** | Laravel `13.43.0`, PHP `8.4.12`, Vite `^8.0.0`, Tailwind CSS `^4.0.0`, SQLite + 3 migrasi bawaan, serta Python `3.13.0` + `rdflib 7.6.0` (`dataset/cek_ttl.py`). |
+| **Tahap 2** | Ontologi & Dataset RDF/OWL | **Selesai** | `ontology/rumah_adat.ttl` final & valid (`3.168 triples`, `42 RumahAdat`, `15 Suku`, `107 Marga`, `13 BahasaDaerah`, `61 Wilayah`, `17 Tradisi`, `13 Ornamen`, `0` error sintaks/domain/range). |
+| **Tahap 3** | UI/UX Halaman Beranda, Search, & Detail + Controller Prototype | **Selesai (Prototype Dummy)** | `routes/web.php` (`/`, `/search`, `/detail/{slug}`), `RumahAdatController.php`, `home.blade.php`, `search.blade.php`, dan `detail.blade.php` sudah berjalan mulus memakai 3 data dummy (`Rumah Bolon`, `Siwaluh Jabu`, `Rumah Bolon Simalungun`). |
+| **Tahap 4** | Setup Triplestore Fuseki & Query SPARQL (`.rq`) | **Belum Dimulai** | Belum ada file `.rq` maupun konfigurasi Fuseki di repo. **Prioritas utama berikutnya.** |
+| **Tahap 5** | Integrasi Backend Laravel ↔ Fuseki + Penyambungan UI Data Asli | **Belum Dimulai** | Belum ada `SparqlService`, config Fuseki, mapping 42 data asli, *badge alasan keterkaitan (match path)*, detail relasi lengkap, maupun foto rumah adat per entitas. |
+| **Tahap 6** | Visualisasi Knowledge Graph Interaktif (`Vis.js`/`Cytoscape.js`) & QA/Tests | **Belum Dimulai** | Diagram di `detail.blade.php` masih prototype statis 3 node; belum ada halaman `/graph`, `/api/graph`, script di `resources/js/app.js`, maupun `QA_CHECKLIST.md` & feature test. |
 
 ---
 
 ## 3. Audit Komponen yang Sudah Selesai
 
-### 3.1. Riwayat Git Pengembangan `tubes_rumah_adat`
-- `ada6e1d` & `e83a744` — Inisialisasi skeleton Laravel 13 di `tubes_rumah_adat/`.
-- `b283d12` / `ddd2235` (PR #47) — Implementasi UI beranda awal & layout heritage.
-- `fb0d720` — Pembuatan dokumentasi progress awal (`PROGRESS_SEARCH_ENGINE.md`).
-- `bc5497b` (PR #48), `713e8ef`, `5406c3b`, `c3d4edf` / `a8ba3a5` (PR #49) — Penyusunan ontologi, dataset RDF rumah adat, skrip validasi `dataset/cek_ttl.py`, dan panduan `URUTAN_PENGERJAAN.md`.
-- `1f8bc44` — Penyempurnaan penuh `ontology/rumah_adat.ttl` (penghapusan `ra:linkFoto` dan entri placeholder *"Status Inventarisasi"*, penambahan 6 rumah adat wilayah Timur/Selatan + tradisi baru termasuk `Maena`, penguatan aksioma OWL, penyeragaman `rdfs:label`, serta pembersihan komentar).
+### 3.1. Riwayat Git Terbaru (`tubes_rumah_adat`)
+- `ada6e1d` & `e83a744` — Inisialisasi skeleton Laravel 13.
+- `b283d12` / `ddd2235` (PR #47) — Implementasi hero beranda & layout heritage awal.
+- `fb0d720` — Dokumentasi progress awal (`PROGRESS_SEARCH_ENGINE.md`).
+- `bc5497b` (PR #48), `713e8ef`, `5406c3b`, `a8ba3a5` (PR #49), `1f8bc44` — Penyusunan, validasi (`dataset/cek_ttl.py`), dan penyempurnaan final `ontology/rumah_adat.ttl` (`3.168 triples`).
+- `07816cc` — Pembaruan dokumen `PROGRESS_SEARCH_ENGINE.md` & `URUTAN_PENGERJAAN.md`.
+- `54b50f6` / `e9d5186` (PR #50) — Implementasi `RumahAdatController.php`, route `/search` & `/detail/{slug}`, `search.blade.php`, dan `detail.blade.php` awal.
+- `d2df116` / `192d79e` (PR #51) — Penyempurnaan `home.blade.php` (Dataset Statistics, Quick Explore Wilayah, Cultural Discovery, CTA).
+- `f47b19a` / `63c0ad1` (PR #52) — Penyempurnaan `detail.blade.php` (Cultural Identity, Cultural Overview, Semantic Data sidebar, Prototype Knowledge Graph 3 node).
 
-### 3.2. Infrastruktur & Dependensi
-- **Backend (`composer.json`):** `php` `^8.3` (terpasang `8.4.12`), `laravel/framework` `^13.17` (`13.43.0`), `laravel/tinker` `^3.0`. Komunikasi dengan Apache Jena Fuseki nantinya dapat menggunakan HTTP Client bawaan Laravel (`Illuminate\Support\Facades\Http`) tanpa perlu library eksternal tambahan, atau menambah paket RDF jika diperlukan.
-- **Frontend (`package.json` & `vite.config.js`):** Vite `^8.0.0`, Tailwind CSS `^4.0.0` (`@tailwindcss/vite`), `laravel-vite-plugin` `^3.1`, font `Instrument Sans`, dan asset build tersedia di `public/build/`.
-- **Validator Python (`dataset/cek_ttl.py`):** Menggunakan Python `3.13.0` + `rdflib 7.6.0` untuk mengecek sintaks Turtle, jumlah entitas di 7 kelas, serta memastikan seluruh target relasi `ObjectProperty` memiliki deklarasi `rdf:type`.
+### 3.2. Routing, Controller, & Alur Web (`routes/web.php`, `RumahAdatController.php`)
+- **`routes/web.php`:**
+  - `GET /` → `home` (`pages.home`)
+  - `GET /search` → `search` (`RumahAdatController@index`)
+  - `GET /detail/{slug}` → `detail` (`RumahAdatController@show`)
+  - *(Hasil `php artisan route:list` menunjukkan 6 route termasuk `storage/{path}` dan `/up`).*
+- **`app/Http/Controllers/RumahAdatController.php` (`119` baris):**
+  - `getHouses()` masih mengembalikan **3 data dummy** (`rumah-bolon`, `siwaluh-jabu`, `rumah-bolon-simalungun`) dengan field `slug`, `name`, `tribe`, `region`, `description`, `tag`.
+  - `index()` memfilter koleksi menggunakan parameter `q` (pencarian substring pada `name`, `tribe`, `region`, `description`), `suku[]`, dan `wilayah[]`.
+  - `show($slug)` mencari item berdasarkan `slug` dan merender `pages.detail` (atau 404 jika tidak ditemukan).
 
-### 3.3. Frontend & Entry Point Pencarian
-1. **Layout Utama (`resources/views/layouts/app.blade.php`):**
-   - Navbar menyediakan tautan **Beranda** (`/`) dan **Jelajahi** (`/search`), dengan palet warna budaya (`#FFF9F5`, `#192235`, `#FFA586`, `#B51A28`, `#561A2E`).
-2. **Halaman Beranda (`resources/views/pages/home.blade.php`):**
-   - Menampilkan hero image `public/images/rumah-adat/hero-rumah-adat.jpeg`, form pencarian `<form action="/search" method="GET" role="search">` (`name="q"`), 3 *chip* pencarian populer (`Batak Toba`, `Karo`, `Simalungun`), dan 3 kartu penjelasan fitur.
-3. **Routing (`routes/web.php`):**
-   - Baru terdaftar `GET /` (`home`), `storage/{path}`, dan `/up`.
+### 3.3. Antarmuka Frontend (`resources/views/`)
+1. **Layout (`layouts/app.blade.php`, `54` baris):** Navbar dengan tautan `route('home')` dan `route('search')`. *(Belum ada tautan menu untuk `/graph`).*
+2. **Beranda (`pages/home.blade.php`, `386` baris):**
+   - **Hero Search Bar:** Form `GET {{ route('search') }}` (`name="q"`) + 3 *popular search chips* (`Batak Toba`, `Karo`, `Simalungun`).
+   - **Dataset Statistics:** Menampilkan angka `42+ Rumah Adat`, `15+ Suku`, `61+ Wilayah`, `107+ Marga` *(masih array statis di Blade, namun angkanya sudah selaras dengan `ontology/rumah_adat.ttl`)*.
+   - **Quick Explore Wilayah:** 3 kartu wilayah (`Samosir`, `Karo`, `Simalungun`) menuju `route('search', ['wilayah' => [...]])`.
+   - **Cultural Discovery & CTA:** 3 kartu topik (`Arsitektur`, `Budaya`, `Rumah Adat`) dan tombol CTA ke `route('search')`.
+3. **Hasil Pencarian (`pages/search.blade.php`, `354` baris):**
+   - Hero pencarian + 5 *quick search* (`Rumah Bolon`, `Batak Toba`, `Karo`, `Simalungun`, `Nias`).
+   - Sidebar filter checkbox **Suku** (`Batak Toba`, `Karo`, `Simalungun`, `Mandailing`, `Nias`) dan **Wilayah** (`Samosir`, `Karo`, `Simalungun`, `Toba`, `Dairi`, `Nias`).
+   - Header hasil dengan label status **`DATA AWAL`**, daftar kartu rumah adat dengan chip statis (`Rumah Adat`, `$house['tribe']`, `Wilayah`), tombol `Lihat Detail →`, serta tampilan *empty state*.
+4. **Halaman Detail (`pages/detail.blade.php`, `439` baris):**
+   - Hero profil budaya dengan breadcrumb dan side card *Heritage Category*.
+   - Card `01 — CULTURAL IDENTITY` (`name`, `tribe`, `region`, `tag`) dan `02 — CULTURAL OVERVIEW` (`description`).
+   - Sidebar `03 — SEMANTIC DATA` (3 kartu relasi dasar) dan `04 — KNOWLEDGE GRAPH` (**Prototype Visualization** statis 3 node: Rumah Adat → Suku → Wilayah), ditambah `05 — INFORMATION NOTE` dan navigasi bawah.
 
-### 3.4. Ontologi & Knowledge Graph RDF (`ontology/rumah_adat.ttl`)
-File utama `ontology/rumah_adat.ttl` (`@prefix ra: <http://example.org/ontology/rumah-adat#> .`) sudah tervalidasi dengan hasil:
-- **Total Triples:** `3.168 triples`, `0` error sintaks, `0` pelanggaran `rdfs:domain`/`rdfs:range`.
-- **7 Kelas Inti (`owl:Class`) & Jumlah Entitas (100% memiliki `ra:nama` dan `rdfs:label`):**
-  - `ra:RumahAdat`: **42** entitas (seluruhnya bangunan/kompleks nyata, tidak ada lagi placeholder *"Status Inventarisasi"*).
-  - `ra:Suku`: **15** entitas (terhubung simetris melalui `ra:berkerabatDenganSuku` = 44 relasi).
-  - `ra:Marga`: **107** entitas (terhubung simetris melalui `ra:berkerabatDenganMarga` = 764 relasi, plus `ra:bagianDariSuku` & `ra:berasalDariWilayah`).
-  - `ra:BahasaDaerah`: **13** entitas.
-  - `ra:Wilayah`: **61** entitas (1 provinsi + 60 kabupaten/kota/desa, 0 wilayah daun yang menganggur).
-  - `ra:Tradisi`: **17** entitas (termasuk `Maena`, `Owasa`, `Hombo Batu`, `Merdang Merdem`, `Merkottas`, `Jamu Laut`, `Rondang Bintang`, `Manortor`, `Tepung Tawar`, dll.).
-  - `ra:Ornamen`: **13** entitas.
-- **11 Object Properties:**
-  - `ra:berasalDariWilayah` (`owl:ObjectProperty`, range `ra:Wilayah`)
-  - `ra:bagianDariWilayah` (`owl:ObjectProperty, owl:TransitiveProperty`, `Wilayah -> Wilayah`)
-  - `ra:dimilikiOlehSuku` (`RumahAdat -> Suku`)
-  - `ra:memilikiMarga` (`RumahAdat -> Marga`)
-  - `ra:menggunakanBahasa` (`RumahAdat -> BahasaDaerah`)
-  - `ra:memilikiTradisi` (`RumahAdat -> Tradisi`)
-  - `ra:memilikiOrnamen` (`RumahAdat -> Ornamen`)
-  - `ra:menuturkanBahasa` (`Suku -> BahasaDaerah`)
-  - `ra:bagianDariSuku` (`Marga -> Suku`)
-  - `ra:berkerabatDenganMarga` (`owl:ObjectProperty, owl:SymmetricProperty`, `Marga -> Marga`)
-  - `ra:berkerabatDenganSuku` (`owl:ObjectProperty, owl:SymmetricProperty`, `Suku -> Suku`)
-- **9 Datatype Properties (`ra:RumahAdat` / `owl:Thing`):**
-  `ra:nama`, `ra:namaAlternatif`, `ra:sejarah`, `ra:fungsi`, `ra:ciriArsitektur`, `ra:bentukAtap`, `ra:bahanBangunan`, `ra:maknaFilosofis`, `ra:referensi`.  
-  *(Catatan: properti `ra:linkFoto` sengaja dihapus dari TBox & ABox karena tautan sebelumnya berupa halaman HTML; gambar rumah adat untuk tampilan web disiapkan melalui aset lokal Laravel).*
+### 3.4. Ontologi & Dataset RDF (`ontology/rumah_adat.ttl`)
+- Tervalidasi `python dataset/cek_ttl.py`: **`3.168 triples`**, `0` syntax error, `0` pelanggaran domain/range.
+- **Entitas (100% ber-`ra:nama` dan `rdfs:label`):** `42 RumahAdat`, `15 Suku`, `107 Marga`, `13 BahasaDaerah`, `61 Wilayah`, `17 Tradisi`, `13 Ornamen`.
+- **Relasi OWL:** `ra:bagianDariWilayah` (`owl:TransitiveProperty`), `ra:berkerabatDenganMarga` (`owl:SymmetricProperty`), `ra:berkerabatDenganSuku` (`owl:SymmetricProperty`), ditambah relasi wilayah, suku, marga, bahasa, ornamen, dan tradisi.
 
 ---
 
-## 4. Analisis Celah & Bagian yang Belum Dikerjakan
+## 4. Analisis Celah yang Tersisa (Menuju Search Engine Semantik Utuh)
 
-### 4.1. Layer Query Semantik & Triplestore (Prioritas Berikutnya)
-- Belum ada instance/dokumentasi **Apache Jena Fuseki** yang terhubung ke proyek.
-- Belum ada file **query SPARQL (`.rq`)** untuk statistik dataset, pencarian kata kunci *multi-hop* (`ra:dimilikiOlehSuku`, `ra:memilikiMarga`, `ra:berkerabatDenganMarga`, `ra:berkerabatDenganSuku`, `ra:bagianDariWilayah+`, `ra:menggunakanBahasa`, `ra:memilikiTradisi`, `ra:memilikiOrnamen`), filter kategori, pelacakan alasan keterkaitan (*match path*), detail entitas, maupun data node/edge graf.
-
-### 4.2. Backend Routing, Service, & Controller Laravel
-- Route `/search` masih **404 Not Found** (`routes/web.php` baru berisi `/`).
-- Belum ada konfigurasi `FUSEKI_URL` / `FUSEKI_DATASET` di `.env.example` dan `config/services.php`.
-- Belum ada `SparqlService` / `RumahAdatSearchService` di `app/Services/` maupun `HomeController`, `SearchController`, `DetailController`, dan `GraphController`.
-
-### 4.3. Halaman Hasil, Detail, Visualisasi Knowledge Graph, Aset Gambar, & Testing
-- Belum ada view `resources/views/pages/search.blade.php`, `detail.blade.php`, dan `graph.blade.php`.
-- Di `resources/views/pages/home.blade.php`, bagian **Statistik Dataset** dinamis dan **Quick Explore Wilayah** (di luar 3 *chip* suku) belum tersedia.
-- `resources/js/app.js` masih kosong (`//`); integrasi **Vis.js / Cytoscape.js** belum dibuat.
-- Folder `public/images/rumah-adat/` baru berisi `hero-rumah-adat.jpeg` (foto per rumah adat belum ditambahkan).
-- Folder `tests/` baru berisi `ExampleTest.php` bawaan Laravel (belum ada feature test maupun dokumen `QA_CHECKLIST.md`).
-
-### 4.4. Catatan Teknis Kebersihan Repository
-1. **Duplikat file TTL lama (`dataset/rumah_adat.ttl`):** Di folder `dataset/` masih terdapat `dataset/rumah_adat.ttl` dari commit `c3d4edf` (`2.739 triples`), sedangkan file terbaru yang sudah disempurnakan dan divalidasi oleh `dataset/cek_ttl.py` adalah **`ontology/rumah_adat.ttl` (`3.168 triples`)**. Sebaiknya `dataset/rumah_adat.ttl` dihapus agar anggota tim tidak keliru meng-upload file lama ke Fuseki.
-2. **Eksekusi `php artisan test` di environment lokal:** Pastikan izin akses folder `vendor/` dan konfigurasi `composer install` berjalan normal di masing-masing perangkat sebelum menjalankan test suite Laravel.
-3. **File sisa bawaan:** `resources/views/welcome.blade.php` masih ada di `resources/views/` meski tidak dipakai oleh route mana pun.
+1. **Belum Ada Apache Jena Fuseki & File Query SPARQL (`.rq`):**
+   - Pencarian saat ini masih `str_contains` di array PHP terhadap 3 data dummy; belum bisa melakukan pencarian *multi-hop* (`marga`, `kerabat marga`, `kerabat suku`, `bahasa`, `tradisi` seperti `Maena`, `ornamen`, atau wilayah bertingkat `bagianDariWilayah+`) serta belum menghasilkan *match path* (alasan keterkaitan).
+2. **Belum Ada Service Layer & Konfigurasi Triplestore:**
+   - `.env.example` dan `config/services.php` belum menyimpan konfigurasi `FUSEKI_URL` / `FUSEKI_DATASET`.
+   - `app/Services/` belum ada (`SparqlService` / `RumahAdatSearchService` belum dibuat untuk menggantikan `getHouses()` di `RumahAdatController`).
+3. **Field UI Masih Terbatas pada Skema Dummy:**
+   - **Beranda:** Statistik belum diambil dinamis dari Fuseki dan *Quick Explore Wilayah* baru menampilkan 3 dari wilayah utama Sumut (belum ada Nias, Toba, Mandailing/Angkola, Deli/Melayu, Pakpak, dsb.).
+   - **Search (`search.blade.php`):** Filter Suku/Wilayah masih hardcoded terbatas; kartu hasil belum menampilkan **Badge Alasan Keterkaitan (match path)**, belum ada filter Tradisi/Ornamen, dan masih bertanda `DATA AWAL`.
+   - **Detail (`detail.blade.php`):** Belum menampilkan 8 atribut kaya dari ontologi (`namaAlternatif`, `sejarah`, `fungsi`, `ciriArsitektur`, `bentukAtap`, `bahanBangunan`, `maknaFilosofis`, `referensi`) serta daftar relasi Marga, Bahasa, Ornamen, Tradisi, dan Wilayah induk yang dapat diklik.
+4. **Visualisasi Knowledge Graph Interaktif & Aset Gambar Belum Dibuat:**
+   - Belum ada route `/graph`, endpoint JSON `/api/graph`, view `graph.blade.php`, maupun library `Vis.js` / `Cytoscape.js` di `package.json` / `resources/js/app.js`.
+   - Folder `public/images/rumah-adat/` baru berisi 1 gambar (`hero-rumah-adat.jpeg`).
+5. **Pengujian & Kebersihan Environment:**
+   - Belum ada feature/unit test untuk rute `/search` & `/detail/{slug}` maupun dokumen `QA_CHECKLIST.md`.
+   - **File kembar `dataset/rumah_adat.ttl`:** Masih ada versi lama `2.739 triples` di `dataset/rumah_adat.ttl`; gunakan selalu **`ontology/rumah_adat.ttl` (`3.168 triples`)** dan hapus `dataset/rumah_adat.ttl` agar tidak salah muat ke Fuseki.
+   - **File lokal `public/hot`:** Saat audit, `public/hot` kembali ada berisi `http://[::1]:5173`; hapus file ini jika menjalankan server Laravel tanpa `npm run dev` aktif.
 
 ---
 
-## 5. Roadmap Langkah Selanjutnya
+## 5. Langkah Selanjutnya (Prioritas Saat Ini)
 
-### Fase A — Ontologi & Knowledge Graph (Fondasi Semantik)
-1. ~~Rancang Ontologi & Validasi `ontology/rumah_adat.ttl`~~ — **Selesai (`✅`, `3.168 triples`).**
-2. **Setup Apache Jena Fuseki & Kumpulan Query SPARQL (`.rq`):**
-   - Import **`ontology/rumah_adat.ttl`** ke dataset Fuseki (misal dataset `rumah_adat`).
-   - Buat & uji file `.rq` di `resources/sparql/` (statistik, pencarian *multi-hop* + *match path*, filter kategori, detail rumah adat, serta graf node/edge).
-
-### Fase B — Backend Search Engine (Laravel)
-3. **Konfigurasi & Service Layer:**
-   - Daftarkan `FUSEKI_URL` dan `FUSEKI_DATASET` di `.env.example` dan `config/services.php`.
-   - Buat `app/Services/SparqlService.php` & `app/Services/RumahAdatSearchService.php` (pembaca `.rq`, sanitasi input SPARQL, HTTP POST ke Fuseki, parser JSON hasil).
-4. **Routing & Controller:**
-   - Tambahkan route `/`, `/search`, `/rumah-adat/{slug}`, `/graph`, dan `/api/graph` di `routes/web.php` beserta controllernya.
-
-### Fase C — Frontend Hasil Pencarian, Detail, & Knowledge Graph
-5. **Penyempurnaan Beranda, Halaman Hasil (`/search`), & Halaman Detail (`/rumah-adat/{slug}`):**
-   - Tampilkan statistik asli (`42` Rumah Adat, `15` Suku, `61` Wilayah, dll.), *quick explore* wilayah, kartu hasil + **badge alasan keterkaitan**, panel relasi semantik yang dapat diklik, serta aset foto lokal di `public/images/rumah-adat/`.
-6. **Halaman Visualisasi Knowledge Graph (`/graph`):**
-   - Implementasi graf dinamis memakai **Vis.js** atau **Cytoscape.js** dari endpoint `/api/graph`.
-
-### Fase D — Pengujian Menyeluruh & Persiapan Demo
-7. **QA Checklist & Feature Tests:**
-   - Uji seluruh skenario pencarian tidak langsung (*multi-hop*: via marga, kerabat marga, tradisi seperti `Maena`/`Hombo Batu`, ornamen, bahasa, suku berkerabat, wilayah bertingkat), uji link/gambar, dan buat feature test di `tests/Feature/`.
+1. **Vascha (Prioritas Utama Sekarang):** Upload **`ontology/rumah_adat.ttl`** (`3.168 triples`) ke **Apache Jena Fuseki** lalu buat & uji query SPARQL `.rq` di `resources/sparql/` (statistik, multi-hop search + match path, filter kategori, detail lengkap 1 rumah adat, dan triplet graf).
+2. **Jeli:** Tambahkan konfigurasi Fuseki di `.env.example` & `config/services.php`, bangun `SparqlService` untuk menggantikan array dummy `getHouses()` di `RumahAdatController`, siapkan route `GET /graph` & `GET /api/graph`, serta kirim statistik dinamis ke `home.blade.php`.
+3. **Jona:** Sambungkan `search.blade.php` (badge *match path* + filter lengkap + hapus label `DATA AWAL`) dan `detail.blade.php` (tampilkan `sejarah`, `ciriArsitektur`, `bentukAtap`, `bahanBangunan`, `maknaFilosofis`, `referensi`, marga, bahasa, tradisi, ornamen sebagai tautan klikable), lengkapi Quick Explore Wilayah di Beranda, dan siapkan foto rumah adat di `public/images/rumah-adat/`.
+4. **Patricia Putri:** Bangun halaman interaktif `/graph` dengan **Vis.js** atau **Cytoscape.js** dari `/api/graph` (tambahkan link-nya di `layouts/app.blade.php` & `detail.blade.php`), lalu jalankan pengujian QA multi-hop menyeluruh dan feature test.
