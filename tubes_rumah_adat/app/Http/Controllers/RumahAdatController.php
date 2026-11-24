@@ -2,118 +2,124 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SparqlService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class RumahAdatController extends Controller
 {
-    private function getHouses()
+    public function __construct(private readonly SparqlService $sparql) {}
+
+    public function index(): View
     {
-        return [
-            [
-                'slug' => 'rumah-bolon',
-                'name' => 'Rumah Bolon',
-                'tribe' => 'Batak Toba',
-                'region' => 'Samosir, Sumatera Utara',
-                'description' => 'Rumah tradisional Batak Toba yang dikenal dengan bentuk atap melengkung menyerupai punggung kerbau.',
-                'tag' => 'Arsitektur Tradisional',
-            ],
-            [
-                'slug' => 'siwaluh-jabu',
-                'name' => 'Siwaluh Jabu',
-                'tribe' => 'Karo',
-                'region' => 'Kabupaten Karo, Sumatera Utara',
-                'description' => 'Rumah adat Karo yang mencerminkan kehidupan komunal dan hubungan sosial masyarakatnya.',
-                'tag' => 'Rumah Komunal',
-            ],
-            [
-                'slug' => 'rumah-bolon-simalungun',
-                'name' => 'Rumah Bolon Simalungun',
-                'tribe' => 'Simalungun',
-                'region' => 'Simalungun, Sumatera Utara',
-                'description' => 'Rumah tradisional Simalungun dengan karakter arsitektur dan ornamen khas daerahnya.',
-                'tag' => 'Warisan Arsitektur',
-            ],
-        ];
-    }
+        $stats = $this->sparql->getStats();
+        $statsAvailable = $this->sparql->isFusekiAvailable();
+        $statsError = $this->sparql->getLastError();
 
-    // HALAMAN PENCARIAN
-    public function index(Request $request)
-    {
-        $houses = collect($this->getHouses());
+        $featuredRegions = $this->sparql->getFeaturedRegions(6);
+        $fusekiAvailable = $statsAvailable && $this->sparql->isFusekiAvailable();
+        $fusekiError = $statsError ?? $this->sparql->getLastError();
 
-        // 1. PENCARIAN KATA KUNCI
-        if ($request->filled('q')) {
-
-            $keyword = mb_strtolower(trim($request->q));
-
-            $houses = $houses->filter(function ($house) use ($keyword) {
-
-                return str_contains(
-                    mb_strtolower($house['name']),
-                    $keyword
-                )
-                || str_contains(
-                    mb_strtolower($house['tribe']),
-                    $keyword
-                )
-                || str_contains(
-                    mb_strtolower($house['region']),
-                    $keyword
-                )
-                || str_contains(
-                    mb_strtolower($house['description']),
-                    $keyword
-                );
-            });
-        }
-
-        // 2. FILTER SUKU
-        if ($request->filled('suku')) {
-
-            $selectedTribes = (array) $request->suku;
-
-            $houses = $houses->filter(function ($house) use ($selectedTribes) {
-
-                return in_array($house['tribe'], $selectedTribes);
-            });
-        }
-
-        // 3. FILTER WILAYAH
-        if ($request->filled('wilayah')) {
-
-            $selectedRegions = (array) $request->wilayah;
-
-            $houses = $houses->filter(function ($house) use ($selectedRegions) {
-
-                foreach ($selectedRegions as $region) {
-
-                    if (str_contains(
-                        mb_strtolower($house['region']),
-                        mb_strtolower($region)
-                    )) {
-                        return true;
-                    }
-                }
-
-                return false;
-            });
-        }
-
-        // KIRIM HASIL KE HALAMAN SEARCH
-        return view('pages.search', [
-            'houses' => $houses->values()->all(),
+        return view('pages.home', [
+            'stats' => $stats,
+            'featuredRegions' => $featuredRegions,
+            'fusekiAvailable' => $fusekiAvailable,
+            'fusekiError' => $fusekiError,
         ]);
     }
 
-    // HALAMAN DETAIL RUMAH ADAT
-    public function show($slug)
+    public function search(Request $request): View
     {
-        $houses = $this->getHouses();
+        $keyword = trim((string) $request->query('q', ''));
+        $filters = [
+            'suku' => $this->normalizeFilterValues($request->query('suku', [])),
+            'wilayah' => $this->normalizeFilterValues($request->query('wilayah', [])),
+            'tradisi' => $this->normalizeFilterValues($request->query('tradisi', [])),
+            'ornamen' => $this->normalizeFilterValues($request->query('ornamen', [])),
+            'bahasa' => $this->normalizeFilterValues($request->query('bahasa', [])),
+            'marga' => $this->normalizeFilterValues($request->query('marga', [])),
+        ];
 
-        $house = collect($houses)->firstWhere('slug', $slug);
+        $houses = $this->sparql->search($keyword, $filters);
+        $searchAvailable = $this->sparql->isFusekiAvailable();
+        $searchError = $this->sparql->getLastError();
 
-        abort_if(!$house, 404);
+        $filterOptions = $this->sparql->getFilterOptions();
+        $fusekiAvailable = $searchAvailable && $this->sparql->isFusekiAvailable();
+        $fusekiError = $searchError ?? $this->sparql->getLastError();
 
-        return view('pages.detail', compact('house'));
+        return view('pages.search', [
+            'houses' => $houses,
+            'filterOptions' => $filterOptions,
+            'keyword' => $keyword,
+            'activeFilters' => $filters,
+            'fusekiAvailable' => $fusekiAvailable,
+            'fusekiError' => $fusekiError,
+        ]);
+    }
+
+    public function detail(string $slug): View
+    {
+        $house = $this->sparql->getDetail($slug);
+
+        if (! $this->sparql->isFusekiAvailable()) {
+            abort(503, $this->sparql->getLastError() ?? 'Server Apache Jena Fuseki belum dapat dihubungi.');
+        }
+
+        abort_if($house === null, 404);
+
+        return view('pages.detail', [
+            'house' => $house,
+            'fusekiAvailable' => true,
+        ]);
+    }
+
+    public function graph(Request $request): View
+    {
+        $focus = trim((string) $request->query('focus', ''));
+        $keyword = trim((string) $request->query('q', ''));
+
+        return view('pages.graph', [
+            'focus' => $focus !== '' ? $focus : null,
+            'keyword' => $keyword !== '' ? $keyword : null,
+        ]);
+    }
+
+    public function apiGraph(Request $request): JsonResponse
+    {
+        $focus = trim((string) ($request->query('focus') ?? $request->query('id') ?? ''));
+        $keyword = trim((string) ($request->query('q') ?? $request->query('keyword') ?? ''));
+
+        $data = $this->sparql->getGraphData(
+            $focus !== '' ? $focus : null,
+            $keyword !== '' ? $keyword : null
+        );
+
+        $data['meta']['fusekiAvailable'] = $this->sparql->isFusekiAvailable();
+        $data['meta']['fusekiError'] = $this->sparql->getLastError();
+
+        return response()->json($data);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function normalizeFilterValues(mixed $raw): array
+    {
+        $items = is_array($raw) ? $raw : [$raw];
+        $cleaned = [];
+
+        foreach ($items as $item) {
+            if (is_scalar($item)) {
+                $trimmed = trim((string) $item);
+
+                if ($trimmed !== '') {
+                    $cleaned[] = $trimmed;
+                }
+            }
+        }
+
+        return array_values(array_unique($cleaned));
     }
 }

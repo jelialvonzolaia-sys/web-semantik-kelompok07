@@ -5,23 +5,14 @@
 @section('content')
 
 @php
-    $relations = [
-        [
-            'label' => 'Rumah Adat',
-            'value' => $house['name'],
-            'type' => 'primary',
-        ],
-        [
-            'label' => 'Suku',
-            'value' => $house['tribe'],
-            'type' => 'secondary',
-        ],
-        [
-            'label' => 'Wilayah',
-            'value' => $house['region'],
-            'type' => 'secondary',
-        ],
-    ];
+    $relations = array_values(array_filter([
+        ['label' => 'Suku', 'values' => $house['suku'] ?? [$house['tribe']], 'filterKey' => 'suku'],
+        ['label' => 'Wilayah', 'values' => $house['wilayah'] ?? [$house['region']], 'filterKey' => 'wilayah'],
+        ['label' => 'Bahasa Daerah', 'values' => $house['bahasa'] ?? [], 'filterKey' => 'bahasa'],
+        ['label' => 'Marga Terkait', 'values' => $house['marga'] ?? [], 'filterKey' => 'marga'],
+        ['label' => 'Tradisi Budaya', 'values' => $house['tradisi'] ?? [], 'filterKey' => 'tradisi'],
+        ['label' => 'Ornamen Khas', 'values' => $house['ornamen'] ?? [], 'filterKey' => 'ornamen'],
+    ], static fn (array $item): bool => $item['values'] !== []));
 @endphp
 
 {{-- =====================================================
@@ -86,6 +77,16 @@
 
             {{-- HERO SIDE INFORMATION --}}
             <div class="hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm lg:block">
+
+                @if (! empty($house['hasCustomImage']))
+                    <div class="mb-5 overflow-hidden rounded-xl border border-white/10">
+                        <img
+                            src="{{ $house['image'] }}"
+                            alt="{{ $house['name'] }}"
+                            class="h-44 w-full object-cover"
+                        >
+                    </div>
+                @endif
 
                 <p class="text-xs font-semibold tracking-widest text-[#FFA586]">
                     HERITAGE CATEGORY
@@ -185,13 +186,37 @@
 
                     <div class="border-l-2 border-[#FFA586] pl-5">
                         <p class="text-xs font-medium tracking-wide text-gray-400">
-                            KATEGORI
+                            NAMA ALTERNATIF
                         </p>
 
                         <p class="mt-2 text-lg font-bold text-[#192235]">
-                            {{ $house['tag'] }}
+                            {{ ! empty($house['namaAlternatif']) ? $house['namaAlternatif'] : $house['tag'] }}
                         </p>
                     </div>
+
+                    @if (! empty($house['bentukAtap']))
+                        <div class="border-l-2 border-[#FFA586] pl-5">
+                            <p class="text-xs font-medium tracking-wide text-gray-400">
+                                BENTUK ATAP
+                            </p>
+
+                            <p class="mt-2 text-sm leading-relaxed font-semibold text-[#192235]">
+                                {{ $house['bentukAtap'] }}
+                            </p>
+                        </div>
+                    @endif
+
+                    @if (! empty($house['bahanBangunan']))
+                        <div class="border-l-2 border-[#FFA586] pl-5">
+                            <p class="text-xs font-medium tracking-wide text-gray-400">
+                                BAHAN BANGUNAN
+                            </p>
+
+                            <p class="mt-2 text-sm leading-relaxed font-semibold text-[#192235]">
+                                {{ $house['bahanBangunan'] }}
+                            </p>
+                        </div>
+                    @endif
 
                 </div>
 
@@ -209,31 +234,48 @@
                     Mengenal {{ $house['name'] }}
                 </h2>
 
-                <div class="mt-7 rounded-2xl bg-[#FFF9F5] p-6 md:p-8">
+                @php
+                    $overviewSections = array_filter([
+                        'Sejarah & Latar Belakang' => $house['sejarah'] ?? '',
+                        'Fungsi Sosial & Adat' => $house['fungsi'] ?? '',
+                        'Ciri Arsitektur' => $house['ciriArsitektur'] ?? '',
+                        'Makna Filosofis' => $house['maknaFilosofis'] ?? '',
+                    ], static fn (string $val): bool => trim($val) !== '');
 
-                    <div class="mb-5 flex items-center gap-3">
+                    if ($overviewSections === []) {
+                        $overviewSections = ['Deskripsi Budaya' => $house['description'] ?? '-'];
+                    }
+                @endphp
 
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFA586]/25 text-lg text-[#B51A28]">
-                            ✦
+                <div class="mt-7 space-y-5">
+                    @foreach ($overviewSections as $heading => $bodyText)
+                        <div class="rounded-2xl bg-[#FFF9F5] p-6 md:p-8">
+
+                            <div class="mb-4 flex items-center gap-3">
+
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFA586]/25 text-lg text-[#B51A28]">
+                                    ✦
+                                </div>
+
+                                <span class="text-sm font-bold text-[#192235]">
+                                    {{ $heading }}
+                                </span>
+
+                            </div>
+
+                            <p class="text-sm leading-8 text-[#384358]">
+                                {{ $bodyText }}
+                            </p>
+
                         </div>
-
-                        <span class="text-sm font-bold text-[#192235]">
-                            Deskripsi Budaya
-                        </span>
-
-                    </div>
-
-                    <p class="text-sm leading-8 text-[#384358]">
-                        {{ $house['description'] }}
-                    </p>
-
+                    @endforeach
                 </div>
 
-                <p class="mt-5 text-xs leading-relaxed text-gray-400">
-                    Informasi merupakan deskripsi awal dari data demonstrasi.
-                    Pengembangan informasi historis, filosofis, dan arsitektural
-                    akan mengikuti hasil inventarisasi dan sumber yang terverifikasi.
-                </p>
+                @if (! empty($house['referensi']))
+                    <p class="mt-5 text-xs leading-relaxed text-gray-500">
+                        <span class="font-semibold text-[#192235]">Referensi:</span> {{ $house['referensi'] }}
+                    </p>
+                @endif
 
             </div>
 
@@ -269,9 +311,14 @@
                                 {{ $relation['label'] }}
                             </p>
 
-                            <p class="mt-2 font-bold text-[#192235]">
-                                {{ $relation['value'] }}
-                            </p>
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                @foreach ($relation['values'] as $val)
+                                    <a href="{{ route('search', [$relation['filterKey'] => [$val]]) }}"
+                                       class="rounded-lg bg-[#FFF4ED] px-2.5 py-1 text-xs font-semibold text-[#561A2E] transition hover:bg-[#B51A28] hover:text-white">
+                                        {{ $val }}
+                                    </a>
+                                @endforeach
+                            </div>
 
                         </div>
 
@@ -294,11 +341,10 @@
                 </h2>
 
                 <p class="mt-3 text-sm leading-relaxed text-white/55">
-                    Gambaran awal hubungan antara rumah adat,
-                    suku, dan wilayah.
+                    Ringkasan relasi langsung antara rumah adat, suku, wilayah, bahasa, tradisi, ornamen, dan marga.
                 </p>
 
-                {{-- RELATION DIAGRAM --}}
+                {{-- RELATION SUMMARY NODES --}}
                 <div class="mt-8 flex flex-col items-center">
 
                     {{-- NODE 1 --}}
@@ -360,16 +406,35 @@
 
                 </div>
 
-                <div class="mt-7 rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="mt-6 grid grid-cols-2 gap-2 text-center text-xs">
+                    <div class="rounded-xl bg-white/5 p-3">
+                        <p class="text-white/50">Marga</p>
+                        <p class="mt-1 font-bold text-[#FFA586]">{{ count($house['marga'] ?? []) }}</p>
+                    </div>
+                    <div class="rounded-xl bg-white/5 p-3">
+                        <p class="text-white/50">Tradisi</p>
+                        <p class="mt-1 font-bold text-[#FFA586]">{{ count($house['tradisi'] ?? []) }}</p>
+                    </div>
+                    <div class="rounded-xl bg-white/5 p-3">
+                        <p class="text-white/50">Ornamen</p>
+                        <p class="mt-1 font-bold text-[#FFA586]">{{ count($house['ornamen'] ?? []) }}</p>
+                    </div>
+                    <div class="rounded-xl bg-white/5 p-3">
+                        <p class="text-white/50">Bahasa</p>
+                        <p class="mt-1 font-bold text-[#FFA586]">{{ count($house['bahasa'] ?? []) }}</p>
+                    </div>
+                </div>
 
-                    <p class="text-xs leading-relaxed text-white/50">
-                        Diagram ini merupakan ilustrasi relasi berdasarkan
-                        data demonstrasi, bukan hasil query Knowledge Graph.
+                <div class="mt-6 rounded-xl border border-white/10 bg-white/5 p-4">
+
+                    <p class="text-xs leading-relaxed text-white/60">
+                        Data keterkaitan di atas berasal langsung dari ontologi RDF/OWL melalui endpoint SPARQL Fuseki.
                     </p>
 
-                    <span class="mt-3 inline-flex rounded-full bg-[#FFA586]/20 px-3 py-1 text-xs font-semibold text-[#FFA586]">
-                        Prototype Visualization
-                    </span>
+                    <a href="{{ route('graph', ['focus' => $house['slug']]) }}"
+                       class="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[#B51A28] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#FFA586] hover:text-[#192235]">
+                        Lihat di /graph →
+                    </a>
 
                 </div>
 
@@ -394,14 +459,11 @@
             <div>
 
                 <h3 class="font-bold text-[#192235]">
-                    Tentang Informasi dalam Halaman Ini
+                    Tentang Data Ontologi Halaman Ini
                 </h3>
 
                 <p class="mt-2 text-sm leading-relaxed text-gray-500">
-                    Halaman ini menggunakan data demonstrasi untuk menampilkan
-                    struktur informasi rumah adat. Informasi tambahan dan
-                    visualisasi relasi akan dikembangkan sesuai integrasi
-                    dataset ontologi dan hasil validasi sumber budaya.
+                    Seluruh atribut historis, arsitektural, serta keterkaitan suku, marga, bahasa, tradisi, dan ornamen di halaman ini ditarik secara langsung dari ontologi RDF/OWL melalui Apache Jena Fuseki (SPARQL).
                 </p>
 
             </div>

@@ -90,7 +90,7 @@
                 Pencarian populer:
             </span>
 
-            @foreach (['Batak Toba', 'Karo', 'Simalungun'] as $keyword)
+            @foreach (['Batak Toba', 'Karo', 'Simalungun', 'Nias', 'Mandailing', 'Melayu Deli'] as $keyword)
                 <a
                     href="{{ route('search', ['q' => $keyword]) }}"
                     class="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-sm transition hover:border-[#FFA586] hover:bg-[#FFA586]/20"
@@ -117,22 +117,22 @@
     @php
         $statistics = [
             [
-                'number' => '42',
+                'number' => $stats['RumahAdat'] ?? 0,
                 'label' => 'Rumah Adat',
                 'description' => 'Warisan arsitektur',
             ],
             [
-                'number' => '15',
+                'number' => $stats['Suku'] ?? 0,
                 'label' => 'Suku',
                 'description' => 'Identitas masyarakat',
             ],
             [
-                'number' => '61',
+                'number' => $stats['Wilayah'] ?? 0,
                 'label' => 'Wilayah',
                 'description' => 'Persebaran budaya',
             ],
             [
-                'number' => '107',
+                'number' => $stats['Marga'] ?? 0,
                 'label' => 'Marga',
                 'description' => 'Hubungan kekerabatan',
             ],
@@ -165,8 +165,15 @@
     </div>
 
     <p class="mt-3 text-center text-xs text-gray-400">
-        Statistik berdasarkan dataset ontologi rumah adat Sumatera Utara.
+        Statistik real-time dari endpoint Apache Jena Fuseki (ontologi rumah adat Sumatera Utara).
     </p>
+
+    @if (! ($fusekiAvailable ?? true))
+        <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-3 text-center text-xs text-amber-800">
+            {{ $fusekiError ?? 'Server Apache Jena Fuseki belum dapat dihubungi.' }}
+            Pastikan Fuseki berjalan di <code>{{ config('services.fuseki.endpoint') }}</code>.
+        </div>
+    @endif
 
 </section>
 
@@ -204,26 +211,53 @@
     </div>
 
     @php
-        $regions = [
-            [
-                'name' => 'Samosir',
-                'description' => 'Warisan budaya Batak Toba',
-                'keyword' => 'Samosir',
-                'number' => '01',
-            ],
-            [
-                'name' => 'Karo',
-                'description' => 'Arsitektur rumah komunal',
-                'keyword' => 'Karo',
-                'number' => '02',
-            ],
-            [
-                'name' => 'Simalungun',
-                'description' => 'Keunikan rumah tradisional',
-                'keyword' => 'Simalungun',
-                'number' => '03',
-            ],
-        ];
+        $regions = ! empty($featuredRegions)
+            ? collect($featuredRegions)->values()->map(function (array $region, int $index): array {
+                return [
+                    'name' => $region['name'],
+                    'description' => $region['count'] . ' rumah adat terdaftar di ontologi',
+                    'keyword' => $region['keyword'],
+                    'number' => str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
+                ];
+            })->all()
+            : [
+                [
+                    'name' => 'Kabupaten Langkat',
+                    'description' => 'Balai adat dan rumah Melayu pesisir',
+                    'keyword' => 'Kabupaten Langkat',
+                    'number' => '01',
+                ],
+                [
+                    'name' => 'Kabupaten Karo',
+                    'description' => 'Arsitektur rumah komunal Siwaluh Jabu',
+                    'keyword' => 'Kabupaten Karo',
+                    'number' => '02',
+                ],
+                [
+                    'name' => 'Kabupaten Mandailing Natal',
+                    'description' => 'Bagas Godang dan Sopo Godang klasik',
+                    'keyword' => 'Kabupaten Mandailing Natal',
+                    'number' => '03',
+                ],
+                [
+                    'name' => 'Kabupaten Nias Selatan',
+                    'description' => 'Omo Hada & Omo Sebua tahan gempa',
+                    'keyword' => 'Kabupaten Nias Selatan',
+                    'number' => '04',
+                ],
+                [
+                    'name' => 'Kabupaten Toba',
+                    'description' => 'Warisan Rumah Bolon pesisir Danau Toba',
+                    'keyword' => 'Kabupaten Toba',
+                    'number' => '05',
+                ],
+                [
+                    'name' => 'Kabupaten Samosir',
+                    'description' => 'Pusat perkampungan Huta Batak Toba',
+                    'keyword' => 'Kabupaten Samosir',
+                    'number' => '06',
+                ],
+            ];
     @endphp
 
     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -300,15 +334,15 @@
                 ],
                 [
                     'number' => '02',
-                    'title' => 'Warisan Budaya',
-                    'description' => 'Temukan nilai sejarah, filosofi, tradisi, dan identitas budaya masyarakat Sumatera Utara.',
-                    'keyword' => 'Budaya',
+                    'title' => 'Tradisi & Upacara Adat',
+                    'description' => 'Temukan tradisi seperti Maena, Hombo Batu, dan Mangulosi yang melekat pada tiap rumah adat.',
+                    'keyword' => 'Maena',
                 ],
                 [
                     'number' => '03',
-                    'title' => 'Pencarian Semantik',
-                    'description' => 'Telusuri hubungan antara rumah adat, suku, marga, bahasa, wilayah, dan tradisi.',
-                    'keyword' => 'Rumah Adat',
+                    'title' => 'Ornamen & Kekerabatan Marga',
+                    'description' => 'Telusuri hubungan antara ukiran ornamen seperti Gorga, marga kerabat, bahasa, dan wilayah.',
+                    'keyword' => 'Gorga',
                 ],
             ];
         @endphp

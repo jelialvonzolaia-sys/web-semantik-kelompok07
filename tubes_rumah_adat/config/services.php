@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'fuseki' => [
+        'base_url' => env('FUSEKI_BASE_URL', 'http://localhost:3030'),
+        'dataset' => env('FUSEKI_DATASET', 'rumah_adat'),
+        'endpoint' => env('FUSEKI_SPARQL_ENDPOINT', 'http://localhost:3030/rumah_adat/query'),
+    ],
+
 ];

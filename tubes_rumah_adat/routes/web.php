@@ -1,17 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RumahAdatController;
+use Illuminate\Support\Facades\Route;
 
-// Homepage
-Route::get('/', function () {
-    return view('pages.home');
-})->name('home');
+Route::get('/', [RumahAdatController::class, 'index'])
+    ->name('home');
 
-// Search Results
-Route::get('/search', [RumahAdatController::class, 'index'])
+Route::get('/search', [RumahAdatController::class, 'search'])
     ->name('search');
 
-// Detail Rumah Adat
-Route::get('/detail/{slug}', [RumahAdatController::class, 'show'])
+Route::get('/detail/{slug}', [RumahAdatController::class, 'detail'])
     ->name('detail');
+
+Route::get('/graph', [RumahAdatController::class, 'graph'])
+    ->name('graph');
+
+Route::get('/api/graph', [RumahAdatController::class, 'apiGraph'])
+    ->name('api.graph');

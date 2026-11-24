@@ -57,7 +57,7 @@
                 Pencarian populer:
             </span>
 
-            @foreach (['Rumah Bolon', 'Batak Toba', 'Karo', 'Simalungun', 'Nias'] as $keyword)
+            @foreach (['Rumah Bolon', 'Omo Hada', 'Bagas Godang', 'Istana Maimun', 'Laia', 'Maena', 'Gorga'] as $keyword)
                 <a href="{{ route('search', ['q' => $keyword]) }}"
                    class="rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-[#FFA586] hover:text-[#FFA586]">
                     {{ $keyword }}
@@ -93,60 +93,183 @@
                 {{-- KEEP SEARCH KEYWORD --}}
                 <input type="hidden" name="q" value="{{ request('q') }}">
 
-                {{-- FILTER SUKU --}}
+                @php
+                    $sukuOptions = collect($filterOptions['suku'] ?? [])->pluck('label')->all();
+                    if ($sukuOptions === []) {
+                        $sukuOptions = ['Batak Toba', 'Karo', 'Simalungun', 'Mandailing', 'Nias'];
+                    }
+
+                    $wilayahOptions = collect($filterOptions['wilayah'] ?? [])->pluck('label')->all();
+                    if ($wilayahOptions === []) {
+                        $wilayahOptions = ['Samosir', 'Karo', 'Simalungun', 'Toba', 'Dairi', 'Nias'];
+                    }
+
+                    $tradisiOptions = collect($filterOptions['tradisi'] ?? [])->pluck('label')->all();
+                    $ornamenOptions = collect($filterOptions['ornamen'] ?? [])->pluck('label')->all();
+                    $bahasaOptions = collect($filterOptions['bahasa'] ?? [])->pluck('label')->all();
+                    $selectedMargaInput = collect((array) request('marga', []))->first() ?? '';
+                @endphp
+
+                {{-- FILTER MARGA --}}
                 <div class="border-b border-gray-100 pb-6">
+
+                    <label for="filter-marga" class="mb-3 block font-semibold text-[#192235]">
+                        Marga
+                    </label>
+
+                    <input
+                        id="filter-marga"
+                        type="text"
+                        name="marga[]"
+                        value="{{ $selectedMargaInput }}"
+                        placeholder="Contoh: Laia, Harahap, Ginting..."
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-[#192235] outline-none focus:border-[#B51A28]"
+                    >
+
+                    @foreach (array_slice((array) request('marga', []), 1) as $extraMarga)
+                        <input type="hidden" name="marga[]" value="{{ $extraMarga }}">
+                    @endforeach
+
+                </div>
+
+                {{-- FILTER SUKU --}}
+                <div class="border-b border-gray-100 py-6">
 
                     <h3 class="mb-4 font-semibold text-[#192235]">
                         Suku
                     </h3>
 
-                    @foreach (['Batak Toba', 'Karo', 'Simalungun', 'Mandailing', 'Nias'] as $item)
+                    <div class="max-h-52 space-y-2 overflow-y-auto pr-1">
+                        @foreach ($sukuOptions as $item)
 
-                        <label class="mb-3 flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
+                            <label class="flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
 
-                            <input
-                                type="checkbox"
-                                name="suku[]"
-                                value="{{ $item }}"
-                                @checked(in_array($item, (array) request('suku', [])))
-                                class="h-4 w-4 accent-[#B51A28]"
-                            >
+                                <input
+                                    type="checkbox"
+                                    name="suku[]"
+                                    value="{{ $item }}"
+                                    @checked(in_array($item, (array) request('suku', [])))
+                                    class="h-4 w-4 shrink-0 accent-[#B51A28]"
+                                >
 
-                            {{ $item }}
+                                <span>{{ $item }}</span>
 
-                        </label>
+                            </label>
 
-                    @endforeach
+                        @endforeach
+                    </div>
 
                 </div>
 
 
                 {{-- FILTER WILAYAH --}}
-                <div class="py-6">
+                <div class="border-b border-gray-100 py-6">
 
                     <h3 class="mb-4 font-semibold text-[#192235]">
                         Wilayah
                     </h3>
 
-                    @foreach (['Samosir', 'Karo', 'Simalungun', 'Toba', 'Dairi', 'Nias'] as $item)
+                    <div class="max-h-52 space-y-2 overflow-y-auto pr-1">
+                        @foreach ($wilayahOptions as $item)
 
-                        <label class="mb-3 flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
+                            <label class="flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
 
-                            <input
-                                type="checkbox"
-                                name="wilayah[]"
-                                value="{{ $item }}"
-                                @checked(in_array($item, (array) request('wilayah', [])))
-                                class="h-4 w-4 accent-[#B51A28]"
-                            >
+                                <input
+                                    type="checkbox"
+                                    name="wilayah[]"
+                                    value="{{ $item }}"
+                                    @checked(in_array($item, (array) request('wilayah', [])))
+                                    class="h-4 w-4 shrink-0 accent-[#B51A28]"
+                                >
 
-                            {{ $item }}
+                                <span>{{ $item }}</span>
 
-                        </label>
+                            </label>
 
-                    @endforeach
+                        @endforeach
+                    </div>
 
                 </div>
+
+                @if ($tradisiOptions !== [])
+                    {{-- FILTER TRADISI --}}
+                    <div class="border-b border-gray-100 py-6">
+
+                        <h3 class="mb-4 font-semibold text-[#192235]">
+                            Tradisi
+                        </h3>
+
+                        <div class="max-h-44 space-y-2 overflow-y-auto pr-1">
+                            @foreach ($tradisiOptions as $item)
+                                <label class="flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
+                                    <input
+                                        type="checkbox"
+                                        name="tradisi[]"
+                                        value="{{ $item }}"
+                                        @checked(in_array($item, (array) request('tradisi', [])))
+                                        class="h-4 w-4 shrink-0 accent-[#B51A28]"
+                                    >
+                                    <span>{{ $item }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                    </div>
+                @endif
+
+                @if ($ornamenOptions !== [])
+                    {{-- FILTER ORNAMEN --}}
+                    <div class="border-b border-gray-100 py-6">
+
+                        <h3 class="mb-4 font-semibold text-[#192235]">
+                            Ornamen
+                        </h3>
+
+                        <div class="max-h-44 space-y-2 overflow-y-auto pr-1">
+                            @foreach ($ornamenOptions as $item)
+                                <label class="flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
+                                    <input
+                                        type="checkbox"
+                                        name="ornamen[]"
+                                        value="{{ $item }}"
+                                        @checked(in_array($item, (array) request('ornamen', [])))
+                                        class="h-4 w-4 shrink-0 accent-[#B51A28]"
+                                    >
+                                    <span>{{ $item }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                    </div>
+                @endif
+
+                @if ($bahasaOptions !== [])
+                    {{-- FILTER BAHASA DAERAH --}}
+                    <div class="py-6">
+
+                        <h3 class="mb-4 font-semibold text-[#192235]">
+                            Bahasa Daerah
+                        </h3>
+
+                        <div class="max-h-44 space-y-2 overflow-y-auto pr-1">
+                            @foreach ($bahasaOptions as $item)
+                                <label class="flex cursor-pointer items-center gap-3 text-sm text-[#384358]">
+                                    <input
+                                        type="checkbox"
+                                        name="bahasa[]"
+                                        value="{{ $item }}"
+                                        @checked(in_array($item, (array) request('bahasa', [])))
+                                        class="h-4 w-4 shrink-0 accent-[#B51A28]"
+                                    >
+                                    <span>{{ $item }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                    </div>
+                @else
+                    <div class="pt-6"></div>
+                @endif
 
 
                 {{-- APPLY FILTER --}}
@@ -184,11 +307,24 @@
 
                 </div>
 
-                <span class="w-fit rounded-full bg-[#FFA586]/20 px-4 py-2 text-xs font-semibold text-[#561A2E]">
-                    DATA AWAL
-                </span>
+                @if ($fusekiAvailable ?? true)
+                    <span class="w-fit rounded-full bg-green-50 px-4 py-2 text-xs font-semibold text-green-700">
+                        SPARQL LIVE
+                    </span>
+                @else
+                    <span class="w-fit rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-800">
+                        FUSEKI OFFLINE
+                    </span>
+                @endif
 
             </div>
+
+            @if (! ($fusekiAvailable ?? true))
+                <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+                    {{ $fusekiError ?? 'Server Apache Jena Fuseki belum dapat dihubungi.' }}
+                    Pastikan server Fuseki aktif di <code>{{ config('services.fuseki.endpoint') }}</code>.
+                </div>
+            @endif
 
 
             {{-- DYNAMIC RESULT CARDS --}}
@@ -199,6 +335,16 @@
                     <article class="group overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
 
                         <div class="flex flex-col justify-between gap-5 md:flex-row">
+
+                            @if (! empty($house['hasCustomImage']))
+                                <div class="w-full shrink-0 overflow-hidden rounded-xl md:w-44">
+                                    <img
+                                        src="{{ $house['image'] }}"
+                                        alt="{{ $house['name'] }}"
+                                        class="h-40 w-full object-cover md:h-full"
+                                    >
+                                </div>
+                            @endif
 
                             {{-- HOUSE INFORMATION --}}
                             <div class="flex-1">
@@ -212,6 +358,12 @@
                                     <span class="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
                                         Terdaftar
                                     </span>
+
+                                    @if (request()->filled('q') && ! empty($house['relevanceScore']))
+                                        <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-[#192235]">
+                                            Skor {{ $house['relevanceScore'] }}
+                                        </span>
+                                    @endif
 
                                 </div>
 
@@ -245,24 +397,28 @@
                                 </p>
 
 
-                                {{-- SEMANTIC RELATIONS --}}
-                                <div class="mt-5 flex flex-wrap items-center gap-3">
+                                {{-- SEMANTIC RELATIONS / MATCH PATHS --}}
+                                <div class="mt-5 flex flex-wrap items-center gap-2">
 
                                     <span class="text-xs font-medium text-[#384358]">
-                                        Relasi budaya:
+                                        {{ ! empty($house['matchPaths']) ? 'Alasan kecocokan:' : 'Relasi budaya:' }}
                                     </span>
 
-                                    <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">
-                                        Rumah Adat
-                                    </span>
+                                    @if (! empty($house['matchPaths']))
+                                        @foreach (array_slice($house['matchPaths'], 0, 4) as $path)
+                                            <span class="rounded-lg bg-[#FFA586]/20 px-3 py-1 text-xs font-medium text-[#561A2E]">
+                                                {{ $path }}
+                                            </span>
+                                        @endforeach
+                                    @else
+                                        <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">
+                                            {{ $house['tribe'] }}
+                                        </span>
 
-                                    <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">
-                                        {{ $house['tribe'] }}
-                                    </span>
-
-                                    <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">
-                                        Wilayah
-                                    </span>
+                                        <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">
+                                            {{ $house['region'] }}
+                                        </span>
+                                    @endif
 
                                 </div>
 
