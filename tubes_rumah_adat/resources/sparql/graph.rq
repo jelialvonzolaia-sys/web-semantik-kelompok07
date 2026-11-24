@@ -16,6 +16,14 @@ WHERE {
   FILTER(isIRI(?subject) && isIRI(?object))
   FILTER(?predicate != rdf:type)
 
+  ?subject a ?sClass .
+  FILTER(?sClass IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:BahasaDaerah, ra:Wilayah, ra:Tradisi, ra:Ornamen))
+  BIND(REPLACE(STR(?sClass), "^.*[#/]([^#/?]+)$", "$1") AS ?subjectType)
+
+  ?object a ?oClass .
+  FILTER(?oClass IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:BahasaDaerah, ra:Wilayah, ra:Tradisi, ra:Ornamen))
+  BIND(REPLACE(STR(?oClass), "^.*[#/]([^#/?]+)$", "$1") AS ?objectType)
+
   OPTIONAL { ?subject ra:nama ?sNama . }
   OPTIONAL { ?subject rdfs:label ?sRdfsLabel . }
   BIND(COALESCE(STR(?sNama), STR(?sRdfsLabel), REPLACE(STR(?subject), "^.*[#/]([^#/?]+)$", "$1")) AS ?subjectLabel)
@@ -27,16 +35,13 @@ WHERE {
   OPTIONAL { ?predicate rdfs:label ?pLabel . }
   BIND(COALESCE(STR(?pLabel), REPLACE(STR(?predicate), "^.*[#/]([^#/?]+)$", "$1")) AS ?predicateLabel)
 
-  OPTIONAL {
-    ?subject a ?sClass .
-    FILTER(?sClass IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:BahasaDaerah, ra:Wilayah, ra:Tradisi, ra:Ornamen))
-  }
-  BIND(COALESCE(REPLACE(STR(?sClass), "^.*[#/]([^#/?]+)$", "$1"), "Entity") AS ?subjectType)
-
-  OPTIONAL {
-    ?object a ?oClass .
-    FILTER(?oClass IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:BahasaDaerah, ra:Wilayah, ra:Tradisi, ra:Ornamen))
-  }
-  BIND(COALESCE(REPLACE(STR(?oClass), "^.*[#/]([^#/?]+)$", "$1"), "Entity") AS ?objectType)
+  BIND(
+    IF(?sClass = ra:RumahAdat, 1,
+      IF(?sClass IN (ra:Suku, ra:Wilayah), 2,
+        IF(?predicate != ra:berkerabatDenganMarga, 3, 4)
+      )
+    ) AS ?priority
+  )
 }
-LIMIT 300
+ORDER BY ?priority ?subjectLabel ?predicateLabel ?objectLabel
+LIMIT 600

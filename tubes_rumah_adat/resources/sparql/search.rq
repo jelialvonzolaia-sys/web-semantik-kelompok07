@@ -9,7 +9,7 @@ SELECT DISTINCT
   ?relevanceScore
 WHERE {
   # Ubah "laia" sesuai kata kunci pencarian saat uji coba di Fuseki
-  BIND("laia" AS ?ql)
+  BIND(LCASE("laia") AS ?ql)
 
   ?rumah a ra:RumahAdat ;
          ra:nama ?namaRumah .
@@ -24,11 +24,32 @@ WHERE {
   }
 
   {
+    BIND(?namaRumah AS ?matchValue)
+    BIND(CONCAT("Nama rumah adat: ", STR(?namaRumah)) AS ?matchPath)
+    BIND(100 AS ?relevanceScore)
+  }
+  UNION
+  {
     ?rumah ra:memilikiMarga ?marga .
     ?marga ra:nama ?namaMarga .
-    FILTER(CONTAINS(LCASE(STR(?namaMarga)), ?ql))
+    BIND(?namaMarga AS ?matchValue)
     BIND(CONCAT("Marga langsung: ", STR(?namaMarga)) AS ?matchPath)
     BIND(95 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:namaAlternatif ?namaAlt .
+    BIND(?namaAlt AS ?matchValue)
+    BIND(CONCAT("Nama alternatif: ", STR(?namaAlt)) AS ?matchPath)
+    BIND(90 AS ?relevanceScore)
+  }
+  UNION
+  {
+    ?rumah ra:dimilikiOlehSuku ?s .
+    ?s ra:nama ?namaS .
+    BIND(?namaS AS ?matchValue)
+    BIND(CONCAT("Suku: ", STR(?namaS)) AS ?matchPath)
+    BIND(85 AS ?relevanceScore)
   }
   UNION
   {
@@ -36,30 +57,26 @@ WHERE {
     ?margaAsal ra:berkerabatDenganMarga ?margaKerabat .
     ?margaKerabat ra:nama ?namaMargaKerabat .
     ?margaAsal ra:nama ?namaMargaAsal .
-    FILTER(CONTAINS(LCASE(STR(?namaMargaKerabat)), ?ql))
+    BIND(?namaMargaKerabat AS ?matchValue)
     BIND(CONCAT("Marga berkerabat: ", STR(?namaMargaKerabat), " (kerabat ", STR(?namaMargaAsal), ")") AS ?matchPath)
     BIND(80 AS ?relevanceScore)
   }
   UNION
   {
-    FILTER(CONTAINS(LCASE(STR(?namaRumah)), ?ql))
-    BIND(CONCAT("Nama rumah adat: ", STR(?namaRumah)) AS ?matchPath)
-    BIND(100 AS ?relevanceScore)
-  }
-  UNION
-  {
-    ?rumah ra:dimilikiOlehSuku ?s .
-    ?s ra:nama ?namaS .
-    FILTER(CONTAINS(LCASE(STR(?namaS)), ?ql))
-    BIND(CONCAT("Suku: ", STR(?namaS)) AS ?matchPath)
-    BIND(85 AS ?relevanceScore)
+    ?rumah ra:dimilikiOlehSuku ?sukuAsal .
+    ?sukuAsal ra:berkerabatDenganSuku ?sukuKerabat .
+    ?sukuKerabat ra:nama ?namaSukuKerabat .
+    ?sukuAsal ra:nama ?namaSukuAsal .
+    BIND(?namaSukuKerabat AS ?matchValue)
+    BIND(CONCAT("Suku berkerabat: ", STR(?namaSukuKerabat), " (kerabat ", STR(?namaSukuAsal), ")") AS ?matchPath)
+    BIND(75 AS ?relevanceScore)
   }
   UNION
   {
     ?rumah ra:berasalDariWilayah ?w .
     ?w (ra:bagianDariWilayah)* ?wInduk .
     ?wInduk ra:nama ?namaW .
-    FILTER(CONTAINS(LCASE(STR(?namaW)), ?ql))
+    BIND(?namaW AS ?matchValue)
     BIND(CONCAT("Wilayah: ", STR(?namaW)) AS ?matchPath)
     BIND(70 AS ?relevanceScore)
   }
@@ -67,7 +84,7 @@ WHERE {
   {
     ?rumah ra:menggunakanBahasa ?bhs .
     ?bhs ra:nama ?namaBhs .
-    FILTER(CONTAINS(LCASE(STR(?namaBhs)), ?ql))
+    BIND(?namaBhs AS ?matchValue)
     BIND(CONCAT("Bahasa: ", STR(?namaBhs)) AS ?matchPath)
     BIND(65 AS ?relevanceScore)
   }
@@ -75,7 +92,7 @@ WHERE {
   {
     ?rumah ra:memilikiTradisi ?trd .
     ?trd ra:nama ?namaTrd .
-    FILTER(CONTAINS(LCASE(STR(?namaTrd)), ?ql))
+    BIND(?namaTrd AS ?matchValue)
     BIND(CONCAT("Tradisi: ", STR(?namaTrd)) AS ?matchPath)
     BIND(65 AS ?relevanceScore)
   }
@@ -83,9 +100,18 @@ WHERE {
   {
     ?rumah ra:memilikiOrnamen ?orn .
     ?orn ra:nama ?namaOrn .
-    FILTER(CONTAINS(LCASE(STR(?namaOrn)), ?ql))
+    BIND(?namaOrn AS ?matchValue)
     BIND(CONCAT("Ornamen: ", STR(?namaOrn)) AS ?matchPath)
     BIND(65 AS ?relevanceScore)
   }
+  UNION
+  {
+    ?rumah (ra:sejarah|ra:fungsi|ra:ciriArsitektur|ra:bentukAtap|ra:bahanBangunan|ra:maknaFilosofis) ?desk .
+    BIND(?desk AS ?matchValue)
+    BIND("Deskripsi & arsitektur" AS ?matchPath)
+    BIND(55 AS ?relevanceScore)
+  }
+
+  FILTER(?ql != "" && CONTAINS(LCASE(STR(?matchValue)), ?ql))
 }
 ORDER BY DESC(?relevanceScore) ASC(?namaRumah)
