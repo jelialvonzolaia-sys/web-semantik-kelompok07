@@ -1,0 +1,42 @@
+PREFIX ra:   <http://example.org/ontology/rumah-adat#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT
+  ?subject
+  ?subjectLabel
+  ?subjectType
+  ?predicate
+  ?predicateLabel
+  ?object
+  ?objectLabel
+  ?objectType
+WHERE {
+  ?subject ?predicate ?object .
+  FILTER(isIRI(?subject) && isIRI(?object))
+  FILTER(?predicate != rdf:type)
+
+  OPTIONAL { ?subject ra:nama ?sNama . }
+  OPTIONAL { ?subject rdfs:label ?sRdfsLabel . }
+  BIND(COALESCE(STR(?sNama), STR(?sRdfsLabel), REPLACE(STR(?subject), "^.*[#/]([^#/?]+)$", "$1")) AS ?subjectLabel)
+
+  OPTIONAL { ?object ra:nama ?oNama . }
+  OPTIONAL { ?object rdfs:label ?oRdfsLabel . }
+  BIND(COALESCE(STR(?oNama), STR(?oRdfsLabel), REPLACE(STR(?object), "^.*[#/]([^#/?]+)$", "$1")) AS ?objectLabel)
+
+  OPTIONAL { ?predicate rdfs:label ?pLabel . }
+  BIND(COALESCE(STR(?pLabel), REPLACE(STR(?predicate), "^.*[#/]([^#/?]+)$", "$1")) AS ?predicateLabel)
+
+  OPTIONAL {
+    ?subject a ?sClass .
+    FILTER(?sClass IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:BahasaDaerah, ra:Wilayah, ra:Tradisi, ra:Ornamen))
+  }
+  BIND(COALESCE(REPLACE(STR(?sClass), "^.*[#/]([^#/?]+)$", "$1"), "Entity") AS ?subjectType)
+
+  OPTIONAL {
+    ?object a ?oClass .
+    FILTER(?oClass IN (ra:RumahAdat, ra:Suku, ra:Marga, ra:BahasaDaerah, ra:Wilayah, ra:Tradisi, ra:Ornamen))
+  }
+  BIND(COALESCE(REPLACE(STR(?oClass), "^.*[#/]([^#/?]+)$", "$1"), "Entity") AS ?objectType)
+}
+LIMIT 300
