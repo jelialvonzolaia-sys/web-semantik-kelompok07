@@ -37,10 +37,12 @@
                 </svg>
 
                 <input
+                    id="live-search-input"
                     type="search"
                     name="q"
+                    autocomplete="off"
                     value="{{ request('q') }}"
-                    placeholder="Cari rumah adat, suku, atau wilayah..."
+                    placeholder="Cari rumah adat, suku, wilayah, tradisi, atau singkatan (mis. tapteng, dnt)..."
                     class="w-full py-3 text-sm text-[#192235] outline-none placeholder:text-gray-400"
                 >
             </div>
@@ -88,10 +90,10 @@
                 </a>
             </div>
 
-            <form action="{{ route('search') }}" method="GET">
+            <form id="filter-sidebar-form" action="{{ route('search') }}" method="GET">
 
                 {{-- KEEP SEARCH KEYWORD --}}
-                <input type="hidden" name="q" value="{{ request('q') }}">
+                <input id="filter-hidden-q" type="hidden" name="q" value="{{ request('q') }}">
 
                 @php
                     $sukuOptions = collect($filterOptions['suku'] ?? [])->pluck('label')->all();
@@ -297,30 +299,30 @@
                         Hasil eksplorasi untuk
                     </p>
 
-                    <h2 class="mt-1 text-2xl font-bold text-[#192235]">
+                    <h2 id="search-result-query" class="mt-1 text-2xl font-bold text-[#192235]">
                         "{{ request('q') ?: 'Seluruh Rumah Adat' }}"
                     </h2>
 
-                    <p class="mt-2 text-sm text-gray-500">
+                    <p id="search-result-count" class="mt-2 text-sm text-gray-500">
                         Menampilkan {{ count($houses) }} rumah adat
                     </p>
 
                 </div>
 
                 @if ($fusekiAvailable ?? true)
-                    <span class="w-fit rounded-full bg-green-50 px-4 py-2 text-xs font-semibold text-green-700">
+                    <span id="fuseki-status-badge" class="w-fit rounded-full bg-green-50 px-4 py-2 text-xs font-semibold text-green-700">
                         SPARQL LIVE
                     </span>
                 @else
-                    <span class="w-fit rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-800">
+                    <span id="fuseki-status-badge" class="w-fit rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-800">
                         FUSEKI OFFLINE
                     </span>
                 @endif
 
             </div>
 
-            @if (! empty($is_corrected))
-                <div class="mb-6 rounded-2xl border border-[#FFA586]/60 bg-[#FFF4ED] px-5 py-4 text-sm text-[#561A2E]">
+            <div id="typo-correction-banner" class="@if (empty($is_corrected)) hidden @endif mb-6 rounded-2xl border border-[#FFA586]/60 bg-[#FFF4ED] px-5 py-4 text-sm text-[#561A2E]">
+                @if (! empty($is_corrected))
                     <p>
                         Menampilkan hasil untuk <strong class="font-bold">"{{ $corrected_query ?? $corrected }}"</strong>
                         (dikoreksi dari <span class="italic">"{{ $original_query ?? $original }}"</span>).
@@ -331,25 +333,26 @@
                             <span class="font-medium text-[#384358]">Saran & ekspansi kata:</span>
                             @foreach ($suggestions as $suggestion)
                                 <a href="{{ route('search', ['q' => $suggestion]) }}"
+                                   data-live-suggestion="{{ $suggestion }}"
                                    class="rounded-full border border-[#FFA586] bg-white px-3 py-1 font-semibold text-[#561A2E] transition hover:bg-[#B51A28] hover:text-white">
                                     {{ $suggestion }}
                                 </a>
                             @endforeach
                         </div>
                     @endif
-                </div>
-            @endif
+                @endif
+            </div>
 
-            @if (! ($fusekiAvailable ?? true))
-                <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+            <div id="fuseki-offline-alert" class="@if ($fusekiAvailable ?? true) hidden @endif mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+                @if (! ($fusekiAvailable ?? true))
                     {{ $fusekiError ?? 'Server Apache Jena Fuseki belum dapat dihubungi.' }}
                     Pastikan server Fuseki aktif di <code>{{ config('services.fuseki.endpoint') }}</code>.
-                </div>
-            @endif
+                @endif
+            </div>
 
 
             {{-- DYNAMIC RESULT CARDS --}}
-            <div class="space-y-5">
+            <div id="search-results-container" class="space-y-5">
 
                 @forelse ($houses as $house)
 
@@ -527,5 +530,299 @@
     </div>
 
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('live-search-input');
+        const hiddenQueryInput = document.getElementById('filter-hidden-q');
+        const sidebarForm = document.getElementById('filter-sidebar-form');
+        const queryHeading = document.getElementById('search-result-query');
+        const countEl = document.getElementById('search-result-count');
+        const statusBadge = document.getElementById('fuseki-status-badge');
+        const typoBanner = document.getElementById('typo-correction-banner');
+        const offlineAlert = document.getElementById('fuseki-offline-alert');
+        const resultsContainer = document.getElementById('search-results-container');
+
+        const liveEndpoint = @json(route('api.search.live'));
+        const searchPageUrl = @json(route('search'));
+        const defaultEndpointDisplay = @json(config('services.fuseki.endpoint'));
+
+        if (! searchInput || ! sidebarForm || ! resultsContainer) {
+            return;
+        }
+
+        let debounceTimer = null;
+        let activeController = null;
+
+        const escapeHtml = (value) => String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+
+        const buildQueryParams = () => {
+            const params = new URLSearchParams();
+            const q = searchInput.value.trim();
+
+            if (hiddenQueryInput) {
+                hiddenQueryInput.value = q;
+            }
+
+            if (q !== '') {
+                params.set('q', q);
+            }
+
+            const formData = new FormData(sidebarForm);
+            for (const [key, rawVal] of formData.entries()) {
+                if (key === 'q') {
+                    continue;
+                }
+                const val = String(rawVal).trim();
+                if (val !== '') {
+                    params.append(key, val);
+                }
+            }
+
+            return params;
+        };
+
+        const renderBanner = (correction) => {
+            if (! typoBanner) {
+                return;
+            }
+
+            if (! correction || ! correction.is_corrected) {
+                typoBanner.innerHTML = '';
+                typoBanner.classList.add('hidden');
+                return;
+            }
+
+            let suggestionsHtml = '';
+            const suggestions = Array.isArray(correction.suggestions) ? correction.suggestions : [];
+
+            if (suggestions.length > 1) {
+                const pills = suggestions.map((sug) => `
+                    <a href="${escapeHtml(searchPageUrl + '?q=' + encodeURIComponent(sug))}"
+                       data-live-suggestion="${escapeHtml(sug)}"
+                       class="rounded-full border border-[#FFA586] bg-white px-3 py-1 font-semibold text-[#561A2E] transition hover:bg-[#B51A28] hover:text-white">
+                        ${escapeHtml(sug)}
+                    </a>
+                `).join('');
+
+                suggestionsHtml = `
+                    <div class="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
+                        <span class="font-medium text-[#384358]">Saran & ekspansi kata:</span>
+                        ${pills}
+                    </div>
+                `;
+            }
+
+            typoBanner.innerHTML = `
+                <p>
+                    Menampilkan hasil untuk <strong class="font-bold">"${escapeHtml(correction.corrected_query)}"</strong>
+                    (dikoreksi dari <span class="italic">"${escapeHtml(correction.original_query)}"</span>).
+                </p>
+                ${suggestionsHtml}
+            `;
+            typoBanner.classList.remove('hidden');
+        };
+
+        const renderCards = (results, q) => {
+            if (! Array.isArray(results) || results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-sm">
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#FFA586]/20 text-3xl text-[#B51A28]">
+                            ⌕
+                        </div>
+                        <h3 class="mt-5 text-xl font-bold text-[#192235]">Rumah Adat Tidak Ditemukan</h3>
+                        <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-500">
+                            Maaf, kami belum menemukan rumah adat yang sesuai dengan kata kunci atau filter yang kamu pilih. Coba gunakan kata kunci lain.
+                        </p>
+                        <a href="${escapeHtml(searchPageUrl)}"
+                           class="mt-6 inline-block rounded-xl bg-[#B51A28] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#561A2E]">
+                            Lihat Semua Rumah Adat
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsContainer.innerHTML = results.map((house) => {
+                const detailUrl = house.detail_url || `/detail/${encodeURIComponent(house.slug || '')}`;
+                const imageHtml = house.hasCustomImage
+                    ? `
+                        <div class="w-full shrink-0 overflow-hidden rounded-xl md:w-44">
+                            <img src="${escapeHtml(house.image)}" alt="${escapeHtml(house.name)}" class="h-40 w-full object-cover md:h-full">
+                        </div>
+                    `
+                    : '';
+
+                const scoreHtml = (q !== '' && house.relevanceScore)
+                    ? `<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-[#192235]">Skor ${escapeHtml(house.relevanceScore)}</span>`
+                    : '';
+
+                const matchPaths = Array.isArray(house.matchPaths) ? house.matchPaths : [];
+                const relationLabel = matchPaths.length > 0 ? 'Alasan kecocokan:' : 'Relasi budaya:';
+                const badgesHtml = matchPaths.length > 0
+                    ? matchPaths.slice(0, 4).map((path) => `
+                        <span class="rounded-lg bg-[#FFA586]/20 px-3 py-1 text-xs font-medium text-[#561A2E]">
+                            ${escapeHtml(path)}
+                        </span>
+                    `).join('')
+                    : `
+                        <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">${escapeHtml(house.tribe)}</span>
+                        <span class="rounded-lg bg-gray-100 px-3 py-1 text-xs text-[#384358]">${escapeHtml(house.region)}</span>
+                    `;
+
+                return `
+                    <article class="group overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        <div class="flex flex-col justify-between gap-5 md:flex-row">
+                            ${imageHtml}
+                            <div class="flex-1">
+                                <div class="mb-3 flex flex-wrap items-center gap-2">
+                                    <span class="rounded-full bg-[#FFA586]/20 px-3 py-1 text-xs font-semibold text-[#561A2E]">
+                                        ${escapeHtml(house.tag)}
+                                    </span>
+                                    <span class="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
+                                        Terdaftar
+                                    </span>
+                                    ${scoreHtml}
+                                </div>
+
+                                <h3 class="text-xl font-bold text-[#192235] transition group-hover:text-[#B51A28]">
+                                    ${escapeHtml(house.name)}
+                                </h3>
+
+                                <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-[#384358]">
+                                    <span>◈ ${escapeHtml(house.tribe)}</span>
+                                    <span>⌖ ${escapeHtml(house.region)}</span>
+                                </div>
+
+                                <p class="mt-4 max-w-2xl text-sm leading-relaxed text-gray-600">
+                                    ${escapeHtml(house.description)}
+                                </p>
+
+                                <div class="mt-5 flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-medium text-[#384358]">${relationLabel}</span>
+                                    ${badgesHtml}
+                                </div>
+                            </div>
+
+                            <div class="flex shrink-0 items-end">
+                                <a href="${escapeHtml(detailUrl)}"
+                                   class="inline-block rounded-xl bg-[#192235] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#B51A28]">
+                                    Lihat Detail →
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        };
+
+        const runLiveSearch = async () => {
+            const params = buildQueryParams();
+            const q = searchInput.value.trim();
+
+            if (activeController) {
+                activeController.abort();
+            }
+            activeController = new AbortController();
+
+            const url = new URL(liveEndpoint, window.location.origin);
+            url.search = params.toString();
+
+            try {
+                const response = await fetch(url.toString(), {
+                    headers: { Accept: 'application/json' },
+                    signal: activeController.signal,
+                });
+
+                if (! response.ok) {
+                    return;
+                }
+
+                const payload = await response.json();
+
+                if (queryHeading) {
+                    queryHeading.textContent = `"${q || 'Seluruh Rumah Adat'}"`;
+                }
+
+                if (countEl) {
+                    countEl.textContent = `Menampilkan ${payload.total ?? 0} rumah adat`;
+                }
+
+                if (statusBadge) {
+                    if (payload.fusekiAvailable !== false) {
+                        statusBadge.className = 'w-fit rounded-full bg-green-50 px-4 py-2 text-xs font-semibold text-green-700';
+                        statusBadge.textContent = 'SPARQL LIVE';
+                    } else {
+                        statusBadge.className = 'w-fit rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-800';
+                        statusBadge.textContent = 'FUSEKI OFFLINE';
+                    }
+                }
+
+                if (offlineAlert) {
+                    if (payload.fusekiAvailable === false) {
+                        offlineAlert.innerHTML = `${escapeHtml(payload.fusekiError || 'Server Apache Jena Fuseki belum dapat dihubungi.')} Pastikan server Fuseki aktif di <code>${escapeHtml(defaultEndpointDisplay)}</code>.`;
+                        offlineAlert.classList.remove('hidden');
+                    } else {
+                        offlineAlert.innerHTML = '';
+                        offlineAlert.classList.add('hidden');
+                    }
+                }
+
+                renderBanner(payload.correction);
+                renderCards(payload.results || [], q);
+
+                const nextUrl = params.toString() !== '' ? `${searchPageUrl}?${params.toString()}` : searchPageUrl;
+                window.history.replaceState({}, '', nextUrl);
+            } catch (err) {
+                if (! err || err.name !== 'AbortError') {
+                    // Biarkan form submit fallback bekerja bila fetch gagal jaringan
+                }
+            }
+        };
+
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.trim();
+            clearTimeout(debounceTimer);
+
+            if (q.length === 1) {
+                return;
+            }
+
+            debounceTimer = setTimeout(runLiveSearch, 250);
+        });
+
+        sidebarForm.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                clearTimeout(debounceTimer);
+                runLiveSearch();
+            });
+        });
+
+        const margaInput = document.getElementById('filter-marga');
+        if (margaInput) {
+            margaInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(runLiveSearch, 250);
+            });
+        }
+
+        if (typoBanner) {
+            typoBanner.addEventListener('click', (event) => {
+                const pill = event.target.closest('[data-live-suggestion]');
+                if (! pill) {
+                    return;
+                }
+                event.preventDefault();
+                searchInput.value = pill.getAttribute('data-live-suggestion') || '';
+                runLiveSearch();
+            });
+        }
+    });
+</script>
 
 @endsection

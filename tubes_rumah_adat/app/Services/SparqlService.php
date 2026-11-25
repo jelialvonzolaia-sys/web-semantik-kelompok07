@@ -11,6 +11,52 @@ class SparqlService
 {
     private const NAMESPACE_URI = 'http://example.org/ontology/rumah-adat#';
 
+    /** @var array<string, string> */
+    private const MANUAL_ABBREVIATIONS = [
+        // Wilayah Sumatera Utara
+        'tapteng' => 'Tapanuli Tengah',
+        'tapsel' => 'Tapanuli Selatan',
+        'taput' => 'Tapanuli Utara',
+        'madina' => 'Mandailing Natal',
+        'palas' => 'Padang Lawas',
+        'paluta' => 'Padang Lawas Utara',
+        'humbahas' => 'Humbang Hasundutan',
+        'sergai' => 'Serdang Bedagai',
+        'labura' => 'Labuhanbatu Utara',
+        'labusel' => 'Labuhanbatu Selatan',
+        'nisel' => 'Nias Selatan',
+        'nisbar' => 'Nias Barat',
+        'nisut' => 'Nias Utara',
+        'gusit' => 'Gunungsitoli',
+        'siantar' => 'Pematangsiantar',
+        'delser' => 'Deli Serdang',
+        'sumut' => 'Sumatera Utara',
+        'padsim' => 'Padangsidimpuan',
+        'tjbalai' => 'Tanjungbalai',
+        'pakbhar' => 'Pakpak Bharat',
+
+        // Suku, sistem kekerabatan, tradisi, ornamen, dan arsitektur
+        'dnt' => 'Dalihan Na Tolu',
+        'rs' => 'Rakut Sitelu',
+        'ss' => 'Sulang Silima',
+        'batoba' => 'Batak Toba',
+        'bkaro' => 'Batak Karo',
+        'bsim' => 'Batak Simalungun',
+        'bmand' => 'Batak Mandailing',
+        'bangkola' => 'Batak Angkola',
+        'hombo' => 'Hombo Batu',
+        'saurmatua' => 'Saur Matua',
+        'rbolon' => 'Rumah Bolon',
+        'sjabu' => 'Siwaluh Jabu',
+        'bgodang' => 'Bagas Godang',
+        'ohada' => 'Omo Hada',
+        'osebua' => 'Omo Sebua',
+        'imaimun' => 'Istana Maimun',
+        'hg' => 'Horja Godang',
+        'ttawar' => 'Tepung Tawar',
+        'rbintang' => 'Rondang Bintang',
+    ];
+
     private bool $fusekiAvailable = true;
 
     private ?string $lastError = null;
@@ -225,13 +271,14 @@ SPARQL;
     }
 
     /**
-     * Bangun kamus entitas ter-tokenisasi dari seluruh ra:nama 7 kelas ontologi dan simpan di Cache Laravel.
+     * Bangun kamus entitas ter-tokenisasi (termasuk generator akronim dinamis) dan simpan di Cache Laravel.
      *
      * @return array{
      *     phrases: array<string, string>,
      *     tokens: array<string, string>,
      *     raw_phrases: array<int, string>,
-     *     raw_tokens: array<string, bool>
+     *     raw_tokens: array<string, bool>,
+     *     abbreviations: array<string, string>
      * }
      */
     public function buildOntologyDictionary(): array
@@ -250,16 +297,83 @@ SPARQL;
             Cache::forget('ontology_dictionary');
         }
 
-        if (! isset($cached['phrases'], $cached['tokens'], $cached['raw_phrases'], $cached['raw_tokens'])) {
+        if (! isset($cached['phrases'], $cached['tokens'], $cached['raw_phrases'], $cached['raw_tokens'], $cached['abbreviations'])) {
             return [
                 'phrases' => [],
                 'tokens' => [],
                 'raw_phrases' => [],
                 'raw_tokens' => [],
+                'abbreviations' => self::MANUAL_ABBREVIATIONS,
             ];
         }
 
         return $cached;
+    }
+
+    /**
+     * Ekspansi singkatan atau akronim (manual + generator dinamis + toleransi typo pada singkatan).
+     */
+    public function expandAbbreviation(string $token): ?string
+    {
+        $cleaned = $this->stripExtraPunctuation(trim($token));
+
+        if ($cleaned === '' || str_contains($cleaned, ' ')) {
+            return null;
+        }
+
+        $rawLower = mb_strtolower($cleaned, 'UTF-8');
+        $normKey = $this->normalizeAbbreviationKey($cleaned);
+
+        if ($normKey === '') {
+            return null;
+        }
+
+        if (isset(self::MANUAL_ABBREVIATIONS[$normKey])) {
+            return self::MANUAL_ABBREVIATIONS[$normKey];
+        }
+
+        $dictionary = $this->buildOntologyDictionary();
+
+        // Hindari mengubah kata entitas persis (mis. "karo", "nias", "laia") menjadi singkatan lain
+        if (isset($dictionary['raw_tokens'][$rawLower])) {
+            return null;
+        }
+
+        $abbreviations = $dictionary['abbreviations'];
+
+        if (isset($abbreviations[$normKey])) {
+            return $abbreviations[$normKey];
+        }
+
+        if (strlen($normKey) < 4) {
+            return null;
+        }
+
+        // Toleransi typo pada singkatan manual seperti "taptng" -> "tapteng" -> "Tapanuli Tengah" atau "tapsl" -> "Tapanuli Selatan"
+        $bestTarget = null;
+        $bestScore = 0.0;
+        $maxLenDiff = strlen($normKey) <= 5 ? 1 : 2;
+
+        foreach (self::MANUAL_ABBREVIATIONS as $abbrKey => $expandedLabel) {
+            if (strlen($abbrKey) < 5 || abs(strlen($normKey) - strlen($abbrKey)) > $maxLenDiff) {
+                continue;
+            }
+
+            $distance = $this->calculateEditDistance($normKey, $abbrKey);
+
+            if ($distance > $maxLenDiff) {
+                continue;
+            }
+
+            $score = $this->calculateHybridSimilarity($normKey, $abbrKey);
+
+            if ($score >= 0.78 && $score > $bestScore) {
+                $bestScore = $score;
+                $bestTarget = $expandedLabel;
+            }
+        }
+
+        return $bestTarget;
     }
 
     /**
@@ -341,6 +455,20 @@ SPARQL;
         }
 
         $dictionary = $this->buildOntologyDictionary();
+
+        if (! str_contains($cleanedInput, ' ')) {
+            $expandedAbbreviation = $this->expandAbbreviation($cleanedInput);
+
+            if ($expandedAbbreviation !== null) {
+                return $this->formatTypoResult(
+                    $keyword,
+                    $expandedAbbreviation,
+                    true,
+                    [$expandedAbbreviation],
+                    [$expandedAbbreviation]
+                );
+            }
+        }
 
         if ($dictionary['phrases'] === [] && $dictionary['tokens'] === []) {
             return $this->formatTypoResult($keyword, $cleanedInput, false, [], [$cleanedInput]);
@@ -725,7 +853,8 @@ SPARQL;
      *     phrases: array<string, string>,
      *     tokens: array<string, string>,
      *     raw_phrases: array<int, string>,
-     *     raw_tokens: array<string, bool>
+     *     raw_tokens: array<string, bool>,
+     *     abbreviations: array<string, string>
      * }
      */
     private function buildDictionaryIndex(array $dictionary): array
@@ -812,12 +941,99 @@ SPARQL;
             }
         }
 
+        $abbreviations = self::MANUAL_ABBREVIATIONS + $this->generateDynamicAcronyms($phrases, $rawTokens);
+
         return [
             'phrases' => $phrases,
             'tokens' => $tokens,
             'raw_phrases' => array_values(array_unique($rawPhrases)),
             'raw_tokens' => $rawTokens,
+            'abbreviations' => $abbreviations,
         ];
+    }
+
+    /**
+     * Generator akronim dinamis dari nama entitas multi-kata (kombinasi 2-4 huruf awal tiap kata).
+     *
+     * @param  array<string, string>  $phrases
+     * @param  array<string, bool>  $rawTokens
+     * @return array<string, string>
+     */
+    private function generateDynamicAcronyms(array $phrases, array $rawTokens): array
+    {
+        $adminPrefixes = ['kabupaten', 'kota', 'kecamatan', 'desa', 'suku', 'etnis', 'bahasa', 'pulau', 'umum', 'sidang', 'musyawarah'];
+        $acronyms = [];
+
+        foreach ($phrases as $canonicalPhrase) {
+            $cleaned = $this->stripExtraPunctuation($canonicalPhrase);
+            $words = preg_split('/\s+/u', $cleaned) ?: [];
+            $significant = [];
+
+            foreach ($words as $word) {
+                $lower = mb_strtolower($word, 'UTF-8');
+                if ($lower !== '' && ! in_array($lower, $adminPrefixes, true) && strlen($word) >= 2) {
+                    $significant[] = $word;
+                }
+            }
+
+            if (count($significant) < 2) {
+                continue;
+            }
+
+            $targetPhrase = implode(' ', $significant);
+
+            if (count($significant) >= 3 && count($significant) <= 4) {
+                $initials = '';
+                foreach ($significant as $part) {
+                    $initials .= mb_strtolower(mb_substr($part, 0, 1, 'UTF-8'), 'UTF-8');
+                }
+                if (strlen($initials) >= 3 && ! isset($rawTokens[$initials]) && ! isset($acronyms[$initials])) {
+                    $acronyms[$initials] = $targetPhrase;
+                }
+            }
+
+            if (count($significant) === 2) {
+                $first = mb_strtolower($significant[0], 'UTF-8');
+                $second = mb_strtolower($significant[1], 'UTF-8');
+
+                foreach ([2, 3, 4] as $lenA) {
+                    foreach ([2, 3, 4] as $lenB) {
+                        if (mb_strlen($first, 'UTF-8') < $lenA || mb_strlen($second, 'UTF-8') < $lenB) {
+                            continue;
+                        }
+
+                        $code = mb_substr($first, 0, $lenA, 'UTF-8').mb_substr($second, 0, $lenB, 'UTF-8');
+                        $normCode = $this->normalizeAbbreviationKey($code);
+
+                        if (
+                            strlen($normCode) >= 4
+                            && ! isset($rawTokens[$normCode])
+                            && ! isset(self::MANUAL_ABBREVIATIONS[$normCode])
+                            && ! isset($acronyms[$normCode])
+                        ) {
+                            $acronyms[$normCode] = $targetPhrase;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $acronyms;
+    }
+
+    private function normalizeAbbreviationKey(string $token): string
+    {
+        $diacriticMap = [
+            'ö' => 'o', 'Ö' => 'o',
+            'ä' => 'a', 'Ä' => 'a',
+            'ü' => 'u', 'Ü' => 'u',
+            'é' => 'e', 'è' => 'e', 'ê' => 'e',
+            'á' => 'a', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+        ];
+        $ascii = strtr($token, $diacriticMap);
+        $lower = mb_strtolower($ascii, 'UTF-8');
+
+        return preg_replace('/[^a-z0-9]/', '', $lower) ?? '';
     }
 
     /**
@@ -969,6 +1185,17 @@ SPARQL;
         for ($i = 0; $i < $count; $i++) {
             $word = $words[$i];
             $wordLower = mb_strtolower($word, 'UTF-8');
+
+            $expandedWord = $this->expandAbbreviation($word);
+
+            if ($expandedWord !== null) {
+                $anyCorrected = true;
+                $resolvedParts[] = $expandedWord;
+                $expansionTerms[] = $expandedWord;
+                $suggestions[] = $expandedWord;
+
+                continue;
+            }
 
             // Cek frasa 2-kata terlebih dahulu agar frasa bertipe "Rumah Bolon" / "Suku Nias" tetap tertangkap
             if ($i < $count - 1) {

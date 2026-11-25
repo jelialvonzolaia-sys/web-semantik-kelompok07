@@ -151,7 +151,8 @@ class RumahAdatSparqlTest extends TestCase
         $response->assertSee('Skor 95');
         $response->assertSee('Bahasa Nias');
         $response->assertSee('Menampilkan 1 rumah adat');
-        $response->assertDontSee('dikoreksi dari');
+        $response->assertViewHas('is_corrected', false);
+        $response->assertSee('id="typo-correction-banner"', false);
 
         $searchSparql = collect($capturedQueries)->first(
             static fn (string $query): bool => str_contains($query, 'BIND(LCASE(')
@@ -320,6 +321,113 @@ class RumahAdatSparqlTest extends TestCase
         $this->assertStringContainsString('||', $searchSparql);
         $this->assertStringContainsString('LCASE("Rumah Bolon")', $searchSparql);
         $this->assertStringContainsString('LCASE("Batak")', $searchSparql);
+    }
+
+    public function test_expand_abbreviation_supports_manual_dynamic_and_typo_abbreviations(): void
+    {
+        Http::fake([
+            'http://localhost:3030/rumah_adat/query' => Http::response([
+                'results' => [
+                    'bindings' => [
+                        ['label' => ['value' => 'Rumah Siwaluh Jabu Desa Lingga']],
+                        ['label' => ['value' => 'Bagas Godang Panyabungan Tonga']],
+                        ['label' => ['value' => 'Sidang Adat & Musyawarah Dalihan Na Tolu']],
+                        ['label' => ['value' => 'Kabupaten Tapanuli Tengah']],
+                        ['label' => ['value' => 'Kabupaten Tapanuli Selatan']],
+                        ['label' => ['value' => 'Suku Nias']],
+                        ['label' => ['value' => 'Suku Batak Karo']],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $service = app(SparqlService::class);
+
+        $this->assertSame('Tapanuli Tengah', $service->expandAbbreviation('tapteng'));
+        $this->assertSame('Tapanuli Selatan', $service->expandAbbreviation('tapsel'));
+        $this->assertSame('Mandailing Natal', $service->expandAbbreviation('madina'));
+        $this->assertSame('Padang Lawas Utara', $service->expandAbbreviation('paluta'));
+        $this->assertSame('Humbang Hasundutan', $service->expandAbbreviation('humbahas'));
+        $this->assertSame('Nias Selatan', $service->expandAbbreviation('nisel'));
+        $this->assertSame('Sumatera Utara', $service->expandAbbreviation('sumut'));
+        $this->assertSame('Dalihan Na Tolu', $service->expandAbbreviation('dnt'));
+        $this->assertSame('Rakut Sitelu', $service->expandAbbreviation('rs'));
+        $this->assertSame('Sulang Silima', $service->expandAbbreviation('ss'));
+        $this->assertSame('Batak Toba', $service->expandAbbreviation('batoba'));
+        $this->assertSame('Batak Karo', $service->expandAbbreviation('bkaro'));
+        $this->assertSame('Hombo Batu', $service->expandAbbreviation('hombo'));
+        $this->assertSame('Saur Matua', $service->expandAbbreviation('saurmatua'));
+
+        // Generator akronim dinamis dari kamus ontologi ("Siwaluh Jabu" -> "sija", "Bagas Godang" -> "bago")
+        $this->assertSame('Siwaluh Jabu', $service->expandAbbreviation('sija'));
+        $this->assertSame('Bagas Godang', $service->expandAbbreviation('bago'));
+
+        // Typo pada singkatan
+        $this->assertSame('Tapanuli Tengah', $service->expandAbbreviation('taptng'));
+        $this->assertSame('Tapanuli Selatan', $service->expandAbbreviation('tapsl'));
+
+        // Kata asli entitas tidak diubah
+        $this->assertNull($service->expandAbbreviation('Karo'));
+        $this->assertNull($service->expandAbbreviation('Nias'));
+    }
+
+    public function test_live_search_api_and_views_include_live_search_support(): void
+    {
+        Http::fake(function (ClientRequest $request) {
+            $sparql = (string) ($request['query'] ?? '');
+
+            if (str_contains($sparql, '?label ?altLabel')) {
+                return Http::response([
+                    'results' => [
+                        'bindings' => [
+                            ['label' => ['value' => 'Kabupaten Tapanuli Tengah']],
+                            ['label' => ['value' => 'Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)']],
+                        ],
+                    ],
+                ], 200);
+            }
+
+            if (str_contains($sparql, 'ra:bagianDariWilayah ra:wil_sumatera_utara') || str_contains($sparql, '?kategori ?uri ?label') || str_contains($sparql, 'GROUP BY ?tipe')) {
+                return Http::response(['results' => ['bindings' => []]], 200);
+            }
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        [
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_adat_pasisi_rajo_sorkam_kanan'],
+                            'namaRumah' => ['value' => 'Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)'],
+                            'namaSuku' => ['value' => 'Etnis Pasisi'],
+                            'namaWilayah' => ['value' => 'Sorkam Kanan, Kecamatan Sorkam Barat'],
+                            'matchPath' => ['value' => 'Wilayah: Kabupaten Tapanuli Tengah'],
+                            'relevanceScore' => ['value' => '70'],
+                        ],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $liveResponse = $this->getJson('/api/search/live?q=taptng');
+        $liveResponse->assertStatus(200)
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('correction.original_query', 'taptng')
+            ->assertJsonPath('correction.corrected_query', 'Tapanuli Tengah')
+            ->assertJsonPath('correction.is_corrected', true)
+            ->assertJsonPath('results.0.name', 'Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)')
+            ->assertJsonPath('results.0.slug', 'rumah-adat-pasisi-rajo-sorkam-kanan');
+
+        $this->assertStringEndsWith('/detail/rumah-adat-pasisi-rajo-sorkam-kanan', (string) $liveResponse->json('results.0.detail_url'));
+
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200)
+            ->assertSee('home-live-dropdown')
+            ->assertSee('api\/search\/live', false);
+
+        $searchPageResponse = $this->get('/search');
+        $searchPageResponse->assertStatus(200)
+            ->assertSee('live-search-input')
+            ->assertSee('search-results-container')
+            ->assertSee('api\/search\/live', false);
     }
 
     public function test_detail_renders_ontology_fields_and_preserves_comma_in_wilayah(): void
