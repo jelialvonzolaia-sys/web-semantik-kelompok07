@@ -9,6 +9,9 @@ Route::get('/', [RumahAdatController::class, 'index'])
 Route::get('/search', [RumahAdatController::class, 'search'])
     ->name('search');
 
+Route::get('/api/search/live', [RumahAdatController::class, 'liveSearch'])
+    ->name('api.search.live');
+
 Route::get('/detail/{slug}', [RumahAdatController::class, 'detail'])
     ->name('detail');
 

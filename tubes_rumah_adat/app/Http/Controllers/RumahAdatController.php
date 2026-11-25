@@ -32,20 +32,17 @@ class RumahAdatController extends Controller
     public function search(Request $request): View
     {
         $keyword = trim((string) $request->query('q', ''));
-        $filters = [
-            'suku' => $this->normalizeFilterValues($request->query('suku', [])),
-            'wilayah' => $this->normalizeFilterValues($request->query('wilayah', [])),
-            'tradisi' => $this->normalizeFilterValues($request->query('tradisi', [])),
-            'ornamen' => $this->normalizeFilterValues($request->query('ornamen', [])),
-            'bahasa' => $this->normalizeFilterValues($request->query('bahasa', [])),
-            'marga' => $this->normalizeFilterValues($request->query('marga', [])),
-        ];
+        $filters = $this->extractFilters($request);
 
         $houses = $this->sparql->search($keyword, $filters);
         $typoResolution = $this->sparql->getLastTypoResolution() ?? [
             'original' => $keyword,
             'corrected' => $keyword,
+            'original_query' => $keyword,
+            'corrected_query' => $keyword,
             'is_corrected' => false,
+            'suggestions' => [],
+            'expansion_terms' => [],
         ];
         $searchAvailable = $this->sparql->isFusekiAvailable();
         $searchError = $this->sparql->getLastError();
@@ -58,14 +55,70 @@ class RumahAdatController extends Controller
             'houses' => $houses,
             'filterOptions' => $filterOptions,
             'keyword' => $keyword,
-            'original' => $typoResolution['original'],
-            'corrected' => $typoResolution['corrected'],
+            'original_query' => $typoResolution['original_query'],
+            'corrected_query' => $typoResolution['corrected_query'],
             'is_corrected' => $typoResolution['is_corrected'],
+            'suggestions' => $typoResolution['suggestions'],
+            'original' => $typoResolution['original_query'],
+            'corrected' => $typoResolution['corrected_query'],
             'typoResolution' => $typoResolution,
             'activeFilters' => $filters,
             'fusekiAvailable' => $fusekiAvailable,
             'fusekiError' => $fusekiError,
         ]);
+    }
+
+    public function liveSearch(Request $request): JsonResponse
+    {
+        $keyword = trim((string) $request->query('q', ''));
+        $filters = $this->extractFilters($request);
+
+        $houses = $this->sparql->search($keyword, $filters);
+        $typoResolution = $this->sparql->getLastTypoResolution() ?? [
+            'original' => $keyword,
+            'corrected' => $keyword,
+            'original_query' => $keyword,
+            'corrected_query' => $keyword,
+            'is_corrected' => false,
+            'suggestions' => [],
+            'expansion_terms' => [],
+        ];
+
+        $results = array_map(static function (array $house): array {
+            $house['detail_url'] = route('detail', ['slug' => $house['slug']]);
+
+            return $house;
+        }, $houses);
+
+        return response()->json([
+            'results' => $results,
+            'correction' => [
+                'original_query' => $typoResolution['original_query'],
+                'corrected_query' => $typoResolution['corrected_query'],
+                'is_corrected' => $typoResolution['is_corrected'],
+                'suggestions' => $typoResolution['suggestions'],
+                'expansion_terms' => $typoResolution['expansion_terms'],
+            ],
+            'total' => count($results),
+            'query' => $keyword,
+            'fusekiAvailable' => $this->sparql->isFusekiAvailable(),
+            'fusekiError' => $this->sparql->getLastError(),
+        ]);
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    private function extractFilters(Request $request): array
+    {
+        return [
+            'suku' => $this->normalizeFilterValues($request->query('suku', [])),
+            'wilayah' => $this->normalizeFilterValues($request->query('wilayah', [])),
+            'tradisi' => $this->normalizeFilterValues($request->query('tradisi', [])),
+            'ornamen' => $this->normalizeFilterValues($request->query('ornamen', [])),
+            'bahasa' => $this->normalizeFilterValues($request->query('bahasa', [])),
+            'marga' => $this->normalizeFilterValues($request->query('marga', [])),
+        ];
     }
 
     public function detail(string $slug): View

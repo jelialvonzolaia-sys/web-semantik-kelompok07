@@ -8,19 +8,21 @@
      1. HERO SECTION
 ========================================================= --}}
 <section
-    class="relative flex min-h-[680px] items-center justify-center overflow-hidden bg-[#192235] px-6 py-24 text-center text-white md:min-h-[760px]"
+    class="relative z-30 flex min-h-[680px] items-center justify-center bg-[#192235] px-6 py-24 text-center text-white md:min-h-[760px]"
     style="background-image: url('{{ asset('images/rumah-adat/hero-rumah-adat.jpeg') }}');
            background-size: cover;
            background-position: center;"
 >
 
-    {{-- DARK OVERLAY --}}
-    <div class="absolute inset-0 bg-[#192235]/55"></div>
+    <div class="pointer-events-none absolute inset-0 overflow-hidden">
+        {{-- DARK OVERLAY --}}
+        <div class="absolute inset-0 bg-[#192235]/55"></div>
 
-    {{-- GRADIENT OVERLAY --}}
-    <div class="absolute inset-0 bg-gradient-to-t from-[#192235]/90 via-transparent to-[#192235]/40"></div>
+        {{-- GRADIENT OVERLAY --}}
+        <div class="absolute inset-0 bg-gradient-to-t from-[#192235]/90 via-transparent to-[#192235]/40"></div>
+    </div>
 
-    <div class="relative z-10 mx-auto w-full max-w-5xl">
+    <div class="relative z-30 mx-auto w-full max-w-5xl">
 
         <span class="mb-7 inline-flex items-center rounded-full border border-[#FFA586]/40 bg-[#561A2E]/60 px-5 py-2 text-sm font-medium tracking-wide text-[#FFA586]">
             Eksplorasi Warisan Budaya Sumatera Utara
@@ -38,50 +40,60 @@
             melalui teknologi pencarian berbasis semantik.
         </p>
 
-        {{-- SEARCH BAR --}}
-        <form
-            action="{{ route('search') }}"
-            method="GET"
-            role="search"
-            class="mx-auto flex w-full max-w-3xl flex-col gap-3 rounded-2xl bg-white p-3 shadow-2xl sm:flex-row"
-        >
-
-            <div class="flex min-w-0 flex-1 items-center gap-3 px-4">
-
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#384358"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                >
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
-                </svg>
-
-                <input
-                    type="search"
-                    name="q"
-                    aria-label="Cari rumah adat"
-                    placeholder="Cari rumah adat, suku, marga, atau wilayah..."
-                    class="w-full min-w-0 py-3 text-base text-[#192235] outline-none placeholder:text-gray-400"
-                >
-
-            </div>
-
-            <button
-                type="submit"
-                class="rounded-xl bg-[#B51A28] px-8 py-4 font-semibold text-white transition duration-300 hover:bg-[#561A2E]"
+        {{-- SEARCH BAR + LIVE DROPDOWN --}}
+        <div id="home-search-wrapper" class="relative z-40 mx-auto w-full max-w-3xl">
+            <form
+                action="{{ route('search') }}"
+                method="GET"
+                role="search"
+                class="flex w-full flex-col gap-3 rounded-2xl bg-white p-3 shadow-2xl sm:flex-row"
             >
-                Jelajahi Sekarang
-            </button>
 
-        </form>
+                <div class="flex min-w-0 flex-1 items-center gap-3 px-4">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#384358"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+
+                    <input
+                        id="home-live-search-input"
+                        type="search"
+                        name="q"
+                        autocomplete="off"
+                        aria-label="Cari rumah adat"
+                        placeholder="Cari rumah adat, suku, marga, wilayah, atau singkatan (mis. madina, tapteng)..."
+                        class="w-full min-w-0 py-3 text-base text-[#192235] outline-none placeholder:text-gray-400"
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-[#B51A28] px-8 py-4 font-semibold text-white transition duration-300 hover:bg-[#561A2E]"
+                >
+                    Jelajahi Sekarang
+                </button>
+
+            </form>
+
+            {{-- LIVE INSTANT DROPDOWN --}}
+            <div
+                id="home-live-dropdown"
+                class="hidden absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-gray-200 bg-white text-left text-[#192235] shadow-2xl"
+            ></div>
+        </div>
 
         {{-- POPULAR SEARCH --}}
         <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -416,5 +428,170 @@
     </div>
 
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.getElementById('home-search-wrapper');
+        const input = document.getElementById('home-live-search-input');
+        const dropdown = document.getElementById('home-live-dropdown');
+        const liveEndpoint = @json(route('api.search.live'));
+        const searchPageUrl = @json(route('search'));
+
+        if (! wrapper || ! input || ! dropdown) {
+            return;
+        }
+
+        let debounceTimer = null;
+        let activeController = null;
+
+        const escapeHtml = (value) => String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+
+        const hideDropdown = () => {
+            dropdown.classList.add('hidden');
+        };
+
+        const renderLoading = () => {
+            dropdown.innerHTML = `
+                <div class="px-5 py-4 text-sm text-[#384358]">
+                    Mencari kecocokan semantik di Fuseki...
+                </div>
+            `;
+            dropdown.classList.remove('hidden');
+        };
+
+        const renderResults = (payload, rawQuery) => {
+            const results = Array.isArray(payload.results) ? payload.results : [];
+            const preview = results.slice(0, 6);
+            const correction = payload.correction || {};
+
+            let html = '';
+
+            if (payload.fusekiAvailable === false) {
+                html += `
+                    <div class="border-b border-amber-200 bg-amber-50 px-5 py-3 text-xs text-amber-800">
+                        ${escapeHtml(payload.fusekiError || 'Server Apache Jena Fuseki belum dapat dihubungi.')}
+                    </div>
+                `;
+            }
+
+            if (correction.is_corrected) {
+                html += `
+                    <div class="border-b border-[#FFA586]/40 bg-[#FFF4ED] px-5 py-2.5 text-xs text-[#561A2E]">
+                        Menampilkan hasil untuk <strong>"${escapeHtml(correction.corrected_query)}"</strong>
+                        (dari <em>"${escapeHtml(correction.original_query)}"</em>)
+                    </div>
+                `;
+            }
+
+            if (preview.length === 0) {
+                html += `
+                    <div class="px-5 py-6 text-center text-sm text-gray-500">
+                        Tidak ditemukan rumah adat untuk kata kunci <strong>"${escapeHtml(rawQuery)}"</strong>.
+                    </div>
+                `;
+            } else {
+                html += '<div class="divide-y divide-gray-100">';
+                for (const item of preview) {
+                    const detailUrl = item.detail_url || `/detail/${encodeURIComponent(item.slug || '')}`;
+                    const badgeText = (item.matchPaths && item.matchPaths[0]) ? item.matchPaths[0] : (item.tag || 'Rumah Adat');
+
+                    html += `
+                        <a href="${escapeHtml(detailUrl)}"
+                           class="flex items-start justify-between gap-4 px-5 py-3.5 transition hover:bg-[#FFF9F5]">
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-bold text-[#192235]">${escapeHtml(item.name)}</p>
+                                <p class="mt-0.5 truncate text-xs text-[#384358]">
+                                    ◈ ${escapeHtml(item.tribe)} • ⌖ ${escapeHtml(item.region)}
+                                </p>
+                            </div>
+                            <span class="shrink-0 rounded-full bg-[#FFA586]/25 px-2.5 py-1 text-[11px] font-semibold text-[#561A2E]">
+                                ${escapeHtml(badgeText)}
+                            </span>
+                        </a>
+                    `;
+                }
+                html += '</div>';
+
+                const allHref = `${searchPageUrl}?q=${encodeURIComponent(rawQuery)}`;
+                html += `
+                    <a href="${escapeHtml(allHref)}"
+                       class="block border-t border-gray-100 bg-gray-50 px-5 py-3 text-center text-xs font-bold text-[#B51A28] transition hover:bg-[#B51A28] hover:text-white">
+                        Lihat semua ${escapeHtml(payload.total ?? results.length)} hasil →
+                    </a>
+                `;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.remove('hidden');
+        };
+
+        input.addEventListener('input', () => {
+            const q = input.value.trim();
+            clearTimeout(debounceTimer);
+
+            if (q.length < 2) {
+                if (activeController) {
+                    activeController.abort();
+                }
+                hideDropdown();
+                return;
+            }
+
+            debounceTimer = setTimeout(async () => {
+                if (activeController) {
+                    activeController.abort();
+                }
+
+                activeController = new AbortController();
+                renderLoading();
+
+                try {
+                    const url = new URL(liveEndpoint, window.location.origin);
+                    url.searchParams.set('q', q);
+
+                    const response = await fetch(url.toString(), {
+                        headers: { Accept: 'application/json' },
+                        signal: activeController.signal,
+                    });
+
+                    if (! response.ok) {
+                        hideDropdown();
+                        return;
+                    }
+
+                    const payload = await response.json();
+                    renderResults(payload, q);
+                } catch (err) {
+                    if (err && err.name !== 'AbortError') {
+                        hideDropdown();
+                    }
+                }
+            }, 250);
+        });
+
+        input.addEventListener('focus', () => {
+            if (input.value.trim().length >= 2 && dropdown.innerHTML.trim() !== '') {
+                dropdown.classList.remove('hidden');
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                hideDropdown();
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (! wrapper.contains(event.target)) {
+                hideDropdown();
+            }
+        });
+    });
+</script>
 
 @endsection

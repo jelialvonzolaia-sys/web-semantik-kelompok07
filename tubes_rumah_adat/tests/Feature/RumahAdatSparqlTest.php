@@ -151,7 +151,8 @@ class RumahAdatSparqlTest extends TestCase
         $response->assertSee('Skor 95');
         $response->assertSee('Bahasa Nias');
         $response->assertSee('Menampilkan 1 rumah adat');
-        $response->assertDontSee('dikoreksi dari');
+        $response->assertViewHas('is_corrected', false);
+        $response->assertSee('id="typo-correction-banner"', false);
 
         $searchSparql = collect($capturedQueries)->first(
             static fn (string $query): bool => str_contains($query, 'BIND(LCASE(')
@@ -160,7 +161,7 @@ class RumahAdatSparqlTest extends TestCase
         $this->assertStringContainsString('BIND(LCASE("Laia") AS ?ql)', $searchSparql);
     }
 
-    public function test_resolve_typo_keyword_caches_dictionary_and_normalizes_typos_and_diacritics(): void
+    public function test_resolve_typo_keyword_caches_tokenized_dictionary_and_computes_hybrid_similarity(): void
     {
         $dictionaryRequests = 0;
 
@@ -172,11 +173,16 @@ class RumahAdatSparqlTest extends TestCase
                     'bindings' => [
                         ['label' => ['value' => 'Bahasa Nias (Li Niha)']],
                         ['label' => ['value' => 'Suku Nias']],
+                        ['label' => ['value' => 'Suku Batak Toba']],
+                        ['label' => ['value' => 'Rumah Bolon Jangga Dolok']],
+                        ['label' => ['value' => 'Rumah Siwaluh Jabu Desa Lingga']],
                         ['label' => ['value' => 'Ginting']],
                         ['label' => ['value' => 'Gulö']],
                         ['label' => ['value' => 'Mendröfa']],
                         ['label' => ['value' => 'Mandailing']],
+                        ['label' => ['value' => 'Laia']],
                         ['label' => ['value' => 'Maena']],
+                        ['label' => ['value' => 'Tradisi']],
                         ['label' => ['value' => 'Kerja']],
                         ['label' => ['value' => 'Omo Hada & Omo Sebua (Umum Nias)']],
                     ],
@@ -185,44 +191,64 @@ class RumahAdatSparqlTest extends TestCase
         });
 
         $service = app(SparqlService::class);
+        $dictionary = $service->buildOntologyDictionary();
+
+        $this->assertArrayHasKey('bolon', $dictionary['tokens']);
+        $this->assertArrayNotHasKey('rumah', $dictionary['tokens']);
+        $this->assertArrayNotHasKey('suku', $dictionary['tokens']);
+        $this->assertArrayHasKey('rumah bolon', $dictionary['phrases']);
+
+        $this->assertGreaterThanOrEqual(0.85, $service->calculateHybridSimilarity('nisa', 'Nias'));
+        $this->assertGreaterThanOrEqual(0.85, $service->calculateHybridSimilarity('tradiis', 'Tradisi'));
+        $this->assertGreaterThanOrEqual(0.68, $service->calculateHybridSimilarity('abtk', 'Batak'));
+        $this->assertGreaterThanOrEqual(0.90, $service->calculateHybridSimilarity('ginitng', 'Ginting'));
+        $this->assertSame(1.0, $service->calculateHybridSimilarity('laiaa', 'Laia'));
+        $this->assertSame(1.0, $service->calculateHybridSimilarity('djaboe', 'Jabu'));
+        $this->assertLessThan(0.68, $service->calculateHybridSimilarity('kerbau', 'Kerja'));
 
         $nisa = $service->resolveTypoKeyword('nisa');
         $this->assertTrue($nisa['is_corrected']);
-        $this->assertSame('Nias', $nisa['corrected']);
+        $this->assertSame('Nias', $nisa['corrected_query']);
+
+        $abtk = $service->resolveTypoKeyword('abtk');
+        $this->assertTrue($abtk['is_corrected']);
+        $this->assertSame('Batak', $abtk['corrected_query']);
+
+        $tradiis = $service->resolveTypoKeyword('tradiis');
+        $this->assertTrue($tradiis['is_corrected']);
+        $this->assertSame('Tradisi', $tradiis['corrected_query']);
+
+        $laiaa = $service->resolveTypoKeyword('laiaa');
+        $this->assertTrue($laiaa['is_corrected']);
+        $this->assertSame('Laia', $laiaa['corrected_query']);
 
         $ginitng = $service->resolveTypoKeyword('ginitng');
         $this->assertTrue($ginitng['is_corrected']);
-        $this->assertSame('Ginting', $ginitng['corrected']);
-
-        $mandalng = $service->resolveTypoKeyword('mandalng');
-        $this->assertTrue($mandalng['is_corrected']);
-        $this->assertSame('Mandailing', $mandalng['corrected']);
+        $this->assertSame('Ginting', $ginitng['corrected_query']);
 
         $gulo = $service->resolveTypoKeyword('gulo');
         $this->assertTrue($gulo['is_corrected']);
-        $this->assertSame('Gulö', $gulo['corrected']);
+        $this->assertSame('Gulö', $gulo['corrected_query']);
 
-        $omoPunct = $service->resolveTypoKeyword('  Ömo!! ');
-        $this->assertTrue($omoPunct['is_corrected']);
-        $this->assertSame('Omo', $omoPunct['corrected']);
+        $multiWord = $service->resolveTypoKeyword('rmah blon btk');
+        $this->assertTrue($multiWord['is_corrected']);
+        $this->assertSame('Rumah Bolon Batak', $multiWord['corrected_query']);
+        $this->assertContains('Rumah Bolon', $multiWord['expansion_terms']);
+        $this->assertContains('Batak', $multiWord['expansion_terms']);
 
         $exactPunct = $service->resolveTypoKeyword('  Maena!! ');
         $this->assertFalse($exactPunct['is_corrected']);
-        $this->assertSame('Maena', $exactPunct['corrected']);
-
-        $tooFarShort = $service->resolveTypoKeyword('nxxx');
-        $this->assertFalse($tooFarShort['is_corrected']);
-        $this->assertSame('nxxx', $tooFarShort['corrected']);
+        $this->assertSame('Maena', $exactPunct['corrected_query']);
 
         $unrelatedSixLetter = $service->resolveTypoKeyword('kerbau');
         $this->assertFalse($unrelatedSixLetter['is_corrected']);
-        $this->assertSame('kerbau', $unrelatedSixLetter['corrected']);
+        $this->assertSame('kerbau', $unrelatedSixLetter['corrected_query']);
 
         $this->assertSame(1, $dictionaryRequests);
         $this->assertTrue(Cache::has('ontology_dictionary'));
     }
 
-    public function test_search_displays_typo_correction_banner_and_uses_corrected_keyword(): void
+    public function test_search_uses_multi_keyword_or_expansion_and_displays_banner_suggestions(): void
     {
         $capturedQueries = [];
 
@@ -234,9 +260,9 @@ class RumahAdatSparqlTest extends TestCase
                 return Http::response([
                     'results' => [
                         'bindings' => [
+                            ['label' => ['value' => 'Rumah Bolon Jangga Dolok']],
+                            ['label' => ['value' => 'Suku Batak Toba']],
                             ['label' => ['value' => 'Suku Nias']],
-                            ['label' => ['value' => 'Ginting']],
-                            ['label' => ['value' => 'Omo Hada Nias Selatan']],
                         ],
                     ],
                 ], 200);
@@ -250,11 +276,27 @@ class RumahAdatSparqlTest extends TestCase
                 'results' => [
                     'bindings' => [
                         [
-                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_omo_hada_nias_selatan'],
-                            'namaRumah' => ['value' => 'Omo Hada Nias Selatan'],
-                            'namaSuku' => ['value' => 'Suku Nias'],
-                            'namaWilayah' => ['value' => 'Kabupaten Nias Selatan'],
-                            'matchPath' => ['value' => 'Suku: Suku Nias'],
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_huta_batak_tb_silalahi_center'],
+                            'namaRumah' => ['value' => 'Huta Batak TB Silalahi Center'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Balige, Kabupaten Toba'],
+                            'matchPath' => ['value' => 'Suku: Suku Batak Toba'],
+                            'relevanceScore' => ['value' => '85'],
+                        ],
+                        [
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_jangga_dolok'],
+                            'namaRumah' => ['value' => 'Rumah Bolon Jangga Dolok'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                            'matchPath' => ['value' => 'Nama rumah adat: Rumah Bolon Jangga Dolok'],
+                            'relevanceScore' => ['value' => '100'],
+                        ],
+                        [
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_jangga_dolok'],
+                            'namaRumah' => ['value' => 'Rumah Bolon Jangga Dolok'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                            'matchPath' => ['value' => 'Suku: Suku Batak Toba'],
                             'relevanceScore' => ['value' => '85'],
                         ],
                     ],
@@ -262,20 +304,130 @@ class RumahAdatSparqlTest extends TestCase
             ], 200);
         });
 
-        $response = $this->get('/search?q=nisa');
+        $response = $this->get('/search?q=rmah+blon+btk');
 
         $response->assertStatus(200);
-        $response->assertSee('Omo Hada Nias Selatan');
+        $response->assertSeeInOrder(['Rumah Bolon Jangga Dolok', 'Huta Batak TB Silalahi Center']);
         $response->assertSee('Menampilkan hasil untuk', false);
-        $response->assertSee('"Nias"', false);
+        $response->assertSee('"Rumah Bolon Batak"', false);
         $response->assertSee('(dikoreksi dari', false);
-        $response->assertSee('"nisa"', false);
+        $response->assertSee('"rmah blon btk"', false);
+        $response->assertSee('Saran & ekspansi kata:', false);
 
         $searchSparql = collect($capturedQueries)->first(
-            static fn (string $query): bool => str_contains($query, 'BIND(LCASE(')
+            static fn (string $query): bool => str_contains($query, 'FILTER(CONTAINS(')
         );
         $this->assertNotNull($searchSparql);
-        $this->assertStringContainsString('BIND(LCASE("Nias") AS ?ql)', $searchSparql);
+        $this->assertStringContainsString('||', $searchSparql);
+        $this->assertStringContainsString('LCASE("Rumah Bolon")', $searchSparql);
+        $this->assertStringContainsString('LCASE("Batak")', $searchSparql);
+    }
+
+    public function test_expand_abbreviation_supports_manual_dynamic_and_typo_abbreviations(): void
+    {
+        Http::fake([
+            'http://localhost:3030/rumah_adat/query' => Http::response([
+                'results' => [
+                    'bindings' => [
+                        ['label' => ['value' => 'Rumah Siwaluh Jabu Desa Lingga']],
+                        ['label' => ['value' => 'Bagas Godang Panyabungan Tonga']],
+                        ['label' => ['value' => 'Sidang Adat & Musyawarah Dalihan Na Tolu']],
+                        ['label' => ['value' => 'Kabupaten Tapanuli Tengah']],
+                        ['label' => ['value' => 'Kabupaten Tapanuli Selatan']],
+                        ['label' => ['value' => 'Suku Nias']],
+                        ['label' => ['value' => 'Suku Batak Karo']],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $service = app(SparqlService::class);
+
+        $this->assertSame('Tapanuli Tengah', $service->expandAbbreviation('tapteng'));
+        $this->assertSame('Tapanuli Selatan', $service->expandAbbreviation('tapsel'));
+        $this->assertSame('Mandailing Natal', $service->expandAbbreviation('madina'));
+        $this->assertSame('Padang Lawas Utara', $service->expandAbbreviation('paluta'));
+        $this->assertSame('Humbang Hasundutan', $service->expandAbbreviation('humbahas'));
+        $this->assertSame('Nias Selatan', $service->expandAbbreviation('nisel'));
+        $this->assertSame('Sumatera Utara', $service->expandAbbreviation('sumut'));
+        $this->assertSame('Dalihan Na Tolu', $service->expandAbbreviation('dnt'));
+        $this->assertSame('Rakut Sitelu', $service->expandAbbreviation('rs'));
+        $this->assertSame('Sulang Silima', $service->expandAbbreviation('ss'));
+        $this->assertSame('Batak Toba', $service->expandAbbreviation('batoba'));
+        $this->assertSame('Batak Karo', $service->expandAbbreviation('bkaro'));
+        $this->assertSame('Hombo Batu', $service->expandAbbreviation('hombo'));
+        $this->assertSame('Saur Matua', $service->expandAbbreviation('saurmatua'));
+
+        // Generator akronim dinamis dari kamus ontologi ("Siwaluh Jabu" -> "sija", "Bagas Godang" -> "bago")
+        $this->assertSame('Siwaluh Jabu', $service->expandAbbreviation('sija'));
+        $this->assertSame('Bagas Godang', $service->expandAbbreviation('bago'));
+
+        // Typo pada singkatan
+        $this->assertSame('Tapanuli Tengah', $service->expandAbbreviation('taptng'));
+        $this->assertSame('Tapanuli Selatan', $service->expandAbbreviation('tapsl'));
+
+        // Kata asli entitas tidak diubah
+        $this->assertNull($service->expandAbbreviation('Karo'));
+        $this->assertNull($service->expandAbbreviation('Nias'));
+    }
+
+    public function test_live_search_api_and_views_include_live_search_support(): void
+    {
+        Http::fake(function (ClientRequest $request) {
+            $sparql = (string) ($request['query'] ?? '');
+
+            if (str_contains($sparql, '?label ?altLabel')) {
+                return Http::response([
+                    'results' => [
+                        'bindings' => [
+                            ['label' => ['value' => 'Kabupaten Tapanuli Tengah']],
+                            ['label' => ['value' => 'Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)']],
+                        ],
+                    ],
+                ], 200);
+            }
+
+            if (str_contains($sparql, 'ra:bagianDariWilayah ra:wil_sumatera_utara') || str_contains($sparql, '?kategori ?uri ?label') || str_contains($sparql, 'GROUP BY ?tipe')) {
+                return Http::response(['results' => ['bindings' => []]], 200);
+            }
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        [
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_adat_pasisi_rajo_sorkam_kanan'],
+                            'namaRumah' => ['value' => 'Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)'],
+                            'namaSuku' => ['value' => 'Etnis Pasisi'],
+                            'namaWilayah' => ['value' => 'Sorkam Kanan, Kecamatan Sorkam Barat'],
+                            'matchPath' => ['value' => 'Wilayah: Kabupaten Tapanuli Tengah'],
+                            'relevanceScore' => ['value' => '70'],
+                        ],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $liveResponse = $this->getJson('/api/search/live?q=taptng');
+        $liveResponse->assertStatus(200)
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('correction.original_query', 'taptng')
+            ->assertJsonPath('correction.corrected_query', 'Tapanuli Tengah')
+            ->assertJsonPath('correction.is_corrected', true)
+            ->assertJsonPath('results.0.name', 'Rumah Adat Pasisi (Rumah Rajo Sorkam Kanan)')
+            ->assertJsonPath('results.0.slug', 'rumah-adat-pasisi-rajo-sorkam-kanan');
+
+        $this->assertStringEndsWith('/detail/rumah-adat-pasisi-rajo-sorkam-kanan', (string) $liveResponse->json('results.0.detail_url'));
+
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200)
+            ->assertSee('home-live-dropdown')
+            ->assertSee('api\/search\/live', false);
+
+        $searchPageResponse = $this->get('/search');
+        $searchPageResponse->assertStatus(200)
+            ->assertSee('live-search-input')
+            ->assertSee('search-results-container')
+            ->assertSee('api\/search\/live', false);
     }
 
     public function test_detail_renders_ontology_fields_and_preserves_comma_in_wilayah(): void
