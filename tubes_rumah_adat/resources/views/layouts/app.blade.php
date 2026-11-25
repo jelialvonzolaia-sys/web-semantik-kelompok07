@@ -32,6 +32,10 @@
                     Jelajahi
                 </a>
 
+                <a href="{{ route('graph') }}" class="transition hover:text-[#FFA586] {{ request()->routeIs('graph') ? 'text-[#FFA586]' : '' }}">
+                    Knowledge Graph
+                </a>
+
             </div>
 
         </nav>
