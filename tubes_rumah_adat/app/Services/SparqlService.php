@@ -661,6 +661,136 @@ SPARQL;
     }
 
     /**
+     * Rekomendasi rumah adat terkait berbasis traversal Property Graph / Knowledge Graph.
+     *
+     * @return array<int, array{
+     *     uri: string,
+     *     id: string,
+     *     slug: string,
+     *     name: string,
+     *     tribe: string,
+     *     region: string,
+     *     image: string,
+     *     hasCustomImage: bool,
+     *     similarityScore: int,
+     *     sharedRelationCount: int,
+     *     relatedReasons: array<int, string>
+     * }>
+     */
+    public function getRelatedHouses(string $id, int $limit = 4): array
+    {
+        $resource = $this->resolveHouseResource($id);
+
+        if ($resource === null) {
+            return [];
+        }
+
+        $safeLimit = max(1, min($limit, 12));
+        $sparql = $this->loadQuery('related.rq');
+        $sparql = str_replace(
+            'BIND(ra:rumah_bagas_godang_panyabungan_tonga AS ?source)',
+            "BIND({$resource} AS ?source)",
+            $sparql
+        );
+
+        $bindings = $this->query($sparql);
+
+        if (! $this->fusekiAvailable || $bindings === []) {
+            return [];
+        }
+
+        $grouped = [];
+
+        foreach ($bindings as $row) {
+            $candidateUri = $this->bindingValue($row, 'candidate');
+            $name = $this->bindingValue($row, 'namaRumah');
+
+            if ($candidateUri === '' || $name === '') {
+                continue;
+            }
+
+            $localName = $this->uriToLocalName($candidateUri);
+
+            if ('ra:'.$localName === $resource) {
+                continue;
+            }
+
+            if (! isset($grouped[$candidateUri])) {
+                $grouped[$candidateUri] = [
+                    'uri' => $candidateUri,
+                    'id' => $localName,
+                    'slug' => str_replace('_', '-', $localName),
+                    'name' => $name,
+                    'tribes' => [],
+                    'regions' => [],
+                    'reasonWeights' => [],
+                ];
+            }
+
+            $tribe = $this->bindingValue($row, 'namaSuku');
+
+            if ($tribe !== '' && ! in_array($tribe, $grouped[$candidateUri]['tribes'], true)) {
+                $grouped[$candidateUri]['tribes'][] = $tribe;
+            }
+
+            $region = $this->bindingValue($row, 'namaWilayah');
+
+            if ($region !== '' && ! in_array($region, $grouped[$candidateUri]['regions'], true)) {
+                $grouped[$candidateUri]['regions'][] = $region;
+            }
+
+            $reason = $this->bindingValue($row, 'reason');
+            $weight = (int) $this->bindingValue($row, 'weight');
+
+            if ($reason !== '' && ! isset($grouped[$candidateUri]['reasonWeights'][$reason])) {
+                $grouped[$candidateUri]['reasonWeights'][$reason] = $weight;
+            }
+        }
+
+        $results = [];
+
+        foreach ($grouped as $item) {
+            if ($item['reasonWeights'] === []) {
+                continue;
+            }
+
+            arsort($item['reasonWeights']);
+            $similarityScore = array_sum($item['reasonWeights']);
+            $sharedRelationCount = count($item['reasonWeights']);
+            $relatedReasons = array_keys($item['reasonWeights']);
+            $imageInfo = $this->resolveHouseImage($item['id'], $item['slug']);
+
+            $results[] = [
+                'uri' => $item['uri'],
+                'id' => $item['id'],
+                'slug' => $item['slug'],
+                'name' => $item['name'],
+                'tribe' => $item['tribes'] !== [] ? implode(', ', $item['tribes']) : 'Sumatera Utara',
+                'region' => $item['regions'] !== [] ? implode(', ', $item['regions']) : 'Sumatera Utara',
+                'image' => $imageInfo['url'],
+                'hasCustomImage' => $imageInfo['isCustom'],
+                'similarityScore' => $similarityScore,
+                'sharedRelationCount' => $sharedRelationCount,
+                'relatedReasons' => $relatedReasons,
+            ];
+        }
+
+        usort($results, static function (array $a, array $b): int {
+            if ($b['similarityScore'] !== $a['similarityScore']) {
+                return $b['similarityScore'] <=> $a['similarityScore'];
+            }
+
+            if ($b['sharedRelationCount'] !== $a['sharedRelationCount']) {
+                return $b['sharedRelationCount'] <=> $a['sharedRelationCount'];
+            }
+
+            return strcmp($a['name'], $b['name']);
+        });
+
+        return array_slice($results, 0, $safeLimit);
+    }
+
+    /**
      * Ambil triplet graf dari graph.rq dan ubah menjadi nodes & edges untuk Vis-Network.
      *
      * @return array{

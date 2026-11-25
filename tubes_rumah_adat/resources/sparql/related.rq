@@ -1,0 +1,95 @@
+PREFIX ra: <http://example.org/ontology/rumah-adat#>
+
+SELECT DISTINCT
+  ?candidate
+  ?namaRumah
+  ?namaSuku
+  ?namaWilayah
+  ?reason
+  ?weight
+WHERE {
+  BIND(ra:rumah_bagas_godang_panyabungan_tonga AS ?source)
+
+  ?candidate a ra:RumahAdat ;
+             ra:nama ?namaRumah .
+  FILTER(?candidate != ?source)
+
+  {
+    ?source ra:dimilikiOlehSuku ?suku .
+    ?candidate ra:dimilikiOlehSuku ?suku .
+    ?suku ra:nama ?nodeLabel .
+    BIND(35 AS ?weight)
+    BIND(CONCAT("Suku sama: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:berasalDariWilayah/(ra:bagianDariWilayah)* ?wilInduk .
+    ?candidate ra:berasalDariWilayah/(ra:bagianDariWilayah)* ?wilInduk .
+    FILTER(?wilInduk != ra:wil_sumatera_utara)
+    ?wilInduk ra:nama ?nodeLabel .
+    BIND(25 AS ?weight)
+    BIND(CONCAT("Wilayah serumpun: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:memilikiOrnamen ?ornamen .
+    ?candidate ra:memilikiOrnamen ?ornamen .
+    ?ornamen ra:nama ?nodeLabel .
+    BIND(20 AS ?weight)
+    BIND(CONCAT("Ornamen sama: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:memilikiTradisi ?tradisi .
+    ?candidate ra:memilikiTradisi ?tradisi .
+    ?tradisi ra:nama ?nodeLabel .
+    BIND(20 AS ?weight)
+    BIND(CONCAT("Tradisi sama: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:memilikiMarga ?marga .
+    ?candidate ra:memilikiMarga ?marga .
+    ?marga ra:nama ?nodeLabel .
+    BIND(18 AS ?weight)
+    BIND(CONCAT("Marga terkait: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:menggunakanBahasa ?bahasa .
+    ?candidate ra:menggunakanBahasa ?bahasa .
+    ?bahasa ra:nama ?nodeLabel .
+    BIND(15 AS ?weight)
+    BIND(CONCAT("Bahasa sama: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:dimilikiOlehSuku ?sukuA .
+    ?sukuA (ra:berkerabatDenganSuku|^ra:berkerabatDenganSuku) ?sukuB .
+    FILTER(?sukuA != ?sukuB)
+    ?candidate ra:dimilikiOlehSuku ?sukuB .
+    ?sukuB ra:nama ?nodeLabel .
+    BIND(12 AS ?weight)
+    BIND(CONCAT("Suku berkerabat: ", ?nodeLabel) AS ?reason)
+  }
+  UNION
+  {
+    ?source ra:memilikiMarga ?margaA .
+    ?margaA (ra:berkerabatDenganMarga|^ra:berkerabatDenganMarga) ?margaB .
+    FILTER(?margaA != ?margaB)
+    ?candidate ra:memilikiMarga ?margaB .
+    ?margaB ra:nama ?nodeLabel .
+    BIND(12 AS ?weight)
+    BIND(CONCAT("Marga berkerabat: ", ?nodeLabel) AS ?reason)
+  }
+
+  OPTIONAL {
+    ?candidate ra:dimilikiOlehSuku ?candSuku .
+    ?candSuku ra:nama ?namaSuku .
+  }
+  OPTIONAL {
+    ?candidate ra:berasalDariWilayah ?candWil .
+    ?candWil ra:nama ?namaWilayah .
+  }
+}
+ORDER BY ASC(?namaRumah)
