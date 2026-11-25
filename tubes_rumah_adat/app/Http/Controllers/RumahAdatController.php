@@ -131,8 +131,11 @@ class RumahAdatController extends Controller
 
         abort_if($house === null, 404);
 
+        $relatedHouses = $this->sparql->getRelatedHouses($slug, 4);
+
         return view('pages.detail', [
             'house' => $house,
+            'relatedHouses' => $relatedHouses,
             'fusekiAvailable' => true,
         ]);
     }

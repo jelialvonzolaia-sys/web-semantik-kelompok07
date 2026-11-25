@@ -356,7 +356,7 @@
 
                 @forelse ($houses as $house)
 
-                    <article class="group overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                    <article class="relative group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#FFA586] hover:shadow-md">
 
                         <div class="flex flex-col justify-between gap-5 md:flex-row">
 
@@ -394,7 +394,10 @@
 
                                 <h3 class="text-xl font-bold text-[#192235] transition group-hover:text-[#B51A28]">
 
-                                    {{ $house['name'] }}
+                                    <a href="{{ route('detail', ['slug' => $house['slug']]) }}"
+                                       class="after:absolute after:inset-0 focus:outline-none">
+                                        {{ $house['name'] }}
+                                    </a>
 
                                 </h3>
 
@@ -452,12 +455,11 @@
                             {{-- DETAIL BUTTON --}}
                             <div class="flex shrink-0 items-end">
 
-                                <a href="{{ route('detail', ['slug' => $house['slug']]) }}"
-                                   class="inline-block rounded-xl bg-[#192235] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#B51A28]">
+                                <span class="inline-block rounded-xl bg-[#192235] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#B51A28]">
 
                                     Lihat Detail →
 
-                                </a>
+                                </span>
 
                             </div>
 
@@ -676,7 +678,7 @@
                     `;
 
                 return `
-                    <article class="group overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                    <article class="relative group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#FFA586] hover:shadow-md">
                         <div class="flex flex-col justify-between gap-5 md:flex-row">
                             ${imageHtml}
                             <div class="flex-1">
@@ -691,7 +693,9 @@
                                 </div>
 
                                 <h3 class="text-xl font-bold text-[#192235] transition group-hover:text-[#B51A28]">
-                                    ${escapeHtml(house.name)}
+                                    <a href="${escapeHtml(detailUrl)}" class="after:absolute after:inset-0 focus:outline-none">
+                                        ${escapeHtml(house.name)}
+                                    </a>
                                 </h3>
 
                                 <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-[#384358]">
@@ -710,10 +714,9 @@
                             </div>
 
                             <div class="flex shrink-0 items-end">
-                                <a href="${escapeHtml(detailUrl)}"
-                                   class="inline-block rounded-xl bg-[#192235] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#B51A28]">
+                                <span class="inline-block rounded-xl bg-[#192235] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#B51A28]">
                                     Lihat Detail →
-                                </a>
+                                </span>
                             </div>
                         </div>
                     </article>

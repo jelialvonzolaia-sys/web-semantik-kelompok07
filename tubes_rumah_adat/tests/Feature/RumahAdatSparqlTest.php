@@ -517,4 +517,205 @@ class RumahAdatSparqlTest extends TestCase
             ->assertJsonPath('nodes.0.slug', 'rumah-istana-maimun-medan')
             ->assertJsonPath('edges.0.label', 'dimiliki oleh suku');
     }
+
+    public function test_search_cards_have_stretched_link_in_blade_and_js_render_cards(): void
+    {
+        Http::fake(function (ClientRequest $request) {
+            $sparql = (string) ($request['query'] ?? '');
+
+            if (str_contains($sparql, '?label ?altLabel')) {
+                return Http::response([
+                    'results' => [
+                        'bindings' => [
+                            ['label' => ['value' => 'Omo Hada & Omo Sebua (Umum Nias)']],
+                        ],
+                    ],
+                ], 200);
+            }
+
+            if (str_contains($sparql, '?kategori ?uri ?label')) {
+                return Http::response(['results' => ['bindings' => []]], 200);
+            }
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        [
+                            'rumah' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_omo_hada_umum_nias'],
+                            'namaRumah' => ['value' => 'Omo Hada & Omo Sebua (Umum Nias)'],
+                            'namaSuku' => ['value' => 'Suku Nias'],
+                            'namaWilayah' => ['value' => 'Pulau Nias'],
+                            'matchPath' => ['value' => 'Nama rumah adat: Omo Hada & Omo Sebua (Umum Nias)'],
+                            'relevanceScore' => ['value' => '100'],
+                        ],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $response = $this->get('/search?q=Omo+Hada');
+
+        $response->assertStatus(200);
+        $response->assertSee('relative group cursor-pointer', false);
+        $response->assertSee('after:absolute after:inset-0 focus:outline-none', false);
+        $response->assertSee('/detail/rumah-omo-hada-umum-nias', false);
+        $response->assertSee('group-hover:bg-[#B51A28]', false);
+
+        // Pastikan template JS renderCards juga memakai stretched link & span untuk tombol visual
+        $content = (string) $response->getContent();
+        $this->assertStringContainsString('<a href="${escapeHtml(detailUrl)}" class="after:absolute after:inset-0 focus:outline-none">', $content);
+        $this->assertStringContainsString('<span class="inline-block rounded-xl bg-[#192235] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#B51A28]">', $content);
+    }
+
+    public function test_get_related_houses_excludes_source_deduplicates_reasons_and_sorts_by_graph_score(): void
+    {
+        $capturedQueries = [];
+
+        Http::fake(function (ClientRequest $request) use (&$capturedQueries) {
+            $sparql = (string) ($request['query'] ?? '');
+            $capturedQueries[] = $sparql;
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        // Jika Fuseki mengembalikan node sumber (edge case), SparqlService wajib mengecualikannya
+                        [
+                            'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_jangga_dolok'],
+                            'namaRumah' => ['value' => 'Rumah Bolon Jangga Dolok'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                            'reason' => ['value' => 'Suku sama: Suku Batak Toba'],
+                            'weight' => ['value' => '35'],
+                        ],
+                        // Kandidat A: Suku sama (35) + Ornamen sama (20) = 55 (meski baris reason terduplikasi oleh wilayah)
+                        [
+                            'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_huta_batak_tb_silalahi_center'],
+                            'namaRumah' => ['value' => 'Huta Batak TB Silalahi Center'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Balige, Kabupaten Toba'],
+                            'reason' => ['value' => 'Suku sama: Suku Batak Toba'],
+                            'weight' => ['value' => '35'],
+                        ],
+                        [
+                            'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_huta_batak_tb_silalahi_center'],
+                            'namaRumah' => ['value' => 'Huta Batak TB Silalahi Center'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                            'reason' => ['value' => 'Suku sama: Suku Batak Toba'],
+                            'weight' => ['value' => '35'],
+                        ],
+                        [
+                            'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_huta_batak_tb_silalahi_center'],
+                            'namaRumah' => ['value' => 'Huta Batak TB Silalahi Center'],
+                            'namaSuku' => ['value' => 'Suku Batak Toba'],
+                            'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                            'reason' => ['value' => 'Ornamen sama: Gorga'],
+                            'weight' => ['value' => '20'],
+                        ],
+                        // Kandidat B: Suku berkerabat (12) + Wilayah serumpun (25) = 37
+                        [
+                            'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_pematang_purba'],
+                            'namaRumah' => ['value' => 'Rumah Bolon Pematang Purba'],
+                            'namaSuku' => ['value' => 'Suku Simalungun'],
+                            'namaWilayah' => ['value' => 'Kabupaten Simalungun'],
+                            'reason' => ['value' => 'Wilayah serumpun: Kawasan Danau Toba'],
+                            'weight' => ['value' => '25'],
+                        ],
+                        [
+                            'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_pematang_purba'],
+                            'namaRumah' => ['value' => 'Rumah Bolon Pematang Purba'],
+                            'namaSuku' => ['value' => 'Suku Simalungun'],
+                            'namaWilayah' => ['value' => 'Kabupaten Simalungun'],
+                            'reason' => ['value' => 'Suku berkerabat: Suku Simalungun'],
+                            'weight' => ['value' => '12'],
+                        ],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $service = app(SparqlService::class);
+        $related = $service->getRelatedHouses('rumah-bolon-jangga-dolok', 4);
+
+        $this->assertCount(2, $related);
+        $this->assertSame('rumah-huta-batak-tb-silalahi-center', $related[0]['slug']);
+        $this->assertSame(55, $related[0]['similarityScore']);
+        $this->assertSame(2, $related[0]['sharedRelationCount']);
+        $this->assertSame(['Suku sama: Suku Batak Toba', 'Ornamen sama: Gorga'], $related[0]['relatedReasons']);
+
+        $this->assertSame('rumah-bolon-pematang-purba', $related[1]['slug']);
+        $this->assertSame(37, $related[1]['similarityScore']);
+
+        $this->assertNotEmpty($capturedQueries);
+        $this->assertStringContainsString('BIND(ra:rumah_bolon_jangga_dolok AS ?source)', $capturedQueries[0]);
+        $this->assertStringContainsString('FILTER(?candidate != ?source)', $capturedQueries[0]);
+        $this->assertStringContainsString('FILTER(?wilInduk != ra:wil_sumatera_utara)', $capturedQueries[0]);
+    }
+
+    public function test_detail_page_renders_related_houses_section_with_graph_reasons(): void
+    {
+        Http::fake(function (ClientRequest $request) {
+            $sparql = (string) ($request['query'] ?? '');
+
+            if (str_contains($sparql, 'FILTER(?candidate != ?source)')) {
+                return Http::response([
+                    'results' => [
+                        'bindings' => [
+                            [
+                                'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_jangga_dolok'],
+                                'namaRumah' => ['value' => 'Rumah Bolon Jangga Dolok'],
+                                'namaSuku' => ['value' => 'Suku Batak Toba'],
+                                'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                                'reason' => ['value' => 'Suku sama: Suku Batak Toba'],
+                                'weight' => ['value' => '35'],
+                            ],
+                            [
+                                'candidate' => ['value' => 'http://example.org/ontology/rumah-adat#rumah_bolon_jangga_dolok'],
+                                'namaRumah' => ['value' => 'Rumah Bolon Jangga Dolok'],
+                                'namaSuku' => ['value' => 'Suku Batak Toba'],
+                                'namaWilayah' => ['value' => 'Kabupaten Toba'],
+                                'reason' => ['value' => 'Ornamen sama: Gorga'],
+                                'weight' => ['value' => '20'],
+                            ],
+                        ],
+                    ],
+                ], 200);
+            }
+
+            return Http::response([
+                'results' => [
+                    'bindings' => [
+                        [
+                            'nama' => ['value' => 'Huta Batak TB Silalahi Center'],
+                            'namaAlternatif' => ['value' => 'Ruma Bolon Museum TB Silalahi'],
+                            'sejarah' => ['value' => 'Kompleks pelestarian arsitektur Batak Toba di Balige.'],
+                            'fungsi' => ['value' => 'Museum budaya dan edukasi warisan Batak.'],
+                            'ciriArsitektur' => ['value' => 'Rumah panggung kayu dengan ukiran Gorga khas Batak Toba.'],
+                            'bentukAtap' => ['value' => 'Pelana melengkung menyerupai tanduk kerbau.'],
+                            'bahanBangunan' => ['value' => 'Kayu keras pilihan dan atap ijuk.'],
+                            'maknaFilosofis' => ['value' => 'Simbol keseimbangan kosmos tiga dunia Batak Toba.'],
+                            'referensi' => ['value' => 'Dokumentasi Budaya Sumatera Utara'],
+                            'suku' => ['value' => 'Suku Batak Toba'],
+                            'wilayah' => ['value' => 'Balige, Kabupaten Toba || Kabupaten Toba'],
+                            'bahasa' => ['value' => 'Bahasa Batak Toba'],
+                            'marga' => ['value' => 'Silalahi || Siahaan'],
+                            'tradisi' => ['value' => 'Mangokal Holi'],
+                            'ornamen' => ['value' => 'Gorga'],
+                        ],
+                    ],
+                ],
+            ], 200);
+        });
+
+        $response = $this->get('/detail/rumah-huta-batak-tb-silalahi-center');
+
+        $response->assertStatus(200);
+        $response->assertSee('Rumah Adat Terkait');
+        $response->assertSee('Rumah Bolon Jangga Dolok');
+        $response->assertSee('Skor Graf 55');
+        $response->assertSee('Suku sama: Suku Batak Toba');
+        $response->assertSee('Ornamen sama: Gorga');
+        $response->assertSee('/detail/rumah-bolon-jangga-dolok', false);
+        $response->assertSee('after:absolute after:inset-0 focus:outline-none', false);
+    }
 }

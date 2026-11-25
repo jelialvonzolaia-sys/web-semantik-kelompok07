@@ -474,7 +474,102 @@
 
 
     {{-- =================================================
-         6. BOTTOM NAVIGATION
+         6. RELATED HOUSES (PROPERTY GRAPH RECOMMENDATION)
+    ================================================= --}}
+    <section class="mt-12 rounded-3xl border border-gray-100 bg-white p-7 shadow-sm md:p-10">
+
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+                <span class="text-xs font-bold tracking-widest text-[#B51A28]">
+                    05 — RELATED HERITAGE
+                </span>
+
+                <h2 class="mt-3 text-2xl font-bold text-[#192235] md:text-3xl">
+                    Rumah Adat Terkait
+                </h2>
+
+                <p class="mt-2 max-w-2xl text-sm leading-relaxed text-gray-500">
+                    Rekomendasi ini dihitung otomatis dari keterhubungan node dan properti Knowledge Graph (suku, wilayah serumpun, ornamen, tradisi, marga, bahasa, dan kekerabatan).
+                </p>
+            </div>
+
+            <a href="{{ route('graph', ['focus' => $house['slug']]) }}"
+               class="inline-flex w-fit items-center gap-2 rounded-xl border border-[#FFA586]/60 bg-[#FFF4ED] px-4 py-2.5 text-xs font-semibold text-[#561A2E] transition hover:bg-[#B51A28] hover:text-white">
+                Jelajahi Relasi Graf →
+            </a>
+        </div>
+
+        @if (! empty($relatedHouses))
+            <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach ($relatedHouses as $related)
+                    <article class="relative group flex cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 bg-[#FFF9F5] p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#FFA586] hover:bg-white hover:shadow-md">
+                        <div>
+                            @if (! empty($related['hasCustomImage']))
+                                <div class="mb-4 overflow-hidden rounded-xl border border-gray-100">
+                                    <img
+                                        src="{{ $related['image'] }}"
+                                        alt="{{ $related['name'] }}"
+                                        class="h-32 w-full object-cover transition duration-300 group-hover:scale-105"
+                                    >
+                                </div>
+                            @endif
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="rounded-full bg-[#192235] px-3 py-1 text-[11px] font-semibold text-white">
+                                    Skor Graf {{ $related['similarityScore'] }}
+                                </span>
+                                <span class="rounded-full bg-[#FFA586]/25 px-2.5 py-1 text-[11px] font-semibold text-[#561A2E]">
+                                    {{ $related['sharedRelationCount'] }} relasi
+                                </span>
+                            </div>
+
+                            <h3 class="mt-3 text-lg font-bold leading-snug text-[#192235] transition group-hover:text-[#B51A28]">
+                                <a href="{{ route('detail', ['slug' => $related['slug']]) }}"
+                                   class="after:absolute after:inset-0 focus:outline-none">
+                                    {{ $related['name'] }}
+                                </a>
+                            </h3>
+
+                            <div class="mt-2.5 space-y-1 text-xs text-[#384358]">
+                                <p>◈ {{ $related['tribe'] }}</p>
+                                <p>⌖ {{ $related['region'] }}</p>
+                            </div>
+
+                            @if (! empty($related['relatedReasons']))
+                                <div class="mt-4 flex flex-wrap gap-1.5">
+                                    @foreach (array_slice($related['relatedReasons'], 0, 3) as $reason)
+                                        <span class="rounded-lg bg-[#FFF4ED] px-2.5 py-1 text-[11px] font-medium text-[#561A2E] ring-1 ring-[#FFA586]/40">
+                                            {{ $reason }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="mt-5 border-t border-gray-200/70 pt-3">
+                            <span class="inline-flex items-center rounded-lg bg-[#192235] px-3.5 py-2 text-xs font-semibold text-white transition group-hover:bg-[#B51A28]">
+                                Lihat Detail →
+                            </span>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        @else
+            <div class="mt-8 rounded-2xl border border-dashed border-gray-200 bg-[#FFF9F5] px-6 py-10 text-center">
+                <p class="text-sm font-semibold text-[#192235]">
+                    Belum ada rekomendasi rumah adat terkait yang ditemukan.
+                </p>
+                <p class="mt-1.5 text-xs text-gray-500">
+                    Entitas ini belum memiliki keterhubungan node bersama dengan rumah adat lain pada Knowledge Graph saat ini.
+                </p>
+            </div>
+        @endif
+
+    </section>
+
+
+    {{-- =================================================
+         7. BOTTOM NAVIGATION
     ================================================= --}}
     <div class="mt-12 flex flex-col items-center justify-between gap-5 border-t border-gray-200 pt-8 sm:flex-row">
 
