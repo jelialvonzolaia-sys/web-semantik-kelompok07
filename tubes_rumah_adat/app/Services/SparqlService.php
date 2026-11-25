@@ -15,7 +15,16 @@ class SparqlService
 
     private ?string $lastError = null;
 
-    /** @var array{original: string, corrected: string, is_corrected: bool}|null */
+    /** @var array{
+     *     original: string,
+     *     corrected: string,
+     *     original_query: string,
+     *     corrected_query: string,
+     *     is_corrected: bool,
+     *     suggestions: array<int, string>,
+     *     expansion_terms: array<int, string>
+     * }|null
+     */
     private ?array $lastTypoResolution = null;
 
     public function isFusekiAvailable(): bool
@@ -29,7 +38,15 @@ class SparqlService
     }
 
     /**
-     * @return array{original: string, corrected: string, is_corrected: bool}|null
+     * @return array{
+     *     original: string,
+     *     corrected: string,
+     *     original_query: string,
+     *     corrected_query: string,
+     *     is_corrected: bool,
+     *     suggestions: array<int, string>,
+     *     expansion_terms: array<int, string>
+     * }|null
      */
     public function getLastTypoResolution(): ?array
     {
@@ -208,103 +225,142 @@ SPARQL;
     }
 
     /**
-     * Resolusi kata kunci typo terhadap kamus label ontologi ter-cache (Cache::remember 3600 detik).
+     * Bangun kamus entitas ter-tokenisasi dari seluruh ra:nama 7 kelas ontologi dan simpan di Cache Laravel.
      *
-     * @return array{original: string, corrected: string, is_corrected: bool}
+     * @return array{
+     *     phrases: array<string, string>,
+     *     tokens: array<string, string>,
+     *     raw_phrases: array<int, string>,
+     *     raw_tokens: array<string, bool>
+     * }
+     */
+    public function buildOntologyDictionary(): array
+    {
+        $cached = Cache::remember('ontology_dictionary', 3600, function (): array {
+            $labels = $this->fetchOntologyDictionary();
+
+            if ($labels === []) {
+                return [];
+            }
+
+            return $this->buildDictionaryIndex($labels);
+        });
+
+        if ($cached === [] && ! $this->fusekiAvailable) {
+            Cache::forget('ontology_dictionary');
+        }
+
+        if (! isset($cached['phrases'], $cached['tokens'], $cached['raw_phrases'], $cached['raw_tokens'])) {
+            return [
+                'phrases' => [],
+                'tokens' => [],
+                'raw_phrases' => [],
+                'raw_tokens' => [],
+            ];
+        }
+
+        return $cached;
+    }
+
+    /**
+     * Hitung skor kemiripan gabungan (0.0 - 1.0) memakai Damerau-Levenshtein,
+     * Sorted-Character Levenshtein, similar_text, dan metaphone.
+     */
+    public function calculateHybridSimilarity(string $input, string $target): float
+    {
+        $normA = $this->normalizeSimilarityText($input);
+        $normB = $this->normalizeSimilarityText($target);
+
+        if ($normA === '' || $normB === '') {
+            return 0.0;
+        }
+
+        if ($normA === $normB) {
+            return 1.0;
+        }
+
+        $maxLength = max(strlen($normA), strlen($normB), 1);
+        $damerauDistance = $this->calculateEditDistance($normA, $normB);
+        $damerauScore = max(0.0, 1.0 - ($damerauDistance / $maxLength));
+
+        $sortedA = $this->sortCharacters(str_replace(' ', '', $normA));
+        $sortedB = $this->sortCharacters(str_replace(' ', '', $normB));
+        $sortedMax = max(strlen($sortedA), strlen($sortedB), 1);
+        $sortedScore = max(0.0, 1.0 - (levenshtein($sortedA, $sortedB) / $sortedMax));
+
+        similar_text($normA, $normB, $similarPercent);
+        $similarTextScore = $similarPercent / 100.0;
+
+        $metaA = metaphone($normA);
+        $metaB = metaphone($normB);
+        $phoneticScore = 0.0;
+
+        if ($metaA !== '' && $metaB !== '') {
+            if ($metaA === $metaB) {
+                $phoneticScore = 1.0;
+            } else {
+                $metaMax = max(strlen($metaA), strlen($metaB), 1);
+                $phoneticScore = max(0.0, 1.0 - (levenshtein($metaA, $metaB) / $metaMax));
+            }
+        }
+
+        $combined = (0.30 * $damerauScore)
+            + (0.30 * $sortedScore)
+            + (0.20 * $similarTextScore)
+            + (0.20 * $phoneticScore);
+
+        return round(min(1.0, max(0.0, $combined)), 4);
+    }
+
+    /**
+     * Resolusi kata kunci typo (single/multi-keyword) dengan ambang batas hybrid similarity >= 0.68
+     * serta ekspansi kandidat top untuk query SPARQL OR (||).
+     *
+     * @return array{
+     *     original: string,
+     *     corrected: string,
+     *     original_query: string,
+     *     corrected_query: string,
+     *     is_corrected: bool,
+     *     suggestions: array<int, string>,
+     *     expansion_terms: array<int, string>
+     * }
      */
     public function resolveTypoKeyword(string $keyword): array
     {
         $trimmed = trim($keyword);
 
         if ($trimmed === '') {
-            return [
-                'original' => $keyword,
-                'corrected' => '',
-                'is_corrected' => false,
-            ];
+            return $this->formatTypoResult($keyword, '', false, [], []);
         }
 
         $cleanedInput = $this->stripExtraPunctuation($trimmed);
-        $normalizedQuery = $this->normalizeFuzzyText($trimmed);
 
-        if ($normalizedQuery === '') {
-            return [
-                'original' => $keyword,
-                'corrected' => $cleanedInput,
-                'is_corrected' => false,
-            ];
+        if ($cleanedInput === '') {
+            return $this->formatTypoResult($keyword, '', false, [], []);
         }
 
-        $dictionary = Cache::remember('ontology_dictionary', 3600, function (): array {
-            return $this->fetchOntologyDictionary();
-        });
+        $dictionary = $this->buildOntologyDictionary();
 
-        if ($dictionary === [] && ! $this->fusekiAvailable) {
-            Cache::forget('ontology_dictionary');
+        if ($dictionary['phrases'] === [] && $dictionary['tokens'] === []) {
+            return $this->formatTypoResult($keyword, $cleanedInput, false, [], [$cleanedInput]);
         }
 
-        if ($dictionary === []) {
-            return [
-                'original' => $keyword,
-                'corrected' => $cleanedInput,
-                'is_corrected' => false,
-            ];
-        }
-
-        $index = $this->buildDictionaryIndex($dictionary);
         $rawLower = mb_strtolower($cleanedInput, 'UTF-8');
 
-        if ($this->matchesExactPreserveDiacritics($rawLower, $index)) {
-            return [
-                'original' => $keyword,
-                'corrected' => $cleanedInput,
-                'is_corrected' => false,
-            ];
+        if ($this->matchesExactPreserveDiacritics($rawLower, $dictionary)) {
+            return $this->formatTypoResult($keyword, $cleanedInput, false, [], [$cleanedInput]);
         }
 
-        $diacriticMatch = $this->findNormalizedExactMatch($normalizedQuery, $index);
-
-        if ($diacriticMatch !== null) {
-            $isChanged = mb_strtolower($diacriticMatch, 'UTF-8') !== $rawLower;
-
-            return [
-                'original' => $keyword,
-                'corrected' => $diacriticMatch,
-                'is_corrected' => $isChanged,
-            ];
+        if (! str_contains($cleanedInput, ' ')) {
+            return $this->resolveSingleTerm($keyword, $cleanedInput, $dictionary);
         }
 
-        $wholeMatch = $this->findBestFuzzyMatch($normalizedQuery, $index['phrases'] + $index['tokens']);
-
-        if ($wholeMatch !== null) {
-            return [
-                'original' => $keyword,
-                'corrected' => $wholeMatch,
-                'is_corrected' => true,
-            ];
-        }
-
-        if (str_contains($normalizedQuery, ' ')) {
-            $multiWordMatch = $this->resolveMultiWordTokens($cleanedInput, $index);
-
-            if ($multiWordMatch !== null) {
-                return [
-                    'original' => $keyword,
-                    'corrected' => $multiWordMatch,
-                    'is_corrected' => true,
-                ];
-            }
-        }
-
-        return [
-            'original' => $keyword,
-            'corrected' => $cleanedInput,
-            'is_corrected' => false,
-        ];
+        return $this->resolveMultiWordQuery($keyword, $cleanedInput, $dictionary);
     }
 
     /**
-     * Jalankan pencarian multi-hop + filter kategori, lalu kelompokkan per Rumah Adat.
+     * Jalankan pencarian multi-hop + filter kategori dengan dukungan typo tolerance & OR expansion.
      *
      * @param  array<string, array<int, string>|string>  $filters
      * @return array<int, array{
@@ -328,7 +384,8 @@ SPARQL;
     {
         $typoResolution = $this->resolveTypoKeyword($keyword);
         $this->lastTypoResolution = $typoResolution;
-        $cleanKeyword = $this->sanitizeInput($typoResolution['corrected']);
+        $cleanKeyword = $this->sanitizeInput($typoResolution['corrected_query']);
+        $expansionTerms = $this->sanitizeExpansionTerms($typoResolution['expansion_terms'], $cleanKeyword);
         $filterClauses = $this->buildFilterClauses($filters);
 
         if ($cleanKeyword !== '') {
@@ -340,6 +397,21 @@ SPARQL;
                 $sparql
             );
 
+            if (count($expansionTerms) > 1) {
+                $orConditions = array_map(function (string $term): string {
+                    $escaped = $this->escapeSparqlLiteral($term);
+
+                    return "CONTAINS(LCASE(STR(?matchValue)), LCASE(\"{$escaped}\"))";
+                }, $expansionTerms);
+
+                $orFilter = 'FILTER('.implode(' || ', $orConditions).')';
+                $sparql = str_replace(
+                    'FILTER(?ql != "" && CONTAINS(LCASE(STR(?matchValue)), ?ql))',
+                    $orFilter,
+                    $sparql
+                );
+            }
+
             if ($filterClauses !== '') {
                 $sparql = $this->injectBeforeWhereEnd($sparql, $filterClauses);
             }
@@ -349,7 +421,7 @@ SPARQL;
 
         $bindings = $this->query($sparql);
 
-        return $this->aggregateSearchBindings($bindings, $cleanKeyword !== '');
+        return $this->aggregateSearchBindings($bindings, $cleanKeyword !== '', $expansionTerms);
     }
 
     /**
@@ -650,14 +722,20 @@ SPARQL;
     /**
      * @param  array<int, string>  $dictionary
      * @return array{
-     *     rawPhrases: array<int, string>,
-     *     rawTokens: array<string, bool>,
      *     phrases: array<string, string>,
-     *     tokens: array<string, string>
+     *     tokens: array<string, string>,
+     *     raw_phrases: array<int, string>,
+     *     raw_tokens: array<string, bool>
      * }
      */
     private function buildDictionaryIndex(array $dictionary): array
     {
+        $stopWords = [
+            'rumah', 'adat', 'suku', 'kabupaten', 'kota',
+            'dan', 'atau', 'kecamatan', 'desa', 'pulau',
+            'etnis', 'umum', 'bahasa', 'yang', 'dari',
+        ];
+
         $rawPhrases = [];
         $rawTokens = [];
         $phrases = [];
@@ -676,7 +754,7 @@ SPARQL;
                 $rawPhrases[] = $rawLower;
             }
 
-            $normFull = $this->normalizeFuzzyText($trimmed);
+            $normFull = $this->normalizeSimilarityText($trimmed);
 
             if ($normFull !== '' && ! isset($phrases[$normFull])) {
                 $phrases[$normFull] = $trimmed;
@@ -686,7 +764,7 @@ SPARQL;
 
             foreach ($segments as $segment) {
                 $cleanSeg = trim($segment);
-                $normSeg = $this->normalizeFuzzyText($cleanSeg);
+                $normSeg = $this->normalizeSimilarityText($cleanSeg);
 
                 if ($normSeg !== '' && ! isset($phrases[$normSeg])) {
                     $phrases[$normSeg] = $cleanSeg;
@@ -697,19 +775,36 @@ SPARQL;
                 if ($rawSeg !== '') {
                     $rawPhrases[] = $rawSeg;
                 }
+
+                // Ekstrak frasa bigram signifikan (mis. "Rumah Bolon", "Bagas Godang", "Suku Nias")
+                $segWords = preg_split('/\s+/u', $this->stripExtraPunctuation($cleanSeg)) ?: [];
+                $wordCount = count($segWords);
+
+                for ($i = 0; $i < $wordCount - 1; $i++) {
+                    $bigram = $segWords[$i].' '.$segWords[$i + 1];
+                    $normBigram = $this->normalizeSimilarityText($bigram);
+
+                    if ($normBigram !== '' && ! isset($phrases[$normBigram])) {
+                        $phrases[$normBigram] = $bigram;
+                    }
+
+                    $rawBigram = mb_strtolower($bigram, 'UTF-8');
+                    $rawPhrases[] = $rawBigram;
+                }
             }
 
             $rawWords = preg_split('/[^\p{L}\p{N}]+/u', $trimmed) ?: [];
 
             foreach ($rawWords as $word) {
-                if (mb_strlen($word, 'UTF-8') < 3) {
+                $wordLower = mb_strtolower($word, 'UTF-8');
+
+                if (mb_strlen($word, 'UTF-8') < 3 || in_array($wordLower, $stopWords, true)) {
                     continue;
                 }
 
-                $rawWordLower = mb_strtolower($word, 'UTF-8');
-                $rawTokens[$rawWordLower] = true;
+                $rawTokens[$wordLower] = true;
 
-                $normWord = $this->normalizeFuzzyText($word);
+                $normWord = $this->normalizeSimilarityText($word);
 
                 if (strlen($normWord) >= 3 && ! isset($tokens[$normWord])) {
                     $tokens[$normWord] = $word;
@@ -718,24 +813,24 @@ SPARQL;
         }
 
         return [
-            'rawPhrases' => array_values(array_unique($rawPhrases)),
-            'rawTokens' => $rawTokens,
             'phrases' => $phrases,
             'tokens' => $tokens,
+            'raw_phrases' => array_values(array_unique($rawPhrases)),
+            'raw_tokens' => $rawTokens,
         ];
     }
 
     /**
      * @param  array{
-     *     rawPhrases: array<int, string>,
-     *     rawTokens: array<string, bool>,
      *     phrases: array<string, string>,
-     *     tokens: array<string, string>
+     *     tokens: array<string, string>,
+     *     raw_phrases: array<int, string>,
+     *     raw_tokens: array<string, bool>
      * }  $index
      */
     private function matchesExactPreserveDiacritics(string $rawLower, array $index): bool
     {
-        if (isset($index['rawTokens'][$rawLower])) {
+        if (isset($index['raw_tokens'][$rawLower])) {
             return true;
         }
 
@@ -743,9 +838,17 @@ SPARQL;
             return false;
         }
 
-        foreach ($index['rawPhrases'] as $phrase) {
-            if ($phrase === $rawLower || str_contains($phrase, $rawLower)) {
+        foreach ($index['raw_phrases'] as $phrase) {
+            if ($phrase === $rawLower) {
                 return true;
+            }
+        }
+
+        if (! str_contains($rawLower, ' ')) {
+            foreach ($index['raw_phrases'] as $phrase) {
+                if (str_contains($phrase, $rawLower)) {
+                    return true;
+                }
             }
         }
 
@@ -754,147 +857,325 @@ SPARQL;
 
     /**
      * @param  array{
-     *     rawPhrases: array<int, string>,
-     *     rawTokens: array<string, bool>,
      *     phrases: array<string, string>,
-     *     tokens: array<string, string>
+     *     tokens: array<string, string>,
+     *     raw_phrases: array<int, string>,
+     *     raw_tokens: array<string, bool>
      * }  $index
+     * @return array{
+     *     original: string,
+     *     corrected: string,
+     *     original_query: string,
+     *     corrected_query: string,
+     *     is_corrected: bool,
+     *     suggestions: array<int, string>,
+     *     expansion_terms: array<int, string>
+     * }
      */
-    private function findNormalizedExactMatch(string $normalizedQuery, array $index): ?string
+    private function resolveSingleTerm(string $originalKeyword, string $cleanedInput, array $index): array
     {
-        if (isset($index['phrases'][$normalizedQuery])) {
-            return $index['phrases'][$normalizedQuery];
+        $normInput = $this->normalizeSimilarityText($cleanedInput);
+        $rawLower = mb_strtolower($cleanedInput, 'UTF-8');
+
+        if ($normInput === '' || strlen($normInput) < 3) {
+            return $this->formatTypoResult($originalKeyword, $cleanedInput, false, [], [$cleanedInput]);
         }
 
-        if (isset($index['tokens'][$normalizedQuery])) {
-            return $index['tokens'][$normalizedQuery];
+        $pool = $index['tokens'] + $index['phrases'];
+
+        if (isset($pool[$normInput])) {
+            $canonical = $pool[$normInput];
+            $isChanged = mb_strtolower($canonical, 'UTF-8') !== $rawLower;
+
+            return $this->formatTypoResult(
+                $originalKeyword,
+                $canonical,
+                $isChanged,
+                $isChanged ? [$canonical] : [],
+                [$canonical]
+            );
         }
 
-        if (strlen($normalizedQuery) >= 4) {
-            foreach ($index['phrases'] as $normPhrase => $canonicalPhrase) {
-                if (str_contains($normPhrase, $normalizedQuery)) {
-                    $rawWords = preg_split('/\s+/u', $canonicalPhrase) ?: [];
-                    $matchedWords = [];
+        $candidates = $this->rankSimilarityCandidates($cleanedInput, $pool, 0.68, 3);
 
-                    foreach ($rawWords as $word) {
-                        $normWord = $this->normalizeFuzzyText($word);
-
-                        if (
-                            $normWord !== ''
-                            && preg_match('/\b'.preg_quote($normWord, '/').'\b/', $normalizedQuery) === 1
-                        ) {
-                            $matchedWords[] = $word;
-                        }
-                    }
-
-                    if ($matchedWords !== []) {
-                        return implode(' ', $matchedWords);
-                    }
-                }
-            }
+        if ($candidates === []) {
+            return $this->formatTypoResult($originalKeyword, $cleanedInput, false, [], [$cleanedInput]);
         }
 
-        return null;
-    }
+        $bestTerm = $candidates[0]['term'];
+        $suggestionTerms = array_values(array_unique(array_column($candidates, 'term')));
+        $isCorrected = mb_strtolower($bestTerm, 'UTF-8') !== $rawLower;
 
-    /**
-     * @param  array<string, string>  $candidates
-     */
-    private function findBestFuzzyMatch(string $normalizedQuery, array $candidates): ?string
-    {
-        $queryLength = strlen($normalizedQuery);
-
-        if ($queryLength < 4) {
-            return null;
-        }
-
-        $maxDistance = $queryLength <= 5 ? 1 : 2;
-        $bestScore = null;
-        $bestCandidate = null;
-
-        foreach ($candidates as $normCand => $canonicalCand) {
-            $candLength = strlen((string) $normCand);
-
-            if ($candLength < 3 || abs($queryLength - $candLength) > $maxDistance) {
-                continue;
-            }
-
-            $distance = $this->calculateEditDistance($normalizedQuery, (string) $normCand);
-
-            if ($distance === 0 || $distance > $maxDistance) {
-                continue;
-            }
-
-            if ($distance === 2 && $candLength < 6) {
-                continue;
-            }
-
-            $score = [
-                $distance,
-                $this->hasSameCharacters($normalizedQuery, (string) $normCand) ? 0 : 1,
-                abs($queryLength - $candLength),
-                $normalizedQuery[0] === ((string) $normCand)[0] ? 0 : 1,
-                levenshtein($normalizedQuery, (string) $normCand),
-            ];
-
-            if ($bestScore === null || $score < $bestScore) {
-                $bestScore = $score;
-                $bestCandidate = $canonicalCand;
-            }
-        }
-
-        return $bestCandidate;
+        return $this->formatTypoResult(
+            $originalKeyword,
+            $bestTerm,
+            $isCorrected,
+            $isCorrected ? $suggestionTerms : [],
+            $suggestionTerms
+        );
     }
 
     /**
      * @param  array{
-     *     rawPhrases: array<int, string>,
-     *     rawTokens: array<string, bool>,
      *     phrases: array<string, string>,
-     *     tokens: array<string, string>
+     *     tokens: array<string, string>,
+     *     raw_phrases: array<int, string>,
+     *     raw_tokens: array<string, bool>
      * }  $index
+     * @return array{
+     *     original: string,
+     *     corrected: string,
+     *     original_query: string,
+     *     corrected_query: string,
+     *     is_corrected: bool,
+     *     suggestions: array<int, string>,
+     *     expansion_terms: array<int, string>
+     * }
      */
-    private function resolveMultiWordTokens(string $cleanedInput, array $index): ?string
+    private function resolveMultiWordQuery(string $originalKeyword, string $cleanedInput, array $index): array
     {
+        $normFull = $this->normalizeSimilarityText($cleanedInput);
+        $rawLower = mb_strtolower($cleanedInput, 'UTF-8');
+
+        if (isset($index['phrases'][$normFull])) {
+            $canonicalPhrase = $index['phrases'][$normFull];
+            $isChanged = mb_strtolower($canonicalPhrase, 'UTF-8') !== $rawLower;
+
+            return $this->formatTypoResult(
+                $originalKeyword,
+                $canonicalPhrase,
+                $isChanged,
+                $isChanged ? [$canonicalPhrase] : [],
+                [$canonicalPhrase]
+            );
+        }
+
+        $wholeCandidates = $this->rankSimilarityCandidates($cleanedInput, $index['phrases'], 0.78, 3);
+
+        if ($wholeCandidates !== []) {
+            $bestPhrase = $wholeCandidates[0]['term'];
+            $terms = array_values(array_unique(array_column($wholeCandidates, 'term')));
+
+            return $this->formatTypoResult($originalKeyword, $bestPhrase, true, $terms, $terms);
+        }
+
         $words = preg_split('/\s+/u', $cleanedInput) ?: [];
-        $resolvedWords = [];
+        $count = count($words);
+        $resolvedParts = [];
+        $expansionTerms = [];
+        $suggestions = [];
         $anyCorrected = false;
 
-        foreach ($words as $word) {
-            $rawLower = mb_strtolower($word, 'UTF-8');
-            $normWord = $this->normalizeFuzzyText($word);
+        for ($i = 0; $i < $count; $i++) {
+            $word = $words[$i];
+            $wordLower = mb_strtolower($word, 'UTF-8');
 
-            if ($normWord === '' || isset($index['rawTokens'][$rawLower])) {
-                $resolvedWords[] = $word;
+            // Cek frasa 2-kata terlebih dahulu agar frasa bertipe "Rumah Bolon" / "Suku Nias" tetap tertangkap
+            if ($i < $count - 1) {
+                $bigram = $word.' '.$words[$i + 1];
+                $normBigram = $this->normalizeSimilarityText($bigram);
+
+                if (isset($index['phrases'][$normBigram])) {
+                    $canonicalBigram = $index['phrases'][$normBigram];
+                    if (mb_strtolower($canonicalBigram, 'UTF-8') !== mb_strtolower($bigram, 'UTF-8')) {
+                        $anyCorrected = true;
+                    }
+                    $resolvedParts[] = $canonicalBigram;
+                    $expansionTerms[] = $canonicalBigram;
+                    $suggestions[] = $canonicalBigram;
+                    $i++;
+
+                    continue;
+                }
+
+                $bigramMatches = $this->rankSimilarityCandidates($bigram, $index['phrases'], 0.75, 2);
+
+                if ($bigramMatches !== []) {
+                    $bestBigram = $bigramMatches[0]['term'];
+                    $anyCorrected = true;
+                    $resolvedParts[] = $bestBigram;
+                    foreach ($bigramMatches as $match) {
+                        $expansionTerms[] = $match['term'];
+                        $suggestions[] = $match['term'];
+                    }
+                    $i++;
+
+                    continue;
+                }
+            }
+
+            if (isset($index['raw_tokens'][$wordLower])) {
+                $resolvedParts[] = $word;
+                $expansionTerms[] = $word;
 
                 continue;
             }
 
-            if (isset($index['tokens'][$normWord])) {
-                $canonical = $index['tokens'][$normWord];
-                if (mb_strtolower($canonical, 'UTF-8') !== $rawLower) {
+            $tokenNorm = $this->normalizeSimilarityText($word);
+
+            if (isset($index['tokens'][$tokenNorm])) {
+                $canonicalToken = $index['tokens'][$tokenNorm];
+                if (mb_strtolower($canonicalToken, 'UTF-8') !== $wordLower) {
                     $anyCorrected = true;
                 }
-                $resolvedWords[] = $canonical;
+                $resolvedParts[] = $canonicalToken;
+                $expansionTerms[] = $canonicalToken;
+                $suggestions[] = $canonicalToken;
 
                 continue;
             }
 
-            $fuzzy = $this->findBestFuzzyMatch($normWord, $index['tokens']);
+            $tokenMatches = $this->rankSimilarityCandidates($word, $index['tokens'], 0.68, 2);
 
-            if ($fuzzy !== null) {
+            if ($tokenMatches !== []) {
+                $bestToken = $tokenMatches[0]['term'];
                 $anyCorrected = true;
-                $resolvedWords[] = $fuzzy;
+                $resolvedParts[] = $bestToken;
+                foreach ($tokenMatches as $match) {
+                    $expansionTerms[] = $match['term'];
+                    $suggestions[] = $match['term'];
+                }
             } else {
-                $resolvedWords[] = $word;
+                $resolvedParts[] = $word;
+                $expansionTerms[] = $word;
             }
         }
 
-        if (! $anyCorrected) {
-            return null;
+        $correctedQuery = implode(' ', $resolvedParts);
+        $uniqueExpansion = array_values(array_unique(array_filter($expansionTerms)));
+        $uniqueSuggestions = array_values(array_unique(array_filter(
+            $anyCorrected ? array_merge([$correctedQuery], $suggestions) : []
+        )));
+
+        return $this->formatTypoResult(
+            $originalKeyword,
+            $correctedQuery,
+            $anyCorrected,
+            $uniqueSuggestions,
+            $uniqueExpansion !== [] ? $uniqueExpansion : [$correctedQuery]
+        );
+    }
+
+    /**
+     * @param  array<string, string>  $candidatesPool
+     * @return array<int, array{term: string, score: float, lenDiff: int}>
+     */
+    private function rankSimilarityCandidates(
+        string $input,
+        array $candidatesPool,
+        float $threshold,
+        int $limit
+    ): array {
+        $normInput = $this->normalizeSimilarityText($input);
+        $inputLen = strlen($normInput);
+
+        if ($inputLen < 3) {
+            return [];
         }
 
-        return implode(' ', $resolvedWords);
+        $scored = [];
+
+        foreach ($candidatesPool as $normCand => $canonicalCand) {
+            $candLen = strlen((string) $normCand);
+
+            if ($candLen < 3 || abs($inputLen - $candLen) > max(3, (int) ceil($inputLen * 0.6))) {
+                continue;
+            }
+
+            $score = $this->calculateHybridSimilarity($normInput, (string) $normCand);
+
+            if ($score < $threshold) {
+                continue;
+            }
+
+            $key = mb_strtolower($canonicalCand, 'UTF-8');
+
+            if (! isset($scored[$key]) || $score > $scored[$key]['score']) {
+                $scored[$key] = [
+                    'term' => $canonicalCand,
+                    'score' => $score,
+                    'lenDiff' => abs($inputLen - $candLen),
+                ];
+            }
+        }
+
+        if ($scored === []) {
+            return [];
+        }
+
+        $list = array_values($scored);
+
+        usort($list, static function (array $a, array $b): int {
+            if ($b['score'] !== $a['score']) {
+                return $b['score'] <=> $a['score'];
+            }
+
+            return $a['lenDiff'] <=> $b['lenDiff'];
+        });
+
+        $bestScore = $list[0]['score'];
+        $closeMatches = array_values(array_filter(
+            $list,
+            static fn (array $item): bool => ($bestScore - $item['score']) <= 0.06
+        ));
+
+        return array_slice($closeMatches, 0, $limit);
+    }
+
+    /**
+     * @param  array<int, string>  $suggestions
+     * @param  array<int, string>  $expansionTerms
+     * @return array{
+     *     original: string,
+     *     corrected: string,
+     *     original_query: string,
+     *     corrected_query: string,
+     *     is_corrected: bool,
+     *     suggestions: array<int, string>,
+     *     expansion_terms: array<int, string>
+     * }
+     */
+    private function formatTypoResult(
+        string $original,
+        string $corrected,
+        bool $isCorrected,
+        array $suggestions,
+        array $expansionTerms
+    ): array {
+        return [
+            'original' => $original,
+            'corrected' => $corrected,
+            'original_query' => $original,
+            'corrected_query' => $corrected,
+            'is_corrected' => $isCorrected,
+            'suggestions' => $suggestions,
+            'expansion_terms' => $expansionTerms,
+        ];
+    }
+
+    /**
+     * @param  array<int, string>  $terms
+     * @return array<int, string>
+     */
+    private function sanitizeExpansionTerms(array $terms, string $fallback): array
+    {
+        $cleaned = [];
+
+        foreach ($terms as $term) {
+            $safe = $this->sanitizeInput($term);
+
+            if ($safe !== '' && mb_strlen($safe, 'UTF-8') >= 3) {
+                $cleaned[] = $safe;
+            }
+        }
+
+        $unique = array_values(array_unique($cleaned));
+
+        if ($unique === [] && $fallback !== '') {
+            return [$fallback];
+        }
+
+        return array_slice($unique, 0, 5);
     }
 
     private function stripExtraPunctuation(string $text): string
@@ -904,7 +1185,7 @@ SPARQL;
         return trim((string) preg_replace('/\s+/u', ' ', $withoutPunct));
     }
 
-    private function normalizeFuzzyText(string $text): string
+    private function normalizeSimilarityText(string $text): string
     {
         $diacriticMap = [
             'ö' => 'o', 'Ö' => 'o',
@@ -927,8 +1208,18 @@ SPARQL;
         $ascii = strtr($text, $diacriticMap);
         $lower = mb_strtolower($ascii, 'UTF-8');
         $clean = preg_replace('/[^a-z0-9\s]+/', ' ', $lower) ?? $lower;
+        $collapsed = trim((string) preg_replace('/\s+/', ' ', $clean));
+        $oldSpelling = str_replace(['oe', 'dj'], ['u', 'j'], $collapsed);
 
-        return trim((string) preg_replace('/\s+/', ' ', $clean));
+        return (string) preg_replace('/(.)\1+/', '$1', $oldSpelling);
+    }
+
+    private function sortCharacters(string $text): string
+    {
+        $chars = str_split($text);
+        sort($chars);
+
+        return implode('', $chars);
     }
 
     private function calculateEditDistance(string $source, string $target): int
@@ -942,7 +1233,7 @@ SPARQL;
         $lenA = strlen($source);
         $lenB = strlen($target);
 
-        if ($lenA === 0 || $lenB === 0 || abs($lenA - $lenB) > 2) {
+        if ($lenA === 0 || $lenB === 0 || abs($lenA - $lenB) > 4) {
             return $levDistance;
         }
 
@@ -978,20 +1269,6 @@ SPARQL;
         }
 
         return min($levDistance, $dp[$lenA][$lenB]);
-    }
-
-    private function hasSameCharacters(string $first, string $second): bool
-    {
-        if (strlen($first) !== strlen($second)) {
-            return false;
-        }
-
-        $charsA = str_split($first);
-        $charsB = str_split($second);
-        sort($charsA);
-        sort($charsB);
-
-        return $charsA === $charsB;
     }
 
     /**
@@ -1163,6 +1440,7 @@ SPARQL;
      * Kelompokkan hasil SPARQL yang berulang per kombinasi suku/wilayah/matchPath ke satu kartu rumah adat.
      *
      * @param  array<int, array<string, array{type?: string, value?: string}>>  $bindings
+     * @param  array<int, string>  $expansionTerms
      * @return array<int, array{
      *     uri: string,
      *     id: string,
@@ -1180,9 +1458,13 @@ SPARQL;
      *     relevanceScore: int
      * }>
      */
-    private function aggregateSearchBindings(array $bindings, bool $hasKeyword): array
+    private function aggregateSearchBindings(array $bindings, bool $hasKeyword, array $expansionTerms = []): array
     {
         $grouped = [];
+        $normExpansion = array_values(array_filter(array_unique(array_map(
+            fn (string $term): string => $this->normalizeSimilarityText($term),
+            $expansionTerms
+        ))));
 
         foreach ($bindings as $row) {
             $uri = $this->bindingValue($row, 'rumah');
@@ -1250,6 +1532,20 @@ SPARQL;
                 $description .= ' Terhubung melalui: '.implode(' • ', $shownPaths).$suffix.'.';
             }
 
+            $matchedTermsCount = 0;
+
+            if (count($normExpansion) > 1) {
+                $haystack = $this->normalizeSimilarityText(
+                    $item['name'].' '.$tribeLabel.' '.$regionLabel.' '.implode(' ', $item['matchPaths'])
+                );
+
+                foreach ($normExpansion as $term) {
+                    if ($term !== '' && str_contains($haystack, $term)) {
+                        $matchedTermsCount++;
+                    }
+                }
+            }
+
             $imageInfo = $this->resolveHouseImage($item['id'], $item['slug']);
 
             $results[] = [
@@ -1267,10 +1563,15 @@ SPARQL;
                 'hasCustomImage' => $imageInfo['isCustom'],
                 'matchPaths' => $item['matchPaths'],
                 'relevanceScore' => $item['relevanceScore'],
+                '_matchedTermsCount' => $matchedTermsCount,
             ];
         }
 
         usort($results, static function (array $a, array $b): int {
+            if ($b['_matchedTermsCount'] !== $a['_matchedTermsCount']) {
+                return $b['_matchedTermsCount'] <=> $a['_matchedTermsCount'];
+            }
+
             if ($b['relevanceScore'] !== $a['relevanceScore']) {
                 return $b['relevanceScore'] <=> $a['relevanceScore'];
             }
@@ -1278,7 +1579,11 @@ SPARQL;
             return strcmp($a['name'], $b['name']);
         });
 
-        return $results;
+        return array_map(static function (array $row): array {
+            unset($row['_matchedTermsCount']);
+
+            return $row;
+        }, $results);
     }
 
     /**

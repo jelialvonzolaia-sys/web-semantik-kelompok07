@@ -320,8 +320,23 @@
             </div>
 
             @if (! empty($is_corrected))
-                <div class="mb-6 rounded-2xl border border-[#FFA586]/60 bg-[#FFF4ED] px-5 py-3.5 text-sm text-[#561A2E]">
-                    Menampilkan hasil untuk <strong class="font-bold">"{{ $corrected }}"</strong> (dikoreksi dari <span class="italic">"{{ $original }}"</span>).
+                <div class="mb-6 rounded-2xl border border-[#FFA586]/60 bg-[#FFF4ED] px-5 py-4 text-sm text-[#561A2E]">
+                    <p>
+                        Menampilkan hasil untuk <strong class="font-bold">"{{ $corrected_query ?? $corrected }}"</strong>
+                        (dikoreksi dari <span class="italic">"{{ $original_query ?? $original }}"</span>).
+                    </p>
+
+                    @if (! empty($suggestions) && count($suggestions) > 1)
+                        <div class="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
+                            <span class="font-medium text-[#384358]">Saran & ekspansi kata:</span>
+                            @foreach ($suggestions as $suggestion)
+                                <a href="{{ route('search', ['q' => $suggestion]) }}"
+                                   class="rounded-full border border-[#FFA586] bg-white px-3 py-1 font-semibold text-[#561A2E] transition hover:bg-[#B51A28] hover:text-white">
+                                    {{ $suggestion }}
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             @endif
 
