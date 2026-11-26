@@ -1,0 +1,54 @@
+PREFIX ra:     <http://example.org/ontology/rumah-adat#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX schema: <https://schema.org/>
+
+# =====================================================================
+# Query Pembuktian Reasoning (Before vs After OWL/RDFS Reasoning)
+#
+# Menguji 4 mekanisme inferensi tanpa SPARQL Property Path (* / +):
+# 1. Transitif (owl:TransitiveProperty) pada ra:bagianDariWilayah:
+#    - Sebelum reasoning : 17 rumah adat (wilayah kab/kota langsung)
+#    - Sesudah reasoning : 42 rumah adat (+25 rumah adat level desa/kecamatan)
+# 2. Invers (owl:inverseOf) pada ra:memilikiRumahAdat <-> ra:dimilikiOlehSuku:
+#    - Sebelum reasoning : ?sukuInvers kosong (0 hasil)
+#    - Sesudah reasoning : ?sukuInvers terisi otomatis untuk seluruh 42 rumah adat
+# 3. Subkelas (rdfs:subClassOf) ke schema:LandmarksOrHistoricalBuildings:
+#    - Sebelum reasoning : ?isSchemaLandmark = false
+#    - Sesudah reasoning : ?isSchemaLandmark = true
+# 4. Simetris (owl:SymmetricProperty) pada ra:berkerabatDenganMarga:
+#    - Menghitung marga kerabat dua arah dari marga yang dimiliki rumah adat
+# =====================================================================
+
+SELECT
+  ?rumah
+  ?namaRumah
+  (GROUP_CONCAT(DISTINCT ?namaWilayah; SEPARATOR=", ") AS ?wilayahTerdeteksi)
+  (SAMPLE(?sukuInvers) AS ?sukuViaInverseOf)
+  (SAMPLE(?isLandmark) AS ?isSchemaLandmark)
+  (COUNT(DISTINCT ?margaKerabat) AS ?jumlahMargaKerabatSimetris)
+WHERE {
+  ?rumah a ra:RumahAdat ;
+         ra:nama ?namaRumah ;
+         ra:berasalDariWilayah ?wilAsal .
+
+  # 1. Inferensi Transitif (tanpa * atau +)
+  ?wilAsal ra:bagianDariWilayah ra:wil_sumatera_utara ;
+           ra:nama ?namaWilayah .
+
+  # 2. Inferensi Invers (owl:inverseOf ra:dimilikiOlehSuku)
+  OPTIONAL {
+    ?sukuNode ra:memilikiRumahAdat ?rumah ;
+              ra:nama ?sukuInvers .
+  }
+
+  # 3. Inferensi Subkelas (rdfs:subClassOf schema:LandmarksOrHistoricalBuildings)
+  BIND(EXISTS { ?rumah a schema:LandmarksOrHistoricalBuildings } AS ?isLandmark)
+
+  # 4. Relasi Simetris Marga (owl:SymmetricProperty)
+  OPTIONAL {
+    ?rumah ra:memilikiMarga ?margaAsal .
+    ?margaAsal ra:berkerabatDenganMarga ?margaKerabat .
+  }
+}
+GROUP BY ?rumah ?namaRumah
+ORDER BY ASC(?namaRumah)

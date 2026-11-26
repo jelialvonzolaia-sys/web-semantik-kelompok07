@@ -1,18 +1,26 @@
-@prefix ra:   <http://example.org/ontology/rumah-adat#> .
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:  <http://www.w3.org/2002/07/owl#> .
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ra:     <http://example.org/ontology/rumah-adat#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <https://schema.org/> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
 
 <http://example.org/ontology/rumah-adat> a owl:Ontology ;
     rdfs:label "Ontologi Rumah Adat Sumatera Utara" ;
-    rdfs:comment "Skema ontologi dan dataset RDF inventarisasi rumah adat di Provinsi Sumatera Utara." .
+    rdfs:comment "Skema ontologi dan dataset RDF inventarisasi rumah adat di Provinsi Sumatera Utara." ;
+    dct:title "Ontologi Rumah Adat Sumatera Utara" ;
+    dct:description "Skema ontologi OWL/RDFS dan dataset RDF inventarisasi 42 rumah adat beserta suku, marga, bahasa daerah, wilayah administratif, tradisi, dan ornamen khas di Provinsi Sumatera Utara." ;
+    dct:creator "Kelompok 07 Web Semantik (2026)" ;
+    dct:created "2026-11-24"^^xsd:date .
 
 # =====================================================================
 # 1. CLASSES (7 Kelas Inti)
 # =====================================================================
 
 ra:RumahAdat a owl:Class ;
+    rdfs:subClassOf schema:LandmarksOrHistoricalBuildings ;
     rdfs:label "Rumah Adat" ;
     rdfs:comment "Bangunan rumah adat tradisional di Sumatera Utara." .
 
@@ -25,18 +33,22 @@ ra:Marga a owl:Class ;
     rdfs:comment "Klan/marga kekerabatan yang berafiliasi dengan rumah adat atau suku." .
 
 ra:BahasaDaerah a owl:Class ;
+    rdfs:subClassOf schema:Language ;
     rdfs:label "Bahasa Daerah" ;
     rdfs:comment "Bahasa daerah yang digunakan pada komunitas rumah adat." .
 
 ra:Wilayah a owl:Class ;
+    rdfs:subClassOf schema:AdministrativeArea ;
     rdfs:label "Wilayah" ;
     rdfs:comment "Lokasi geografis bertingkat (Desa/Kecamatan, Kabupaten/Kota, Provinsi)." .
 
 ra:Tradisi a owl:Class ;
+    rdfs:subClassOf schema:Event ;
     rdfs:label "Tradisi" ;
     rdfs:comment "Upacara adat, ritual, atau praktik budaya terkait rumah adat." .
 
 ra:Ornamen a owl:Class ;
+    rdfs:subClassOf schema:VisualArtwork ;
     rdfs:label "Ornamen" ;
     rdfs:comment "Ukiran, motif, atau ragam hias arsitektur rumah adat." .
 
@@ -45,6 +57,7 @@ ra:Ornamen a owl:Class ;
 # =====================================================================
 
 ra:berasalDariWilayah a owl:ObjectProperty ;
+    rdfs:subPropertyOf schema:containedInPlace ;
     rdfs:label "berasal dari wilayah" ;
     rdfs:comment "Lokasi asal rumah adat atau persebaran wilayah marga dan komunitas adat." ;
     rdfs:range ra:Wilayah .
@@ -66,6 +79,13 @@ ra:dimilikiOlehSuku a owl:ObjectProperty ;
     rdfs:comment "Suku pemilik rumah adat." ;
     rdfs:domain ra:RumahAdat ;
     rdfs:range ra:Suku .
+
+ra:memilikiRumahAdat a owl:ObjectProperty ;
+    rdfs:label "memiliki rumah adat" ;
+    rdfs:comment "Rumah adat yang dimiliki atau dibangun oleh suatu suku (relasi invers dari dimilikiOlehSuku)." ;
+    rdfs:domain ra:Suku ;
+    rdfs:range ra:RumahAdat ;
+    owl:inverseOf ra:dimilikiOlehSuku .
 
 ra:memilikiMarga a owl:ObjectProperty ;
     rdfs:label "memiliki marga" ;
@@ -114,18 +134,21 @@ ra:bagianDariWilayah a owl:ObjectProperty, owl:TransitiveProperty ;
 # =====================================================================
 
 ra:nama a owl:DatatypeProperty ;
+    rdfs:subPropertyOf schema:name, rdfs:label ;
     rdfs:label "nama" ;
     rdfs:comment "Nama utama entitas." ;
     rdfs:domain owl:Thing ;
     rdfs:range xsd:string .
 
 ra:namaAlternatif a owl:DatatypeProperty ;
+    rdfs:subPropertyOf skos:altLabel ;
     rdfs:label "nama alternatif" ;
     rdfs:comment "Sebutan atau nama lain rumah adat." ;
     rdfs:domain ra:RumahAdat ;
     rdfs:range xsd:string .
 
 ra:sejarah a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dct:description ;
     rdfs:label "sejarah" ;
     rdfs:comment "Latar belakang sejarah bangunan." ;
     rdfs:domain ra:RumahAdat ;

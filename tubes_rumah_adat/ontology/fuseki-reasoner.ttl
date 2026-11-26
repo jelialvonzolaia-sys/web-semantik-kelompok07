@@ -1,0 +1,46 @@
+@prefix fuseki: <http://jena.apache.org/fuseki#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+# =====================================================================
+# Konfigurasi Assembler Apache Jena Fuseki dengan OWL Reasoner
+# Jalankan dari direktori root tubes_rumah_adat/:
+#   fuseki-server --config=ontology/fuseki-reasoner.ttl
+# Endpoint SPARQL Query:
+#   http://localhost:3030/rumah_adat_reasoned/query
+# =====================================================================
+
+<#service_rumah_adat_reasoned> rdf:type fuseki:Service ;
+    fuseki:name "rumah_adat_reasoned" ;
+    fuseki:endpoint [
+        fuseki:operation fuseki:query ;
+        fuseki:name "query"
+    ] ;
+    fuseki:endpoint [
+        fuseki:operation fuseki:query ;
+        fuseki:name "sparql"
+    ] ;
+    fuseki:endpoint [
+        fuseki:operation fuseki:gsp-r ;
+        fuseki:name "get"
+    ] ;
+    fuseki:dataset <#dataset_reasoned> .
+
+<#dataset_reasoned> rdf:type ja:RDFDataset ;
+    ja:defaultGraph <#inf_model_rumah_adat> .
+
+<#inf_model_rumah_adat> rdf:type ja:InfModel ;
+    ja:baseModel <#base_model_rumah_adat> ;
+    # OWLFBRuleReasoner mendukung inferensi owl:TransitiveProperty, owl:SymmetricProperty,
+    # owl:inverseOf, rdfs:subClassOf, dan rdfs:subPropertyOf.
+    # Alternatif lebih ringan jika hanya butuh profil OWL mikro:
+    #   <http://jena.hpl.hp.com/2003/OWLMicroFBRuleReasoner>
+    ja:reasoner [
+        ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLFBRuleReasoner>
+    ] .
+
+<#base_model_rumah_adat> rdf:type ja:MemoryModel ;
+    ja:content [
+        ja:externalContent <file:ontology/rumah_adat.ttl>
+    ] .

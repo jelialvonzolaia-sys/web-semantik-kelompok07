@@ -60,7 +60,8 @@ class RumahAdatSparqlTest extends TestCase
         $response->assertSee('107');
         $response->assertSee('Kabupaten Langkat');
         $response->assertSee('4 rumah adat terdaftar di ontologi');
-        $response->assertDontSee('Knowledge Graph');
+        $response->assertSee('Knowledge Graph');
+        $response->assertDontSee('id="kg-canvas"', false);
     }
 
     public function test_home_gracefully_handles_fuseki_connection_failure(): void
@@ -483,7 +484,7 @@ class RumahAdatSparqlTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_graph_placeholder_and_api_graph_endpoint_are_ready(): void
+    public function test_graph_page_and_api_graph_endpoint_are_ready(): void
     {
         Http::fake([
             'http://localhost:3030/rumah_adat/query' => Http::response([
@@ -506,8 +507,9 @@ class RumahAdatSparqlTest extends TestCase
 
         $pageResponse = $this->get('/graph');
         $pageResponse->assertStatus(200);
-        $pageResponse->assertSee('ENDPOINT API SIAP');
-        $pageResponse->assertDontSee('vis-network');
+        $pageResponse->assertSee('Kanvas Relasi Ontologi RDF');
+        $pageResponse->assertSee('Detail Node Terpilih');
+        $pageResponse->assertSee('id="kg-canvas"', false);
 
         $apiResponse = $this->getJson('/api/graph');
         $apiResponse->assertStatus(200)
